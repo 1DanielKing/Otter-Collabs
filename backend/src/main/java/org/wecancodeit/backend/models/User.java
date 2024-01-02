@@ -24,7 +24,7 @@ public class User {
     private String imageURL;
 
     /**
-     * Default constructor.
+     * Default constructor for JPA.
      */
     public User() {
     }
