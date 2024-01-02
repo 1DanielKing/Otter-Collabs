@@ -1,6 +1,7 @@
 package org.wecancodeit.backend.models;
 
 import jakarta.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,6 +23,9 @@ public class User {
     private String genre;
     private int experienceLevel;
     private String imageURL;
+
+    @ElementCollection
+    private List<String> musicTags;
 
     /**
      * Default constructor.
@@ -81,6 +85,10 @@ public class User {
 
     public String getImageURL() {
         return imageURL;
+    }
+    
+    public List<String> getMusicTags() {
+        return musicTags;
     }
 
     // Setters
