@@ -67,6 +67,10 @@ public class AudioService {
      */
     @Transactional
     public AudioMetadata uploadAudio(MultipartFile file, String title, String artist, String genre) throws IOException {
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("audio/")) {
+            throw new IllegalArgumentException("File must be an audio file");
+        }
         String fileName = storeFile(file);
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, null, new Date(), fileName);
         return audioMetaDataRepository.save(metaData);
