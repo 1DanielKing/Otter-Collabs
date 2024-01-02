@@ -35,7 +35,7 @@ OtterCollab is a music collaboration and band making platform that connects musi
 
 
 - Database:
-  - MySQL or PostgreSQL
+  - Hibernate
 
 
 - Authentication:
@@ -47,7 +47,7 @@ OtterCollab is a music collaboration and band making platform that connects musi
 
 
 - Build and Dependency Management:
-  - Maven or Gradle
+  - Maven
 
 ### additional behavior 
 Real-Time Chat and Messaging:
@@ -67,7 +67,7 @@ Feedback and Ratings:
 
 ### additional technologies
 Real-Time Communication:
-    Expand the real-time communication features .
+    Expand the real-time communication features.
 
 Enhanced Frontend Framework:
     Use React to create a richer and more interactive user interface.
