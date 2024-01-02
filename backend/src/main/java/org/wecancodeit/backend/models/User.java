@@ -1,4 +1,4 @@
-package org.wecancodeit.entities;
+package org.wecancodeit.backend.models;
 
 import org.springframework.stereotype.Indexed;
 

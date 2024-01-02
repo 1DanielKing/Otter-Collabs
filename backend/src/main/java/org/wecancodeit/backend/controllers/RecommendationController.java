@@ -1,4 +1,4 @@
-package org.wecancodeit.controllers;
+package org.wecancodeit.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.wecancodeit.entities.User;
-import org.wecancodeit.services.RecommendationService;
+import org.wecancodeit.backend.models.User;
+import org.wecancodeit.backend.services.RecommendationService;
 
 import java.util.List;
 

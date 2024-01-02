@@ -1,4 +1,4 @@
-package org.wecancodeit.repository;
+package org.wecancodeit.backend.repositories;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
