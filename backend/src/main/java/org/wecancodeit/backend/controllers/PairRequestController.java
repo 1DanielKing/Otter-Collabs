@@ -3,15 +3,14 @@ package org.wecancodeit.backend.controllers;
 import org.springframework.web.bind.annotation.RestController;
 import org.wecancodeit.backend.models.PairRequest;
 import org.wecancodeit.backend.models.PairRequest.RequestStatus;
+import org.wecancodeit.backend.services.PairRequestService;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +39,7 @@ public class PairRequestController {
     
     //Handle Response to a request
     @PostMapping("/respond")
-    public ResponseEntity<Void> respondToPairRequest(RequestParam Long pairRequestId, @RequestParam RequestStatus response){
+    public ResponseEntity<Void> respondToPairRequest(@RequestParam Long pairRequestId, @RequestParam RequestStatus response){
         pairRequestService.respondToPairRequest(pairRequestId, response);
         return ResponseEntity.ok().build();
     }
