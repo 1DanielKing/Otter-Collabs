@@ -22,6 +22,7 @@ public class UserController {
      *
      * @return a list of all users
      */
+
     @GetMapping
     public List<User> getAllUsers() {
         return userService.findAllUsers();
@@ -33,11 +34,22 @@ public class UserController {
      * @param id
      * @return the user or a not found response
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.findUserById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getUser(@RequestParam(required = false) Long id,
+            @RequestParam(required = false) String email) {
+        if (id != null) {
+            return userService.findUserById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } else if (email != null) {
+            return userService.findUserByEmail(email)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } else {
+            // Handle case where neither id nor email is provided
+            return ResponseEntity.badRequest().body("Either id or email must be provided");
+        }
     }
 
     /**
