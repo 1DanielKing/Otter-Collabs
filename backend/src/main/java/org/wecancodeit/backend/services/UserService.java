@@ -29,10 +29,20 @@ public class UserService {
      * Finds a user by their ID.
      *
      * @param id the ID of the user
-     * @return an Optional possibly containing the found user
+     * @return an Optional containing the user if found
      */
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    /**
+     * Finds a user by their email.
+     *
+     * @param email the email of the user
+     * @return an Optional containing the user if found
+     */
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     /**
