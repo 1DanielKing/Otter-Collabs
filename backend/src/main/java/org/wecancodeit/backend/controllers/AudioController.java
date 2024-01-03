@@ -52,7 +52,7 @@ public class AudioController {
     }
 
     /**
-     * Endpoint to delete audio fild and data by ID.
+     * Endpoint to delete audio file and data by ID.
      *
      * @param id the ID of the audio to delete
      * @return a response entity
