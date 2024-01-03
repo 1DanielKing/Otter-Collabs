@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.wecancodeit.backend.models.AudioMetadata;
+import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.AudioMetadataRepository;
+import org.wecancodeit.backend.repositories.UserRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,12 +21,14 @@ import java.util.Optional;
 public class AudioService {
 
     private final AudioMetadataRepository audioMetaDataRepository;
+    private final UserRepository userRepository;
 
-    @Value("${app.file.storage-location}") //Storage location in app properties
+    @Value("${app.file.storage-location}") // Storage location in app properties
     private String storageLocation;
 
-    public AudioService(AudioMetadataRepository audioMetaDataRepository) {
+    public AudioService(AudioMetadataRepository audioMetaDataRepository, UserRepository userRepository) {
         this.audioMetaDataRepository = audioMetaDataRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -66,13 +70,19 @@ public class AudioService {
      * @return the saved audio metadata
      */
     @Transactional
-    public AudioMetadata uploadAudio(MultipartFile file, String title, String artist, String genre) throws IOException {
+    public AudioMetadata uploadAudio(MultipartFile file, String title, String artist, String genre, Long userId)
+            throws IOException {
+        User owner = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         String contentType = file.getContentType();
         if (contentType == null || !contentType.startsWith("audio/")) {
             throw new IllegalArgumentException("File must be an audio file");
         }
+
         String fileName = storeFile(file);
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, null, new Date(), fileName);
+        metaData.setUser(owner);
         return audioMetaDataRepository.save(metaData);
     }
 
@@ -98,6 +108,7 @@ public class AudioService {
 
         return targetLocation.toString();
     }
+
     private void deleteFile(String filePath) {
         try {
             Path file = Paths.get(filePath);

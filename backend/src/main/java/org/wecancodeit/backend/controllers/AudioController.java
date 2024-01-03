@@ -26,15 +26,18 @@ public class AudioController {
      * @param title
      * @param artist
      * @param genre
+     * @param userId the id of the user owning the audio file
      * @return the saved audio metadata
      */
     @PostMapping("/upload")
-    public ResponseEntity<AudioMetadata> uploadAudio(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<AudioMetadata> uploadAudio(
+            @RequestParam("file") MultipartFile file,
             @RequestParam("title") String title,
             @RequestParam("artist") String artist,
-            @RequestParam("genre") String genre) {
+            @RequestParam("genre") String genre,
+            @RequestParam("userId") Long userId) {
         try {
-            AudioMetadata metadata = audioService.uploadAudio(file, title, artist, genre);
+            AudioMetadata metadata = audioService.uploadAudio(file, title, artist, genre, userId);
             return ResponseEntity.ok(metadata);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
