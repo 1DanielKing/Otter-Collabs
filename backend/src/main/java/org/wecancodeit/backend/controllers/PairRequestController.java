@@ -29,6 +29,12 @@ public class PairRequestController {
         pairRequestService.sendPairRequest(senderUsername, receiverUsername, message);
         return ResponseEntity.ok().build();
     }
+     // Fetch Pair Requests by Status
+     @GetMapping("/status/{status}")
+     public ResponseEntity<List<PairRequest>> getPairRequestsByStatus(@PathVariable RequestStatus status) {
+         List<PairRequest> pairRequests = pairRequestService.getPairRequestsByStatus(status);
+         return ResponseEntity.ok(pairRequests);
+     }
 
     // Fetch Pending requests for the user
     @GetMapping("/pending/{username}")
