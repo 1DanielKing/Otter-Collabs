@@ -25,10 +25,14 @@ public class User {
     private int experienceLevel;
     private String imageURL;
 
-
+    //field for music tags
     @ElementCollection
     private List<String> musicTags;
 
+    //field for pending pair requests
+    @OneToMany(mappedBy = "receiver")
+    private List<PairRequest> pendingPairRequests;
+   
     /**
      * Default constructor.
      */
@@ -93,6 +97,9 @@ public class User {
         return musicTags;
     }
 
+    public List<PairRequest> getPendingPairRequests() {
+        return pendingPairRequests;
+    }
 
     // Setters
     public void setId(Long id) {
@@ -125,6 +132,10 @@ public class User {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public void setPendingPairRequests(List<PairRequest> pendingPairRequests) {
+        this.pendingPairRequests = pendingPairRequests;
     }
 
     @Override
