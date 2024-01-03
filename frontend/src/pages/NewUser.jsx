@@ -16,7 +16,10 @@ const NewUser = () => {
 
   const checkUserExists = async (email) => {
     try {
-      const response = await fetch(`/api/users/search?email=${email}`);
+      console.log(userEmail)
+      const response = await fetch(`http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`);
+      console.log(response.status)
+
       if (response.ok) {
         return true;
       } else if (response.status === 404) {
