@@ -14,6 +14,24 @@ const NewUser = () => {
     setUserPassword(event.target.value);
   };
 
+  const checkUserExists = async (email) => {
+    try {
+      const response = await fetch(`/api/users/email/{email`);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+      return data.isPresent();
+    } catch (error) {
+      console.error("Error checking user:", error.message);
+      return false;
+    }
+  };
+
   const handleUserInput = async (event) => {
     event.preventDefault();
     if (
@@ -29,17 +47,14 @@ const NewUser = () => {
       alert("Password must be at least 8 characters long.");
       return;
     }
-    try {
-      // will attempt to save username and password in data base then let user continue with account creation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Redirects to the user profile page upon successful account creation
+    const userExists = await checkUserExists(userEmail);
+    if (!userExists) {
       navigate("/profile-creation", {
         state: { userEmail, userPassword },
       });
-    } catch (error) {
-      console.error("Error creating user:", error.message);
-      // Handle errors from the API call
+    } else {
+      alert("Account already exists please log in.");
+      return;
     }
   };
 

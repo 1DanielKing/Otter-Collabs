@@ -13,6 +13,42 @@ const ProfileCreation = (props) => {
 
   const createProfile = async (event) => {
     event.preventDefault();
+    const newUser = {
+      userEmail,
+      userPassword,
+      userName,
+      userInstruments,
+      userGenre,
+      userExperience,
+      userPicture,
+    };
+    try {
+      // Send a POST request to the backend endpoint
+      const response = await fetch("http://localhost:8080/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+
+      if (response.ok) {
+        // User creation successful
+        console.log("User created successfully");
+        navigate("/profile");
+        setUserName("");
+        setUserInstruments("");
+        setUserGenre("");
+        setUserExperience("");
+        setUserPicture("");
+      } else {
+        // User creation failed
+        console.error("Failed to create user");
+        // Handle error or show error message
+      }
+    } catch (error) {
+      console.error("Error creating user:", error.message);
+    }
   };
 
   const handleNameChange = (event) => {
