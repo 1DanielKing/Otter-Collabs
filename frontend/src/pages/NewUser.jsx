@@ -16,9 +16,11 @@ const NewUser = () => {
 
   const checkUserExists = async (email) => {
     try {
-      console.log(userEmail)
-      const response = await fetch(`http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`);
-      console.log(response.status)
+      console.log(userEmail);
+      const response = await fetch(
+        `api/users/search?email=${encodeURIComponent(email)}`
+      );
+      console.log(response.status);
 
       if (response.ok) {
         return true;
@@ -35,19 +37,21 @@ const NewUser = () => {
 
   const handleUserInput = async (event) => {
     event.preventDefault();
-    if (
-      !userEmail.includes("@") &&
-      !userEmail.includes(".com") &&
-      !userEmail.includes(".org") &&
-      !userEmail.includes(".edu")
-    ) {
+    setUserEmail(event.target.elements.emailInput.value);
+    setUserPassword(event.target.elements.passwordInput.value);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(userEmail)) {
       alert("Must be a valid email address");
       return;
     }
+
     if (userPassword.length < 8) {
       alert("Password must be at least 8 characters long.");
       return;
     }
+
     const userExists = await checkUserExists(userEmail);
     if (!userExists) {
       navigate("/profile-creation", {

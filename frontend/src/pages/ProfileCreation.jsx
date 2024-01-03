@@ -1,8 +1,9 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const ProfileCreation = (props) => {
+const ProfileCreation = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [username, setUsername] = useState(""); // Changed from userName
   const [instrument, setInstrument] = useState(""); // Changed from userInstruments
@@ -12,14 +13,17 @@ const ProfileCreation = (props) => {
 
   const createProfile = async (event) => {
     event.preventDefault();
+    const { userEmail, userPassword } = location.state;
+    console.log(userEmail);
+    console.log(userPassword);
     const newUser = {
       username,
-      password: props.userPassword,
-      email: props.userEmail,
+      password: userPassword,
+      email: userEmail,
       instrument,
       genre,
       experienceLevel: parseInt(experienceLevel) || 0,
-      imageURL
+      imageURL,
     };
     try {
       // Send a POST request to the backend endpoint
