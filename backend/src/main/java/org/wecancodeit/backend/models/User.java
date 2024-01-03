@@ -2,6 +2,7 @@ package org.wecancodeit.backend.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +26,8 @@ public class User {
     private int experienceLevel;
     private String imageURL;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AudioMetadata> audioFiles = new ArrayList<>();
 
     @ElementCollection
     private List<String> musicTags;

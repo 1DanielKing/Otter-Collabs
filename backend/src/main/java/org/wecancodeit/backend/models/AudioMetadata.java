@@ -14,6 +14,10 @@ public class AudioMetadata {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String title;
     private String artist;
     private String genre;
@@ -50,31 +54,35 @@ public class AudioMetadata {
     public Long getId() {
         return id;
     }
-
+    
     public String getTitle() {
         return title;
     }
-
+    
     public String getArtist() {
         return artist;
     }
-
+    
     public String getGenre() {
         return genre;
     }
-
+    
     public Double getDuration() {
         return duration;
     }
-
+    
     public Date getUploadDate() {
         return uploadDate;
     }
-
+    
     public String getFilePath() {
         return filePath;
     }
-
+    
+        public User getUser() {
+            return user;
+        }
+    
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -87,23 +95,27 @@ public class AudioMetadata {
     public void setArtist(String artist) {
         this.artist = artist;
     }
-
+    
     public void setGenre(String genre) {
         this.genre = genre;
     }
-
+    
     public void setDuration(Double duration) {
         this.duration = duration;
     }
-
+    
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
     }
-
+    
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-
+    
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
     @Override
     public String toString() {
         return "AudioMetaData{" +
@@ -137,4 +149,5 @@ public class AudioMetadata {
     public int hashCode() {
         return Objects.hash(id, title, artist, genre, duration, uploadDate, filePath);
     }
+
 }
