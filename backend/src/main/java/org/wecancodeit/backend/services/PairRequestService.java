@@ -39,6 +39,12 @@ public class PairRequestService {
         pairRequestRepository.save(pairRequest);
     }
 
+    // Service method to handle different states of a pair request
+    public List<PairRequest> getPairRequestsByStatus(RequestStatus status) {
+        // Implementation to retrieve pair requests by their status from the database
+        return pairRequestRepository.findByRequestStatus(status);
+    }
+
     public List<PairRequest> getPendingPairRequests(String username) {
         // Retrieve a user from the database using the provided username
         User user = userRepository.findByUsername(username)
@@ -59,4 +65,5 @@ public class PairRequestService {
         // Save the updated pair request to the database
         pairRequestRepository.save(pairRequest);
     }
+
 }
