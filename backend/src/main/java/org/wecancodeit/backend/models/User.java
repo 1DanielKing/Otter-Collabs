@@ -30,7 +30,7 @@ public class User {
     private List<String> musicTags;
 
     /**
-     * Default constructor.
+     * Default constructor for JPA.
      */
     public User() {
     }
