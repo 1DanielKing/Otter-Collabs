@@ -3,24 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const ProfileCreation = (props) => {
-  const { userEmail, userPassword } = props;
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
-  const [userInstruments, setUserInstruments] = useState("");
-  const [userGenre, setUserGenre] = useState("");
-  const [userExperience, setUserExperience] = useState("");
-  const [userPicture, setUserPicture] = useState("");
+  const [username, setUsername] = useState(""); // Changed from userName
+  const [instrument, setInstrument] = useState(""); // Changed from userInstruments
+  const [genre, setGenre] = useState(""); // Changed from userGenre
+  const [experienceLevel, setExperienceLevel] = useState(""); // Changed from userExperience
+  const [imageURL, setImageURL] = useState("");
 
   const createProfile = async (event) => {
     event.preventDefault();
     const newUser = {
-      userEmail,
-      userPassword,
-      userName,
-      userInstruments,
-      userGenre,
-      userExperience,
-      userPicture,
+      username,
+      password: props.userPassword,
+      email: props.userEmail,
+      instrument,
+      genre,
+      experienceLevel: parseInt(experienceLevel) || 0,
+      imageURL
     };
     try {
       // Send a POST request to the backend endpoint
@@ -36,11 +35,11 @@ const ProfileCreation = (props) => {
         // User creation successful
         console.log("User created successfully");
         navigate("/profile");
-        setUserName("");
-        setUserInstruments("");
-        setUserGenre("");
-        setUserExperience("");
-        setUserPicture("");
+        setUsername("");
+        setInstrument("");
+        setGenre("");
+        setExperienceLevel("");
+        setImageURL("");
       } else {
         // User creation failed
         console.error("Failed to create user");
@@ -52,19 +51,19 @@ const ProfileCreation = (props) => {
   };
 
   const handleNameChange = (event) => {
-    setUserName(event.target.value);
+    setUsername(event.target.value);
   };
   const handleInstrumentChange = (event) => {
-    setUserInstruments(event.target.value);
+    setInstrument(event.target.value);
   };
   const handleGenreChange = (event) => {
-    setUserGenre(event.target.value);
+    setGenre(event.target.value);
   };
   const handleExperienceChange = (event) => {
-    setUserExperience(event.target.value);
+    setExperienceLevel(event.target.value);
   };
   const handlePictureChange = (event) => {
-    setUserPicture(event.target.value);
+    setImageURL(event.target.value);
   };
 
   return (
@@ -76,7 +75,7 @@ const ProfileCreation = (props) => {
           <input
             id="userNameInput"
             type="text"
-            value={userName}
+            value={username}
             onChange={handleNameChange}
             placeholder="username"
           />
@@ -86,7 +85,7 @@ const ProfileCreation = (props) => {
           <input
             id="InstrumentInput"
             type="text"
-            value={userInstruments}
+            value={instrument}
             onChange={handleInstrumentChange}
             placeholder="Instruments"
           />
@@ -96,7 +95,7 @@ const ProfileCreation = (props) => {
           <input
             id="genreInput"
             type="text"
-            value={userGenre}
+            value={genre}
             onChange={handleGenreChange}
             placeholder="Rock, Classical, ect."
           />
@@ -106,7 +105,7 @@ const ProfileCreation = (props) => {
           <input
             id="emailInput"
             type="text"
-            value={userExperience}
+            value={experienceLevel}
             onChange={handleExperienceChange}
             placeholder="1-5"
           />
@@ -116,7 +115,7 @@ const ProfileCreation = (props) => {
           <input
             id="imageUrl"
             type="text"
-            value={userPicture}
+            value={imageURL}
             onChange={handlePictureChange}
             placeholder="ImageUrl"
           />

@@ -16,16 +16,17 @@ const NewUser = () => {
 
   const checkUserExists = async (email) => {
     try {
-      const response = await fetch(`/api/users/email/{email`);
+      console.log(userEmail)
+      const response = await fetch(`http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`);
+      console.log(response.status)
 
-      if (!response.ok) {
+      if (response.ok) {
+        return true;
+      } else if (response.status === 404) {
+        return false;
+      } else {
         throw new Error("Network response was not ok");
       }
-
-      const data = await response.json();
-
-      console.log(data);
-      return data.isPresent();
     } catch (error) {
       console.error("Error checking user:", error.message);
       return false;
