@@ -4,6 +4,7 @@ import "./App.css";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider } from "./contexts/AuthContext";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<NewUser />} />
             <Route path="/profile-creation" element={<ProfileCreation />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
       </Router>
