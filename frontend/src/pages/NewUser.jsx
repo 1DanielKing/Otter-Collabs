@@ -14,32 +14,52 @@ const NewUser = () => {
     setUserPassword(event.target.value);
   };
 
+  const checkUserExists = async (email) => {
+    try {
+      console.log(userEmail);
+      const response = await fetch(
+        `http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`
+      );
+      console.log(response.status);
+
+      if (response.ok) {
+        return true;
+      } else if (response.status === 404) {
+        return false;
+      } else {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      console.error("Error checking user:", error.message);
+      return true;
+    }
+  };
+
   const handleUserInput = async (event) => {
     event.preventDefault();
-    if (
-      !userEmail.includes("@") &&
-      !userEmail.includes(".com") &&
-      !userEmail.includes(".org") &&
-      !userEmail.includes(".edu")
-    ) {
+    setUserEmail(event.target.elements.emailInput.value);
+    setUserPassword(event.target.elements.passwordInput.value);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(userEmail)) {
       alert("Must be a valid email address");
       return;
     }
+
     if (userPassword.length < 8) {
       alert("Password must be at least 8 characters long.");
       return;
     }
-    try {
-      // will attempt to save username and password in data base then let user continue with account creation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Redirects to the user profile page upon successful account creation
+    const userExists = await checkUserExists(userEmail);
+    if (!userExists) {
       navigate("/profile-creation", {
         state: { userEmail, userPassword },
       });
-    } catch (error) {
-      console.error("Error creating user:", error.message);
-      // Handle errors from the API call
+    } else {
+      alert("Account already exists please log in.");
+      return;
     }
   };
 

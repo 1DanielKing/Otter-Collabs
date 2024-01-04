@@ -2,7 +2,11 @@ package org.wecancodeit.backend.models;
 
 import jakarta.persistence.*;
 
+
 import java.util.HashSet;
+
+import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -27,7 +31,12 @@ public class User {
     private int experienceLevel;
     private String imageURL;
 
+
     //field for music tags
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AudioMetadata> audioFiles = new ArrayList<>();
+
     @ElementCollection
     private Set<String> musicTags = new HashSet<>();
 
@@ -36,7 +45,7 @@ public class User {
     private List<PairRequest> pendingPairRequests;
    
     /**
-     * Default constructor.
+     * Default constructor for JPA.
      */
     public User() {
     }

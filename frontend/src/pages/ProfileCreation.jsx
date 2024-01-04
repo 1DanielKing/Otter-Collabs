@@ -1,34 +1,74 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-const ProfileCreation = (props) => {
-  const { userEmail, userPassword } = props;
+const ProfileCreation = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
-  const [userInstruments, setUserInstruments] = useState("");
-  const [userGenre, setUserGenre] = useState("");
-  const [userExperience, setUserExperience] = useState("");
-  const [userPicture, setUserPicture] = useState("");
+  const [username, setUsername] = useState(""); // Changed from userName
+  const [instrument, setInstrument] = useState(""); // Changed from userInstruments
+  const [genre, setGenre] = useState(""); // Changed from userGenre
+  const [experienceLevel, setExperienceLevel] = useState(""); // Changed from userExperience
+  const [imageURL, setImageURL] = useState("");
+  const { user, login } = useAuth();
 
   const createProfile = async (event) => {
     event.preventDefault();
+    const { userEmail, userPassword } = location.state;
+    const newUser = {
+      username,
+      password: userPassword,
+      email: userEmail,
+      instrument,
+      genre,
+      experienceLevel: parseInt(experienceLevel) || 0,
+      imageURL,
+    };
+    try {
+      // Send a POST request to the backend endpoint
+      const response = await fetch("http://localhost:8080/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+
+      if (response.ok) {
+        // User creation successful
+        console.log("User created successfully");
+        login(username, userPassword);
+        navigate("/profile");
+        setUsername("");
+        setInstrument("");
+        setGenre("");
+        setExperienceLevel("");
+        setImageURL("");
+      } else {
+        // User creation failed
+        console.error("Failed to create user");
+        // Handle error or show error message
+      }
+    } catch (error) {
+      console.error("Error creating user:", error.message);
+    }
   };
 
   const handleNameChange = (event) => {
-    setUserName(event.target.value);
+    setUsername(event.target.value);
   };
   const handleInstrumentChange = (event) => {
-    setUserInstruments(event.target.value);
+    setInstrument(event.target.value);
   };
   const handleGenreChange = (event) => {
-    setUserGenre(event.target.value);
+    setGenre(event.target.value);
   };
   const handleExperienceChange = (event) => {
-    setUserExperience(event.target.value);
+    setExperienceLevel(event.target.value);
   };
   const handlePictureChange = (event) => {
-    setUserPicture(event.target.value);
+    setImageURL(event.target.value);
   };
 
   return (
@@ -40,7 +80,7 @@ const ProfileCreation = (props) => {
           <input
             id="userNameInput"
             type="text"
-            value={userName}
+            value={username}
             onChange={handleNameChange}
             placeholder="username"
           />
@@ -50,7 +90,7 @@ const ProfileCreation = (props) => {
           <input
             id="InstrumentInput"
             type="text"
-            value={userInstruments}
+            value={instrument}
             onChange={handleInstrumentChange}
             placeholder="Instruments"
           />
@@ -60,7 +100,7 @@ const ProfileCreation = (props) => {
           <input
             id="genreInput"
             type="text"
-            value={userGenre}
+            value={genre}
             onChange={handleGenreChange}
             placeholder="Rock, Classical, ect."
           />
@@ -70,7 +110,7 @@ const ProfileCreation = (props) => {
           <input
             id="emailInput"
             type="text"
-            value={userExperience}
+            value={experienceLevel}
             onChange={handleExperienceChange}
             placeholder="1-5"
           />
@@ -80,7 +120,7 @@ const ProfileCreation = (props) => {
           <input
             id="imageUrl"
             type="text"
-            value={userPicture}
+            value={imageURL}
             onChange={handlePictureChange}
             placeholder="ImageUrl"
           />
