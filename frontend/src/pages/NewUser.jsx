@@ -19,9 +19,7 @@ const NewUser = () => {
     try {
       console.log(userEmail);
       const response = await fetch(
-        `http://localhost:8080/api/users/search?email=${encodeURIComponent(
-          email
-        )}`
+        `http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`
       );
       console.log(response.status);
 
