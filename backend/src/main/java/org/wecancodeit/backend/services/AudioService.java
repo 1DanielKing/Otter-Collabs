@@ -85,6 +85,10 @@ public class AudioService {
         if (contentType == null || !contentType.startsWith("audio/")) {
             throw new IllegalArgumentException("File must be an audio file");
         }
+        // no videos allowed
+        if (isVideoContentType(contentType)) {
+            throw new IllegalArgumentException("Video uploads are not allowed");
+        }
 
         String fileName = storeFile(file);
 
@@ -95,6 +99,11 @@ public class AudioService {
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
         metaData.setUser(owner);
         return audioMetaDataRepository.save(metaData);
+    }
+
+    // no videos allowed
+    private boolean isVideoContentType(String contentType) {
+        return contentType.startsWith("video/");
     }
 
     /**
@@ -110,18 +119,19 @@ public class AudioService {
             audioMetaDataRepository.deleteById(id);
         });
     }
-/**
- * 
- * @param filePath to the audio file
- * @return the duration of the audio file in seconds
- */
-    private Double getAudioFileDuration(String filePath){
-        try{
+
+    /**
+     * 
+     * @param filePath to the audio file
+     * @return the duration of the audio file in seconds
+     */
+    private Double getAudioFileDuration(String filePath) {
+        try {
             File file = new File(filePath);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(audioInputStream);
             long microseconds = (long) fileFormat.properties().get("duration");
-            return microseconds / 1_000_000.0; //Converts Microseconds to seconds
+            return microseconds / 1_000_000.0; // Converts Microseconds to seconds
         } catch (Exception e) {
             e.printStackTrace();
             return null;
