@@ -18,7 +18,7 @@ const NewUser = () => {
     try {
       console.log(userEmail);
       const response = await fetch(
-        `api/users/search?email=${encodeURIComponent(email)}`
+        `http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`
       );
       console.log(response.status);
 
@@ -31,7 +31,7 @@ const NewUser = () => {
       }
     } catch (error) {
       console.error("Error checking user:", error.message);
-      return false;
+      return true;
     }
   };
 
