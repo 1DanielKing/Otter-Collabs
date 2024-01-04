@@ -26,6 +26,10 @@ const ChatBox = () => {
             });
         });
 
+        //testing backend authorization
+
+
+
         return () => {
             if (client && isConnected) {
                 client.disconnect();
