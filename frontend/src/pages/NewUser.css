@@ -1,0 +1,47 @@
+.signup {
+  max-width: 400px;
+  padding: 25px;
+  border: 15px solid #000000f5;
+  border-radius: 16px;
+  background-color: #ffffff;
+}
+
+.OtterCollab {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url("/public/media/pictures/music.jpg");
+  background-size: cover;
+}
+
+input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #000000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #727272;
+}
