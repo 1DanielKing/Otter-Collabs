@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./NewUser.css";
+import { useAuth } from "../contexts/AuthContext";
 
 const NewUser = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      console.log('User logged in:', user);
+      navigate("/test");
+    }
+  }, [user, navigate]);
 
   const handleEmailChange = (event) => {
     setUserEmail(event.target.value);
