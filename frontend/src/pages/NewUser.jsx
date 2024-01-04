@@ -12,7 +12,7 @@ const NewUser = () => {
   useEffect(() => {
     if (user) {
       console.log('User logged in:', user);
-      navigate("/test");
+      navigate("/profile");
     }
   }, [user, navigate]);
 
