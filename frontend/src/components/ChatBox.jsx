@@ -14,6 +14,7 @@ const ChatBox = () => {
         const client = Stomp.over(socket);
 
         let isConnected = false;
+        console.log('user at connection: ' + user)
 
         client.connect({
             'Authorization': `Bearer ${user.token}`
