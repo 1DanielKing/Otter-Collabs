@@ -2,8 +2,10 @@ package org.wecancodeit.backend.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Represents a user in the OtterCollab platform.
@@ -27,7 +29,7 @@ public class User {
 
     //field for music tags
     @ElementCollection
-    private List<String> musicTags;
+    private Set<String> musicTags = new HashSet<>();
 
     //field for pending pair requests
     @OneToMany(mappedBy = "receiver")
@@ -93,7 +95,7 @@ public class User {
         return imageURL;
     }
     
-    public List<String> getMusicTags() {
+    public Set<String> getMusicTags() {
         return musicTags;
     }
 
@@ -132,6 +134,18 @@ public class User {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public void setMusicTags(Set<String> musicTags) {
+        this.musicTags = musicTags;
+    }
+
+    public void addMusicTag(String musicTag) {
+        this.musicTags.add(musicTag);
+    }
+
+    public void removeMusicTag(String musicTag) {
+        this.musicTags.remove(musicTag);
     }
 
     public void setPendingPairRequests(List<PairRequest> pendingPairRequests) {
