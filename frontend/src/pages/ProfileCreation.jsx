@@ -13,6 +13,13 @@ const ProfileCreation = () => {
   const [imageURL, setImageURL] = useState("");
   const { user, login } = useAuth();
 
+  useEffect(() => {
+    if (user) {
+      console.log('User logged in:', user);
+      navigate("/test");
+    }
+  }, [user, navigate]);
+
   const createProfile = async (event) => {
     event.preventDefault();
     const { userEmail, userPassword } = location.state;
@@ -37,9 +44,11 @@ const ProfileCreation = () => {
 
       if (response.ok) {
         // User creation successful
-        console.log("User created successfully");
-        login(username, userPassword);
-        navigate("/profile");
+        console.log("User created successfully, attempting to login...");
+        await login(username, userPassword).then(() => {
+          console.log('Current user after login attempt:', user);
+          navigate("/test");
+        });
         setUsername("");
         setInstrument("");
         setGenre("");

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from 'stompjs/lib/stomp.min.js'
+import { useAuth } from '../contexts/AuthContext';
 
 const ChatBox = () => {
     const [stompClient, setStompClient] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
+    const { user } = useAuth();
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/chat');
@@ -13,13 +15,19 @@ const ChatBox = () => {
 
         let isConnected = false;
 
-        client.connect({}, frame => {
+        client.connect({
+            'Authorization': `Bearer ${user.token}`
+        }, frame => {
             isConnected = true;
             setStompClient(client);
             client.subscribe('/topic/messages', message => {
                 setMessages(prev => [...prev, JSON.parse(message.body)]);
             });
         });
+
+        //testing backend authorization
+
+
 
         return () => {
             if (client && isConnected) {
@@ -31,7 +39,7 @@ const ChatBox = () => {
 
     const sendMessage = () => {
         if (stompClient && newMessage) {
-            const chatMessage = { sender: "User", text: newMessage };
+            const chatMessage = { sender: user.username, text: newMessage };
             stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
             setNewMessage("");
         }

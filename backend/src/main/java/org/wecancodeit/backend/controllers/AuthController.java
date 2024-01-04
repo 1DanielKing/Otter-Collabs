@@ -1,5 +1,8 @@
 package org.wecancodeit.backend.controllers;
 
+import java.security.Principal;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wecancodeit.backend.models.User;
@@ -23,6 +26,17 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponse(token));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Login failed: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/checkStatus")
+    public ResponseEntity<String> checkAuthStatus(Principal principal) {
+        if (principal != null) {
+            // User is logged in
+            return ResponseEntity.ok("User is logged in: " + principal.getName());
+        } else {
+            // User is not logged in
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
         }
     }
 }
