@@ -6,12 +6,35 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        // Check for token in local storage on initial load
-        const storedToken = localStorage.getItem("authToken");
-        if (storedToken) {
-            // Update state with token or fetch user details as needed
-            setUser({ token: storedToken });
-        }
+        const validateToken = async () => {
+            const storedToken = localStorage.getItem('authToken');
+            console.log('Retrieved token from localStorage:', storedToken);
+            if (storedToken) {
+                try {
+                    const response = await fetch('http://localhost:8080/api/auth/checkStatus', {
+                        headers: {
+                            'Authorization': `Bearer ${storedToken}`,
+                        },
+                    });
+                    if (response.ok) {
+                        // Token is valid, set the user state
+                        const username = await response.text();
+                        setUser({ token: storedToken, username });
+                    } else {
+                        // Token is invalid, clear the token and user state
+                        localStorage.removeItem('authToken');
+                        setUser(null);
+                    }
+                } catch (error) {
+                    console.error('Error validating token:', error);
+                    localStorage.removeItem('authToken');
+                    setUser(null);
+                }
+            }
+            console.log("current user:", user);
+        };
+
+        validateToken();
     }, []);
 
     const login = async (username, password) => {

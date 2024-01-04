@@ -33,10 +33,10 @@ public class AuthController {
     public ResponseEntity<String> checkAuthStatus(Principal principal) {
         if (principal != null) {
             // User is logged in
-            return ResponseEntity.ok("User is logged in: " + principal.getName());
+            return ResponseEntity.ok(principal.getName());
         } else {
             // User is not logged in
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }
