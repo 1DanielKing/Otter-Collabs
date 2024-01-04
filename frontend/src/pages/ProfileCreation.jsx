@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const ProfileCreation = () => {
   const location = useLocation();
@@ -10,12 +11,11 @@ const ProfileCreation = () => {
   const [genre, setGenre] = useState(""); // Changed from userGenre
   const [experienceLevel, setExperienceLevel] = useState(""); // Changed from userExperience
   const [imageURL, setImageURL] = useState("");
+  const { user, login } = useAuth();
 
   const createProfile = async (event) => {
     event.preventDefault();
     const { userEmail, userPassword } = location.state;
-    console.log(userEmail);
-    console.log(userPassword);
     const newUser = {
       username,
       password: userPassword,
@@ -38,6 +38,7 @@ const ProfileCreation = () => {
       if (response.ok) {
         // User creation successful
         console.log("User created successfully");
+        login(username, userPassword);
         navigate("/profile");
         setUsername("");
         setInstrument("");
