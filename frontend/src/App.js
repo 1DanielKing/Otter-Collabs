@@ -5,18 +5,19 @@ import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <main>
+        <Layout>
           <Routes>
             <Route path="/" element={<NewUser />} />
             <Route path="/profile-creation" element={<ProfileCreation />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
-        </main>
+        </Layout>
       </Router>
     </AuthProvider>
   );
