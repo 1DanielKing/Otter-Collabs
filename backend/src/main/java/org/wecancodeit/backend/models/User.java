@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.wecancodeit.backend.enums.ExperienceLevelEnum;
+
 /**
  * Represents a user in the OtterCollab platform.
  * This class holds user details relevant for music collaboration.
@@ -28,7 +30,10 @@ public class User {
     private String email;
     private String instrument;
     private String genre;
-    private int experienceLevel;
+
+    @Enumerated(EnumType.STRING)
+    private ExperienceLevelEnum experienceLevel;
+    
     private String imageURL;
 
 
@@ -60,8 +65,9 @@ public class User {
      * @param genre
      * @param experienceLevel
      * @param imageURL
+     * @param musicTag
      */
-    public User(String username, String password, String email, String instrument, String genre, int experienceLevel,
+    public User(String username, String password, String email, String instrument, String genre, ExperienceLevelEnum experienceLevel,
             String imageURL) {
         this.username = username;
         this.password = password;
@@ -96,7 +102,7 @@ public class User {
         return genre;
     }
 
-    public int getExperienceLevel() {
+    public ExperienceLevelEnum getExperienceLevel() {
         return experienceLevel;
     }
 
@@ -137,7 +143,7 @@ public class User {
         this.genre = genre;
     }
 
-    public void setExperienceLevel(int experienceLevel) {
+    public void setExperienceLevel(ExperienceLevelEnum experienceLevel) {
         this.experienceLevel = experienceLevel;
     }
 
