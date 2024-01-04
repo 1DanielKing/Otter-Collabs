@@ -9,6 +9,12 @@ import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.AudioMetadataRepository;
 import org.wecancodeit.backend.repositories.UserRepository;
 
+// imports for Checking Duration of uploaded audio files
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -81,7 +87,12 @@ public class AudioService {
         }
 
         String fileName = storeFile(file);
-        AudioMetadata metaData = new AudioMetadata(title, artist, genre, null, new Date(), fileName);
+
+        // Finds the file being uploaded and calculates the audio files duration
+        String filePath = Paths.get(storageLocation).resolve(fileName).toString();
+        Double duration = getAudioFileDuration(filePath);
+
+        AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
         metaData.setUser(owner);
         return audioMetaDataRepository.save(metaData);
     }
@@ -98,6 +109,23 @@ public class AudioService {
             deleteFile(m.getFilePath());
             audioMetaDataRepository.deleteById(id);
         });
+    }
+/**
+ * 
+ * @param filePath to the audio file
+ * @return the duration of the audio file in seconds
+ */
+    private Double getAudioFileDuration(String filePath){
+        try{
+            File file = new File(filePath);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(audioInputStream);
+            long microseconds = (long) fileFormat.properties().get("duration");
+            return microseconds / 1_000_000.0; //Converts Microseconds to seconds
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String storeFile(MultipartFile file) throws IOException {
