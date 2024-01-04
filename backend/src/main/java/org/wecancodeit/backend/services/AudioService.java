@@ -119,6 +119,23 @@ public class AudioService {
             audioMetaDataRepository.deleteById(id);
         });
     }
+/**
+ * 
+ * @param filePath to the audio file
+ * @return the duration of the audio file in seconds
+ */
+    private Double getAudioFileDuration(String filePath){
+        try{
+            File file = new File(filePath);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(audioInputStream);
+            long microseconds = (long) fileFormat.properties().get("duration");
+            return microseconds / 1_000_000.0; //Converts Microseconds to seconds
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
      * 
