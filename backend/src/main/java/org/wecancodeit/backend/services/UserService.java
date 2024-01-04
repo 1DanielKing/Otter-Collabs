@@ -1,5 +1,6 @@
 package org.wecancodeit.backend.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.UserRepository;
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -52,6 +55,7 @@ public class UserService {
      * @return the saved or updated user
      */
     public User saveOrUpdateUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
