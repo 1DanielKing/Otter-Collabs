@@ -1,7 +1,6 @@
 function DisplayProfile({ data }) {
   return (
     <div>
-      console.log({data.instrument})
       <div className="profile">
         <h1>profile picture</h1>
         <h2>{data.userPhoto}</h2>
@@ -12,7 +11,7 @@ function DisplayProfile({ data }) {
       </div>
       <div className="profile">
         <h1>email</h1>
-        <h2>{data.email}</h2>
+        <h2>{data.userEmail}</h2>
       </div>
       <div className="profile">
         <h1>instrument</h1>
