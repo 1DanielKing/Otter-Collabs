@@ -6,17 +6,17 @@ import { useAuth } from "../contexts/AuthContext";
 const ProfileCreation = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [username, setUsername] = useState(""); // Changed from userName
-  const [instrument, setInstrument] = useState(""); // Changed from userInstruments
-  const [genre, setGenre] = useState(""); // Changed from userGenre
-  const [experienceLevel, setExperienceLevel] = useState(""); // Changed from userExperience
+  const [username, setUsername] = useState(""); 
+  const [instrument, setInstrument] = useState(""); 
+  const [genre, setGenre] = useState(""); 
+  const [experienceLevel, setExperienceLevel] = useState(""); 
   const [imageURL, setImageURL] = useState("");
   const { user, login } = useAuth();
 
   useEffect(() => {
     if (user) {
       console.log('User logged in:', user);
-      navigate("/test");
+      navigate("/profile");
     }
   }, [user, navigate]);
 
