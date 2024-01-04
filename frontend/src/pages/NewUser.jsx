@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "./NewUser.css";
 
 const NewUser = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ const NewUser = () => {
     try {
       console.log(userEmail);
       const response = await fetch(
-        `http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`
+        `http://localhost:8080/api/users/search?email=${encodeURIComponent(
+          email
+        )}`
       );
       console.log(response.status);
 
@@ -64,8 +67,8 @@ const NewUser = () => {
   };
 
   return (
-    <div>
-      <h1>Create Account Page</h1>
+    <div className="signup">
+      <h1 className="OtterCollab">Create Account Page</h1>
       <form onSubmit={handleUserInput}>
         <div className="email-box">
           <label htmlFor="emailInput">Email: </label>
@@ -93,6 +96,9 @@ const NewUser = () => {
           </button>
         </div>
       </form>
+      <p>
+        Already on OtterCollab? <Link to="/Login">Sign In</Link>
+      </p>
     </div>
   );
 };
