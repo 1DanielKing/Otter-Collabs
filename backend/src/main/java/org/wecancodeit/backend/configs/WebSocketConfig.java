@@ -1,4 +1,4 @@
-package org.wecancodeit.backend.config;
+package org.wecancodeit.backend.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
