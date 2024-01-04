@@ -47,7 +47,7 @@ const ProfileCreation = () => {
         console.log("User created successfully, attempting to login...");
         await login(username, userPassword).then(() => {
           console.log('Current user after login attempt:', user);
-          navigate("/test");
+          navigate("/profile");
         });
         setUsername("");
         setInstrument("");
