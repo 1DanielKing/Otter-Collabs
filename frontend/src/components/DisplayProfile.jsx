@@ -1,7 +1,7 @@
 function DisplayProfile({ data }) {
   return (
     <div>
-      console.log({data.username})
+      console.log({data.instrument})
       <div className="profile">
         <h1>profile picture</h1>
         <h2>{data.userPhoto}</h2>
