@@ -14,7 +14,7 @@ const ChatBox = () => {
         const client = Stomp.over(socket);
 
         let isConnected = false;
-        console.log('user at connection: ' + user)
+        console.log('user token: ' + user.token)
 
         client.connect({
             'Authorization': `Bearer ${user.token}`
@@ -25,10 +25,6 @@ const ChatBox = () => {
                 setMessages(prev => [...prev, JSON.parse(message.body)]);
             });
         });
-
-        //testing backend authorization
-
-
 
         return () => {
             if (client && isConnected) {
