@@ -11,7 +11,7 @@ function DisplayProfile({ data }) {
       </div>
       <div className="profile">
         <h1>email</h1>
-        <h2>{data.userEmail}</h2>
+        <h2>{data.email}</h2>
       </div>
       <div className="profile">
         <h1>instrument</h1>
