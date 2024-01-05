@@ -24,12 +24,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/h2-console/**").permitAll() // Permit H2 console access
+                        .requestMatchers("/**").permitAll() // Permit H2 console access
                         .requestMatchers("/api/auth/**").permitAll() // Permit all requests to auth endpoints
-                        .requestMatchers("/chat/**").permitAll() //
+                        .requestMatchers("/chat/chat").permitAll() //
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/audio/**").permitAll()
-                        .anyRequest().permitAll() // Require auth for all other requests
+                        .anyRequest().authenticated() // Require auth for all other requests
                 )
                 .headers(headers -> headers // Set headers to allow frame options for H2 console
                         .frameOptions().sameOrigin());
