@@ -37,6 +37,28 @@ export const AuthProvider = ({ children }) => {
         validateToken();
     }, []);
 
+    const loadProfileData = async () => {
+        if (user && user.username) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/users/search?username=${user.username}`);
+                if (response.ok) {
+                    const profileData = await response.json();
+                    setUser(current => ({ ...current, ...profileData }));
+                } else {
+                    console.error('Failed to load profile data');
+                }
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (user) {
+            loadProfileData();
+        }
+    }, [user]);
+
     const login = async (username, password) => {
         try {
             const response = await fetch("http://localhost:8080/api/auth/login", {
@@ -50,16 +72,7 @@ export const AuthProvider = ({ children }) => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("authToken", data.token);
-                const userDetails = {
-                    username,
-                    userEmail: data.email,
-                    userPhoto: data.imageURL,
-                    instrument: data.instrument,
-                    experience: data.experience,
-                    genre: data.genre,
-                };
-                localStorage.setItem("userDetails", JSON.stringify(userDetails));
-                setUser({ token: data.token, ...userDetails });
+                setUser({ token: data.token, username: username });
             } else {
                 console.error("Login failed");
             }
