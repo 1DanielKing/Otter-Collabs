@@ -75,6 +75,7 @@ const NewUser = () => {
   return (
     <div className="signup">
       <h1 className="OtterCollab">Join OtterCollab</h1>
+      <h1 className="OtterCollab">Join OtterCollab</h1>
       <form onSubmit={handleUserInput}>
         <div className="email-box">
           <label htmlFor="emailInput">Email: </label>
@@ -104,7 +105,7 @@ const NewUser = () => {
         </div>
       </form>
       <p>
-        Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
+        Already on OtterCollab? <Link to="/SignIn">Sign In</Link>
       </p>
     </div>
   );
