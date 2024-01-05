@@ -49,6 +49,16 @@ public class UserService {
     }
 
     /**
+     * Finds a user by their email.
+     *
+     * @param email the email of the user
+     * @return an Optional containing the user if found
+     */
+    public Optional<User> findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    /**
      * Saves a new user or updates an existing user in the repository.
      *
      * @param user the user to save or update

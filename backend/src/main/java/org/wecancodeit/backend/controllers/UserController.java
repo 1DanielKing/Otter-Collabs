@@ -37,7 +37,8 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<?> getUser(@RequestParam(required = false) Long id,
-            @RequestParam(required = false) String email) {
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String username) {
         if (id != null) {
             return userService.findUserById(id)
                     .map(ResponseEntity::ok)
@@ -46,9 +47,14 @@ public class UserController {
             return userService.findUserByEmail(email)
                     .map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity.notFound().build());
+
+        } else if (username != null) {
+            return userService.findUserByUsername(username)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
         } else {
             // Handle case where neither id nor email is provided
-            return ResponseEntity.badRequest().body("Either id or email must be provided");
+            return ResponseEntity.badRequest().body("Either id, username, or email must be provided");
         }
     }
 
@@ -66,7 +72,7 @@ public class UserController {
     /**
      * PUT endpoint to update a user.
      *
-     * @param id should be zero or omitted
+     * @param id   should be zero or omitted
      * @param user updated user information
      * @return the updated user
      */
