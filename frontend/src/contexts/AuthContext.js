@@ -4,6 +4,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [profileLoaded, setProfileLoaded] = useState(false);
 
     useEffect(() => {
         const validateToken = async () => {
@@ -38,12 +39,13 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const loadProfileData = async () => {
-        if (user && user.username) {
+        if (user && user.username && !profileLoaded) {
             try {
                 const response = await fetch(`http://localhost:8080/api/users/search?username=${user.username}`);
                 if (response.ok) {
                     const profileData = await response.json();
                     setUser(current => ({ ...current, ...profileData }));
+                    setProfileLoaded(true);
                 } else {
                     console.error('Failed to load profile data');
                 }
@@ -54,10 +56,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if (user) {
+        if (user && !profileLoaded) {
             loadProfileData();
         }
-    }, [user]);
+    }, [user, profileLoaded]);
 
     const login = async (username, password) => {
         try {
