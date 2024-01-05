@@ -11,7 +11,7 @@ const AuthenticatedApp = () => {
   return (
     <Layout>
       <Routes>
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/" element={<ProfilePage />} />
       </Routes>
     </Layout>
   );
