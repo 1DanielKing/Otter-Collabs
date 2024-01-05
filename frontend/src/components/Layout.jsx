@@ -5,7 +5,6 @@ const Layout = ({ children }) => {
     return (
         <>
             <div className="layout">
-                "// TODO add navbar"
                 <main>{children}</main>
                 <ChatBox />
             </div>
