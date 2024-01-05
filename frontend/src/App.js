@@ -37,13 +37,13 @@ const UnauthenticatedApp = () => {
 };
 
 function App() {
-  return (
+ return (
     <AuthProvider>
       <Router>
         <MainApp />
       </Router>
     </AuthProvider>
-  );
+ );
 }
 
 const MainApp = () => {
