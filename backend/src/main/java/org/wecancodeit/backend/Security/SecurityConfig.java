@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/**").permitAll() // Permit H2 console access
+                        .requestMatchers("/h2-console/**").permitAll() // Permit H2 console access
                         .requestMatchers("/api/auth/**").permitAll() // Permit all requests to auth endpoints
                         .requestMatchers("/chat/**").permitAll() //
                         .requestMatchers("/api/users/**").permitAll()
