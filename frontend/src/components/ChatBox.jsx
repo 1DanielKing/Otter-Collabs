@@ -14,7 +14,6 @@ const ChatBox = () => {
         const client = Stomp.over(socket);
 
         let isConnected = false;
-        console.log('user token: ' + user.token)
 
         client.connect({
             'Authorization': `Bearer ${user.token}`
@@ -22,6 +21,7 @@ const ChatBox = () => {
             isConnected = true;
             setStompClient(client);
             client.subscribe('/topic/messages', message => {
+                console.log("received: " + message);
                 setMessages(prev => [...prev, JSON.parse(message.body)]);
             });
         });
@@ -33,11 +33,10 @@ const ChatBox = () => {
         };
     }, []);
 
-
     const sendMessage = () => {
         if (stompClient && newMessage) {
             const chatMessage = { sender: user.username, text: newMessage };
-            stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+            stompClient.send("/api/message", {}, JSON.stringify(chatMessage));
             setNewMessage("");
         }
     };
@@ -46,7 +45,7 @@ const ChatBox = () => {
         <div>
             <div>
                 {messages.map((msg) => (
-                    <div key={msg.id}>{msg.from}: {msg.text}</div>
+                    <div key={msg.id}>{msg.sender}: {msg.text}</div>
                 ))}
             </div>
             <input
