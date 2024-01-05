@@ -3,8 +3,8 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [profileLoaded, setProfileLoaded] = useState(false);
+    const [user, setUser] = useState(null);
+    const [profileLoaded, setProfileLoaded] = useState(false);
 
   useEffect(() => {
     const validateToken = async () => {
@@ -41,38 +41,38 @@ export const AuthProvider = ({ children }) => {
     validateToken();
   }, []);
 
-    useEffect(() => {
-        console.log("profileLoaded updated to: ", profileLoaded);
-    }, [profileLoaded]);
-
-    const loadProfileData = async (username) => {
-        if (username === null || username === undefined) {
-            username = user.username;
-        }
-        try {
-            const response = await fetch(`http://localhost:8080/api/users/search?username=${username}`);
-            if (response.ok) {
-                const profileData = await response.json();
-                setUser(current => ({ ...current, ...profileData }));
-                setProfileLoaded(true);
-            } else {
-                console.error('Failed to load profile data');
+    const loadProfileData = async () => {
+        if (user && user.username && !profileLoaded) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/users/search?username=${user.username}`);
+                if (response.ok) {
+                    const profileData = await response.json();
+                    setUser(current => ({ ...current, ...profileData }));
+                    setProfileLoaded(true);
+                } else {
+                    console.error('Failed to load profile data');
+                }
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
             }
-        } catch (error) {
-            console.error('Error fetching profile data:', error);
         }
-
     };
 
-  const login = async (username, password) => {
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    useEffect(() => {
+        if (user && !profileLoaded) {
+            loadProfileData();
+        }
+    }, [user, profileLoaded]);
+
+    const login = async (username, password) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
       if (response.ok) {
         const data = await response.json();
