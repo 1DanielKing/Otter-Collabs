@@ -17,7 +17,7 @@ public class ChatController {
         this.chatMessageRepository = chatMessageRepository;
     }
 
-    @MessageMapping("/message")
+    @MessageMapping("/api/message")
     @SendTo("/topic/messages")
     public ChatMessage sendMessage(ChatMessage chatMessage) {
         chatMessage.setTimestamp(new Date()); // Set the current timestamp
@@ -25,4 +25,3 @@ public class ChatController {
         return chatMessageRepository.save(chatMessage);
     }
 }
-
