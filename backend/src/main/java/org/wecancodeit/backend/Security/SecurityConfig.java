@@ -28,7 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // Permit all requests to auth endpoints
                         .requestMatchers("/chat/**").permitAll() //
                         .requestMatchers("/api/users/**").permitAll()
-                        .anyRequest().authenticated() // Require auth for all other requests
+                        .requestMatchers("/api/audio/**").permitAll()
+                        .anyRequest().permitAll() // Require auth for all other requests
                 )
                 .headers(headers -> headers // Set headers to allow frame options for H2 console
                         .frameOptions().sameOrigin());
