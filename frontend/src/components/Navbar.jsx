@@ -1,22 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css';
+import './Navbar.css'; // Import your CSS file
 
-function Navbar({ openLogoutModal }) {
+function Navbar() {
     return (
         <nav className="navbar">
             <ul className="nav-links">
                 <div className="Logo-Home-Button">
-                    <li>
-                        <Link to="/"><img src='/' alt='LOGO OTTERCOLLAB'></img></Link>
-                    </li>
+                    <li><a href="../pages/HomePage"><img src='/' alt='LOGO OTTERCOLLAB'></img></a></li>
                 </div>
-                <div className="nav-links">
-                    <div><li><Link to="/">Profile</Link></li></div>
-                    <div><li><Link to="/portfolio">Portfolio</Link></li></div>
-                    <div><li><Link to="/about">About</Link></li></div>
+                <div className="rest-of-nav">
+                    <div><li><a href="#">Profile</a></li></div>
+                    <div><li><a href="#">Feed</a></li></div>
+                    <div><li><a href="#">About</a></li></div>
                 </div>
-                <div><li><a href="#" onClick={openLogoutModal}>Log Out</a></li></div>
             </ul>
         </nav>
     );
