@@ -1,9 +1,13 @@
 /* Navbar styles */
 .navbar {
   background-color: #CED4DA;
-  border: 10px solid black;
-  border-radius: 25px;
+  border-bottom: 10px solid black;
   padding: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 /* Navbar links */
