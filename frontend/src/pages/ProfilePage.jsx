@@ -10,6 +10,12 @@ const ProfilePage = () => {
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
+  const { user, login, logout } = useAuth();
+  const [editMode, setEditMode] = useState(false);
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
 
   return (
     <div className="main-container">
