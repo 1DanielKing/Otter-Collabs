@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 const EditProfileForm = ({ user, toggleEditMode }) => {
   const { loadProfileData } = useAuth();
   const [formData, setFormData] = useState({
-    userPhoto: user.userPhoto,
+    imageURL: user.imageURL,
     username: user.username,
     email: user.email,
     instrument: user.instrument,
@@ -14,7 +14,7 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
 
   useEffect(() => {
     setFormData({
-      userPhoto: user.userPhoto,
+      imageURL: user.imageURL,
       username: user.username,
       email: user.email,
       instrument: user.instrument,

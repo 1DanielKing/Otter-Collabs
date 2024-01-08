@@ -44,6 +44,9 @@ export const AuthProvider = ({ children }) => {
     }, [profileLoaded]);
 
     const loadProfileData = async (username) => {
+        if (username === null || username === undefined) {
+            username = user.username;
+        }
         try {
             const response = await fetch(`http://localhost:8080/api/users/search?username=${username}`);
             if (response.ok) {
@@ -88,7 +91,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, loadProfileData }}>
             {children}
         </AuthContext.Provider>
     );
