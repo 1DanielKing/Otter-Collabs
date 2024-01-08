@@ -57,6 +57,16 @@ public class AudioService {
     }
 
     /**
+     * Retrieves all audio metadata entries for a given user.
+     *
+     * @param userId the ID of the user
+     * @return a list of audio metadata entries for the user
+     */
+    public List<AudioMetadata> findAllByUserId(Long userId) {
+        return audioMetaDataRepository.findByUserId(userId);
+    }
+
+    /**
      * Saves or updates audio metadata.
      *
      * @param audioMetaData the audio metadata to save or update

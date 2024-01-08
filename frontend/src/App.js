@@ -6,12 +6,16 @@ import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
+import AudioPortfolio from "./pages/AudioPortfolio";
+import AudioUpload from "./pages/AudioUpload";
 
 const AuthenticatedApp = () => {
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<ProfilePage />} />
+        <Route path="/portfolio" element={<AudioPortfolio />} />
+        <Route path="/portfolio/upload" element={<AudioUpload />} />
       </Routes>
     </Layout>
   );

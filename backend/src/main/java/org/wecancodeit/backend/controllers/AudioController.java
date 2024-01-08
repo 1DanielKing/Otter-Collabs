@@ -55,6 +55,17 @@ public class AudioController {
     }
 
     /**
+     * GET endpoint to retrieve all audio metadata for a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a list of audio metadata for the user
+     */
+    @GetMapping("/user/{userId}")
+    public List<AudioMetadata> getAllAudioByUser(@PathVariable Long userId) {
+        return audioService.findAllByUserId(userId);
+    }
+
+    /**
      * Endpoint to delete audio file and data by ID.
      *
      * @param id the ID of the audio to delete
