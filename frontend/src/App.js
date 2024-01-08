@@ -7,6 +7,8 @@ import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
 import LandingPage from "./pages/LandingPage";
 import SignIn from "./pages/SignIn";
+import AudioPortfolio from "./pages/AudioPortfolio";
+import AudioUpload from "./pages/AudioUpload";
 
 const AuthenticatedApp = () => {
   const {loading } = useAuth();
@@ -18,6 +20,8 @@ const AuthenticatedApp = () => {
       ) : (
       <Routes>
         <Route path="/" element={<ProfilePage />} />
+        <Route path="/portfolio" element={<AudioPortfolio />} />
+        <Route path="/portfolio/upload" element={<AudioUpload />} />
       </Routes>
       )}
     </Layout>
