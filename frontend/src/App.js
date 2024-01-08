@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
 import AudioPortfolio from "./pages/AudioPortfolio";
 import AudioUpload from "./pages/AudioUpload";
+import SignIn from "./pages/SignIn";
 
 const AuthenticatedApp = () => {
   return (
@@ -26,6 +27,8 @@ const UnauthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
+      <Route path="/sign-in" element={<SignIn />} />
+
     </Routes>
   );
 };

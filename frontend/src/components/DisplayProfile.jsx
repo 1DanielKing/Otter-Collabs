@@ -3,7 +3,6 @@ import React from "react";
 function DisplayProfile({ data, toggleEditMode }) {
   return (
     <div>
-      console.log({data.instrument})
       <div className="profile">
         <h1>profile picture</h1>
         <h2>{data.userPhoto}</h2>
