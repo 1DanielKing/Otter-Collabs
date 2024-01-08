@@ -104,7 +104,7 @@ const NewUser = () => {
         </div>
       </form>
       <p>
-        Already on OtterCollab? <Link to="/SignIn">Sign In</Link>
+        Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
       </p>
     </div>
   );
