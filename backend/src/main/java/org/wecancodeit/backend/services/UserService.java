@@ -64,8 +64,20 @@ public class UserService {
      * @param user the user to save or update
      * @return the saved or updated user
      */
-    public User saveOrUpdateUser(User user) {
+    public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    /**
+     * Updates an existing user in the repository.
+     *
+     * @param user the user with updated information
+     * @return the updated user
+     */
+    public User updateUser(User user) {
+        // Assumes the password is already set correctly (either unmodified or null if
+        // not updating the password)
         return userRepository.save(user);
     }
 
