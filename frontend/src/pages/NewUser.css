@@ -12,17 +12,6 @@
   margin-bottom: 20px;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  color: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-image: url("/public/media/pictures/music.jpg");
-  background-size: cover;
-}
 
 input {
   width: calc(100% - 20px);

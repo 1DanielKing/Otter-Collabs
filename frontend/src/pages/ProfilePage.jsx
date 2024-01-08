@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import DisplayProfile from "../components/DisplayProfile";
+import "./ProfilePage.css";
 import EditProfileForm from "../components/EditProfileForm";
 
 const ProfilePage = () => {
@@ -11,8 +12,13 @@ const ProfilePage = () => {
     setEditMode(!editMode);
   };
 
+  if (!user) {
+    console.log(user);
+    return <div>Loading profile...</div>;
+  }
+
   return (
-    <div id="items-container">
+    <div className="main-container">
       <div className="item-box">
         {editMode ? (
           <EditProfileForm user={user} toggleEditMode={toggleEditMode} />
@@ -25,3 +31,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
