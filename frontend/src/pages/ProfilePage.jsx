@@ -4,7 +4,7 @@ import DisplayProfile from "../components/DisplayProfile";
 import EditProfileForm from "../components/EditProfileForm";
 
 const ProfilePage = () => {
-  const { user, login, logout } = useAuth();
+  const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
 
   const toggleEditMode = () => {
