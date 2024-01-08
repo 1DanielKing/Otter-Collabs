@@ -26,7 +26,7 @@ const ProfileCreation = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('User logged in:', user);
+      console.log("User logged in:", user);
       navigate("/");
     }
   }, [user, navigate]);
@@ -44,7 +44,6 @@ const ProfileCreation = () => {
       imageURL,
     };
     try {
-      // Send a POST request to the backend endpoint
       const response = await fetch("http://localhost:8080/api/users", {
         method: "POST",
         headers: {
@@ -57,7 +56,7 @@ const ProfileCreation = () => {
         // User creation successful
         console.log("User created successfully, attempting to login...");
         await login(username, userPassword).then(() => {
-          console.log('Current user after login attempt:', user);
+          console.log("Current user after login attempt:", user);
           navigate("/");
         });
         setUsername("");

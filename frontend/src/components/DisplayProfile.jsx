@@ -1,4 +1,6 @@
-function DisplayProfile({ data }) {
+import React from "react";
+
+function DisplayProfile({ data, toggleEditMode }) {
   return (
     <div className="display-profile-container">
       <div className="profile-picture-section">
@@ -23,6 +25,7 @@ function DisplayProfile({ data }) {
           <p>{data.genre}</p>
         </div>
       </div>
+      <button onClick={toggleEditMode}>Edit Profile</button>
     </div>
   );
 }
