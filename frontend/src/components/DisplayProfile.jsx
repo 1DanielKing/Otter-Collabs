@@ -4,30 +4,28 @@ import { useAuth } from "../contexts/AuthContext";
 function DisplayProfile({ toggleEditMode }) {
   const { user } = useAuth();
   return (
-    <div>
-      <div className="profile">
-        <h1>profile picture</h1>
-        <h2>{data.userPhoto}</h2>
+    <div className="display-profile-container">
+      <div className="profile-picture-section">
+        <img src={data.imageURL} alt="Profile" className="profile-picture" />
       </div>
-      <div className="profile">
-        <h1>username</h1>
-        <h2>{data.username}</h2>
-      </div>
-      <div className="profile">
-        <h1>email</h1>
-        <h2>{data.email}</h2>
-      </div>
-      <div className="profile">
-        <h1>instrument</h1>
-        <h2>{data.instrument}</h2>
-      </div>
-      <div className="profile">
-        <h1>experience</h1>
-        <h2>{data.experience}</h2>
-      </div>
-      <div className="profile">
-        <h1>genre</h1>
-        <h2>{data.genre}</h2>
+      <div className="profile-details-section">
+        <h1 className="profile-username">{data.username}</h1>
+        <div className="profile-info">
+          <h2>Email:</h2>
+          <p>{data.email}</p>
+        </div>
+        <div className="profile-info">
+          <h2>Instrument:</h2>
+          <p>{data.instrument}</p>
+        </div>
+        <div className="profile-info">
+          <h2>Experience:</h2>
+          <p>{data.experience}</p>
+        </div>
+        <div className="profile-info">
+          <h2>Genre:</h2>
+          <p>{data.genre}</p>
+        </div>
       </div>
       <button onClick={toggleEditMode}>Edit Profile</button>
     </div>
