@@ -21,4 +21,9 @@ public interface AudioMetadataRepository extends JpaRepository<AudioMetadata, Lo
      * @return a list of audio metadata entries
      */
     List<AudioMetadata> findByGenre(String genre);
+
+    /**
+     * @return a list of audio metadata entries
+     */
+    List<AudioMetadata> findByUserId(Long userId);
 }

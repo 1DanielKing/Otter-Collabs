@@ -66,22 +66,25 @@ public class UserController {
      */
     @PostMapping
     public User createUser(@RequestBody User user) {
-        return userService.saveOrUpdateUser(user);
+        return userService.createUser(user);
     }
 
     /**
-     * PUT endpoint to update a user.
+     * Updates an existing user's information, excluding the password.
      *
-     * @param id   should be zero or omitted
-     * @param user updated user information
-     * @return the updated user
+     * @param id          the ID of the user to update
+     * @param updatedUser the user information to update
+     * @return ResponseEntity containing the updated user or a not found status
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         return userService.findUserById(id)
                 .map(existingUser -> {
-                    user.setId(id); // Ensure the user's ID remains unchanged
-                    return ResponseEntity.ok(userService.saveOrUpdateUser(user));
+                    updatedUser.setPassword(existingUser.getPassword());
+
+                    updatedUser.setId(id);
+
+                    return ResponseEntity.ok(userService.updateUser(updatedUser));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
