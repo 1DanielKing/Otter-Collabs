@@ -1,4 +1,6 @@
-function DisplayProfile({ data }) {
+import React from "react";
+
+function DisplayProfile({ data, toggleEditMode }) {
   return (
     <div>
       console.log({data.instrument})
@@ -26,6 +28,7 @@ function DisplayProfile({ data }) {
         <h1>genre</h1>
         <h2>{data.genre}</h2>
       </div>
+      <button onClick={toggleEditMode}>Edit Profile</button>
     </div>
   );
 }
