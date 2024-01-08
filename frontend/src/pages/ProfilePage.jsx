@@ -1,11 +1,17 @@
 import { useAuth } from "../contexts/AuthContext";
 import DisplayProfile from "../components/DisplayProfile";
+import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const { user } = useAuth();
 
+  if (!user) {
+    console.log(user);
+    return <div>Loading profile...</div>;
+  }
+
   return (
-    <div id="items-container">
+    <div className="main-container">
       <div className="item-box">
         <DisplayProfile data={user} />
       </div>
@@ -14,3 +20,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
