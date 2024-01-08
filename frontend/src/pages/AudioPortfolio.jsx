@@ -17,7 +17,7 @@ const AudioPortfolio = () => {
 
     const fetchAudios = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/audio/user/${user.id}`, {
+            const response = await axios.get(`http://yourdomain.com/api/audio/user/${user.id}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -29,7 +29,7 @@ const AudioPortfolio = () => {
     };
 
     return (
-        <div className="main-container">
+        <div>
             <h2>Your Audio Uploads</h2>
             <table>
                 <thead>
