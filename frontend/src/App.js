@@ -6,6 +6,7 @@ import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
+import SignIn from "./pages/SignIn";
 
 const AuthenticatedApp = () => {
   return (
@@ -22,18 +23,20 @@ const UnauthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
+      <Route path="/sign-in" element={<SignIn />} />
+
     </Routes>
   );
 };
 
 function App() {
- return (
+  return (
     <AuthProvider>
       <Router>
         <MainApp />
       </Router>
     </AuthProvider>
- );
+  );
 }
 
 const MainApp = () => {
