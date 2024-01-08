@@ -63,7 +63,7 @@ const SignIn = () => {
         </div>
       </form>
       <p>
-        Not on OtterCollab? <Link to="/profile-creation">Create Account</Link>
+        Not on OtterCollab? <Link to="/">Create Account</Link>
       </p>
     </div>
   );
