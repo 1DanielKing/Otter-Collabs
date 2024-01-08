@@ -41,30 +41,28 @@ export const AuthProvider = ({ children }) => {
     validateToken();
   }, []);
 
-  const loadProfileData = async () => {
-    if (user && user.username) {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/users/search?username=${user.username}`
-        );
-        if (response.ok) {
-          const profileData = await response.json();
-          setUser((current) => ({ ...current, ...profileData }));
-          setProfileLoaded(true);
-        } else {
-          console.error("Failed to load profile data");
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    }
-  };
+    useEffect(() => {
+        console.log("profileLoaded updated to: ", profileLoaded);
+    }, [profileLoaded]);
 
-  useEffect(() => {
-    if (user && !profileLoaded) {
-      loadProfileData();
-    }
-  }, [user, profileLoaded]);
+    const loadProfileData = async (username) => {
+        if (username === null || username === undefined) {
+            username = user.username;
+        }
+        try {
+            const response = await fetch(`http://localhost:8080/api/users/search?username=${username}`);
+            if (response.ok) {
+                const profileData = await response.json();
+                setUser(current => ({ ...current, ...profileData }));
+                setProfileLoaded(true);
+            } else {
+                console.error('Failed to load profile data');
+            }
+        } catch (error) {
+            console.error('Error fetching profile data:', error);
+        }
+
+    };
 
   const login = async (username, password) => {
     try {
@@ -93,11 +91,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout, loadProfileData }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={{ user, login, logout, loadProfileData }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => {
