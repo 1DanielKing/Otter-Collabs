@@ -1,30 +1,37 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
-import SignIn from "./pages/SignIn";
+import LandingPage from "./pages/LandingPage";
 
 const AuthenticatedApp = () => {
+  const {loading } = useAuth();
+
   return (
     <Layout>
+    {loading ? (
+        <p>Loading Sick Beats...</p>
+      ) : (
       <Routes>
         <Route path="/" element={<ProfilePage />} />
       </Routes>
+      )}
     </Layout>
   );
 };
 
 const UnauthenticatedApp = () => {
+  const { user, loading } = useAuth();
+
   return (
     <Routes>
-      <Route path="/" element={<NewUser />} />
+      <Route path="/"element={<LandingPage user={user} loading={loading}/>}/>
+      <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
-      <Route path="/sign-in" element={<SignIn />} />
-
     </Routes>
   );
 };
