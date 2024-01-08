@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 const EditProfileForm = ({ user, toggleEditMode }) => {
-  const { login } = useAuth();
+  const { loadProfileData } = useAuth();
   const [formData, setFormData] = useState({
     userPhoto: user.userPhoto,
     username: user.username,
@@ -29,6 +29,7 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData);
     e.preventDefault();
     try {
       const response = await fetch(
@@ -43,8 +44,8 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
       );
 
       if (response.ok) {
-        login(user.username, user.password); //
         console.log("User information updated successfully");
+        loadProfileData();
         toggleEditMode();
       } else {
         console.error("Failed to update user information");
@@ -52,6 +53,7 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
     } catch (error) {
       console.error("An error occurred:", error);
     }
+    console.log(user.username);
   };
 
   return (
