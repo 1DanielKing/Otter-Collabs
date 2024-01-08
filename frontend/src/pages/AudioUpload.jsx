@@ -31,20 +31,29 @@ function AudioUpload() {
         formData.append('userId', user.id);
 
         try {
-            const response = await axios.post('http://yourdomain.com/api/upload', formData, {
+            const response = await fetch('http://localhost:8080/api/audio/upload', {
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${user.token}`
                 },
+                body: formData
             });
-            console.log('Response:', response.data);
-            navigate("/portfolio");
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Response:', responseData);
+                navigate("/portfolio");
+            } else {
+                console.error('Upload error: Server responded with a non-2xx status code');
+            }
         } catch (error) {
             console.error('Upload error:', error);
         }
     };
 
+
     return (
-        <div>
+        <div className="main-container">
             <h2>Upload Audio</h2>
             <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange} />

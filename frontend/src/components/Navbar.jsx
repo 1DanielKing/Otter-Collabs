@@ -13,7 +13,7 @@ function Navbar({ openLogoutModal }) {
                 </div>
                 <div className="nav-links">
                     <div><li><Link to="/">Profile</Link></li></div>
-                    <div><li><Link to="/feed">Feed</Link></li></div>
+                    <div><li><Link to="/portfolio">Portfolio</Link></li></div>
                     <div><li><Link to="/about">About</Link></li></div>
                 </div>
                 <div><li><a href="#" onClick={openLogoutModal}>Log Out</a></li></div>
