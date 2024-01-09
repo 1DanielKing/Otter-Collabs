@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
                 <Navbar openLogoutModal={openLogoutModal} />
                 <LogoutModal isOpen={isLogoutModalOpen} onClose={closeLogoutModal} />
                 <main>{children}</main>
-                {/* <ChatBox /> */}
+                <ChatBox />
             </div>
         </>
     );
