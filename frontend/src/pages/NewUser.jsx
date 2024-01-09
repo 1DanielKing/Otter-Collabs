@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AddFriendModal from '../components/add-friend-modal.js'
+import AddFriendModal from '../components/AddFriendModal.jsx'
 
 const NewUser = () => {
   const navigate = useNavigate();
@@ -75,6 +75,7 @@ const NewUser = () => {
           
         </div>
       </form>
+      <AddFriendModal></AddFriendModal>
     </div>
   );
 };

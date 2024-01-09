@@ -14,10 +14,14 @@ const AddFriendModal = () => {
     setShowModal(false);
   };
 
-  const handleAddFriend = () => {
+  const handleAddFriend = async () => {
     // Perform actions when Add Friend is clicked
-    console.log('Friend request sent');
-    closeModal();
+    try {
+      await console.log('Friend request sent'); // add proper logic for backend processes here
+      closeModal();
+    }catch (error) {
+    console.error('Failed to send friend request:', error);
+    }
   };
 
   return (
