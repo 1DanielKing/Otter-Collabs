@@ -9,6 +9,7 @@ import AudioPortfolio from "./pages/AudioPortfolio";
 import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 
+
 const AuthenticatedApp = () => {
   return (
     <Layout>
@@ -34,6 +35,7 @@ const UnauthenticatedApp = () => {
 
 function App() {
   return (
+    
     <AuthProvider>
       <Router>
         <MainApp />
