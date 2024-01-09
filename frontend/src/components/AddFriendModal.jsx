@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // import backend content?
 
-// implement using <div><AddFriendModal></AddFriendModal></div>
+// implement by importing and then using <AddFriendModal></AddFriendModal>
 
 const AddFriendModal = () => {
   const [showModal, setShowModal] = useState(false);
