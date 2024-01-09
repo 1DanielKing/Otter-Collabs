@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 import org.wecancodeit.backend.models.User;
 
 
-import java.util.List;
+
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -31,13 +32,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * finds users by similar User tags
      */ 
-    default List<User> findBySimilarTags(String username, List<String> userTags) {
+    default Set<User> findBySimilarTags(String username, Set<String> userTags) {
         return findByMusicTagsInAndUsernameNot(userTags, username);
     }
 
     /*
      * Finds users with similar music tags.
      */
-    List<User> findByMusicTagsInAndUsernameNot(List<String> musicTags, String username);
+    Set<User> findByMusicTagsInAndUsernameNot(Set<String> musicTags, String username);
 
 }
