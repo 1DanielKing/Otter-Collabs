@@ -1,12 +1,22 @@
 package org.wecancodeit.backend.services;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
 import org.wecancodeit.backend.models.User;
+import org.wecancodeit.backend.repositories.UserRepository;
 
-public class Populator {
-        public static void main(String[] args) {
+@Component
+public class Populator implements CommandLineRunner {
 
-                // Create a few test users
+        private final UserRepository userRepository;
+
+        public Populator(UserRepository userRepository) {
+                this.userRepository = userRepository;
+        }
+
+        @Override
+        public void run(String... args) throws Exception {
                 User user1 = new User("user1", "password1", "user1@example.com", "Guitar", "Rock",
                                 ExperienceLevelEnum.INTERMEDIATE, "image1.jpg");
                 user1.addMusicTag("Tag1");
@@ -22,9 +32,8 @@ public class Populator {
                 user3.addMusicTag("Tag5");
                 user3.addMusicTag("Tag6");
 
-                // Print the populated users for testing
-                System.out.println(user1);
-                System.out.println(user2);
-                System.out.println(user3);
+                userRepository.save(user1);
+                userRepository.save(user2);
+                userRepository.save(user3);
         }
 }
