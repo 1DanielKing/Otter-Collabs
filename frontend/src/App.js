@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
 import LandingPage from "./pages/LandingPage";
+import SignIn from "./pages/SignIn";
 
 const AuthenticatedApp = () => {
   const {loading } = useAuth();
