@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import AddFriendModal from '../components/add-friend-modal.js'
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+// import AddFriendModal from '../components/add-friend-modal.js'
 
 const NewUser = () => {
   const navigate = useNavigate();
