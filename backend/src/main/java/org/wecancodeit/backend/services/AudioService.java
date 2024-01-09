@@ -29,7 +29,7 @@ public class AudioService {
     private final AudioMetadataRepository audioMetaDataRepository;
     private final UserRepository userRepository;
 
-    @Value("${app.file.storage-location}") // Storage location in app properties
+    @Value("${app.file.storage-location}") // Storage location configuration
     private String storageLocation;
 
     public AudioService(AudioMetadataRepository audioMetaDataRepository, UserRepository userRepository) {
