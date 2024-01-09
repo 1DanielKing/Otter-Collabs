@@ -1,5 +1,8 @@
 {
   "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "automatic",
-  "cSpell.words": ["Collab", "Populator"]
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "cSpell.words": [
+    "Collab",
+    "Populator"
+  ]
 }
