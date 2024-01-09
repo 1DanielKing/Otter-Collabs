@@ -1,10 +1,15 @@
 package org.wecancodeit.backend.controllers;
 
 import java.util.Date;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.wecancodeit.backend.models.ChatMessage;
 import org.wecancodeit.backend.repositories.ChatMessageRepository;
 
@@ -12,16 +17,23 @@ import org.wecancodeit.backend.repositories.ChatMessageRepository;
 public class ChatController {
 
     private final ChatMessageRepository chatMessageRepository;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public ChatController(ChatMessageRepository chatMessageRepository) {
         this.chatMessageRepository = chatMessageRepository;
     }
 
     @MessageMapping("/api/message")
-    @SendTo("/topic/messages")
-    public ChatMessage sendMessage(ChatMessage chatMessage) {
-        chatMessage.setTimestamp(new Date()); // Set the current timestamp
-        // Save the message to the database
-        return chatMessageRepository.save(chatMessage);
+    public void sendMessage(ChatMessage chatMessage) {
+        chatMessage.setTimestamp(new Date());
+        chatMessageRepository.save(chatMessage);
+        messagingTemplate.convertAndSendToUser(chatMessage.getRecipient(), "/queue/messages", chatMessage);
+    }
+
+    @GetMapping("/api/message/history")
+    @ResponseBody
+    public List<ChatMessage> getMessageHistory(@RequestParam String user1, @RequestParam String user2) {
+        return chatMessageRepository.findBySenderAndRecipientOrRecipientAndSender(user1, user2, user1, user2);
     }
 }

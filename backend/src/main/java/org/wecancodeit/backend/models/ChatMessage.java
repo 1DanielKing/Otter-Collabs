@@ -10,6 +10,7 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String sender;
+    private String recipient;
     private String text;
     private Date timestamp;
 
@@ -50,6 +51,14 @@ public class ChatMessage {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
     
 }
