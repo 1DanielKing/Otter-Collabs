@@ -33,7 +33,7 @@ const UnauthenticatedApp = () => {
       <Route path="/"element={<LandingPage user={user} loading={loading}/>}/>
       <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
-      <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/sign-in" element={<SignIn user={user} loading={loading} />} />
 
     </Routes>
   );

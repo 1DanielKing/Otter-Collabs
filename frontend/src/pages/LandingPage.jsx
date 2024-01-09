@@ -20,7 +20,7 @@ const LandingPage = () => {
   }, [loading, user, navigate]);
 
   return (
-    <div className="landing-page">
+    <div className="SignIn">
       {loading ? (
         <p>Loading Sick Beats...</p>
       ) : (
@@ -47,6 +47,8 @@ const LandingPage = () => {
                   <Link to="/profile-creation">Signup</Link>
                 </>
               )}
+              <p>
+OtterCollab is a cutting-edge platform designed for musicians seeking a collaborative and immersive music creation experience. Uniting artists worldwide, OtterCollab fosters a unique space where creativity thrives through real-time collaboration, allowing users to seamlessly connect, compose, and produce music together. With its intuitive interface, diverse collaboration tools, and a vibrant community, OtterCollab stands out as the go-to destination for musicians aspiring to transcend geographical boundaries and elevate their collaborative music-making journey. Join OtterCollab and unlock the power of global collaboration in music creation like never before.</p>
             </div>
           )}
         </>
