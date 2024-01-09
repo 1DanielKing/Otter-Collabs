@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import AddFriendModal from '../components/add-friend-modal.js'
 import { useNavigate, Link } from "react-router-dom";
 import "./NewUser.css";
 import { useAuth } from "../contexts/AuthContext";
+
 
 const NewUser = () => {
   const navigate = useNavigate();
@@ -101,6 +103,7 @@ const NewUser = () => {
           <button type="submit" className="action-button">
             Create Account
           </button>
+          
         </div>
       </form>
       <p>
