@@ -35,13 +35,11 @@ public class User {
     private ExperienceLevelEnum experienceLevel;
     
     private String imageURL;
-
-
-    //field for music tags
-
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AudioMetadata> audioFiles = new ArrayList<>();
-
+    
+    //field for music tags
     @ElementCollection
     private Set<String> musicTags = new HashSet<>();
 
