@@ -9,10 +9,10 @@ import org.wecancodeit.backend.repositories.UserRepository;
 @Component
 public class Populator implements CommandLineRunner {
 
-        private final UserRepository userRepository;
+        private final UserService userService;
 
-        public Populator(UserRepository userRepository) {
-                this.userRepository = userRepository;
+        public Populator(UserService userService) {
+                this.userService = userService;
         }
 
         @Override
@@ -32,8 +32,8 @@ public class Populator implements CommandLineRunner {
                 user3.addMusicTag("Tag5");
                 user3.addMusicTag("Tag6");
 
-                userRepository.save(user1);
-                userRepository.save(user2);
-                userRepository.save(user3);
+                userService.createUser(user1);
+                userService.createUser(user2);
+                userService.createUser(user3);
         }
 }
