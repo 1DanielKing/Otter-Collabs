@@ -3,8 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import "./NewUser.css";
 import { useAuth } from "../contexts/AuthContext";
 
-
-
 const NewUser = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState("");
