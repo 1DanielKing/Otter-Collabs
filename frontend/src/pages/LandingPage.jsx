@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './contexts/AuthContext.js' ;
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import SignIn from './SignIn';
 
 const LandingPage = () => {
   const { user, loading} = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [showLoginForm, setShowLoginForm] = useState(false);
   
   useEffect(() => {
     // Redirect to the profile page after 3 seconds if the user is authenticated
     if (!loading && user) {
       const redirectTimeout = setTimeout(() => {
-        history.push('/profile');
+        navigate.push('/profile');
       }, 3000);
 
       return () => clearTimeout(redirectTimeout); // Clear the timeout on component unmount
     }
-  }, [loading, user, history]);
+  }, [loading, user, navigate]);
 
   return (
     <div className="landing-page">
