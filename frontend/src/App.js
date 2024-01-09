@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import AudioPortfolio from "./pages/AudioPortfolio";
 import AudioUpload from "./pages/AudioUpload";
 
+
 const AuthenticatedApp = () => {
   const {loading } = useAuth();
 
@@ -44,6 +45,7 @@ const UnauthenticatedApp = () => {
 
 function App() {
   return (
+    
     <AuthProvider>
       <Router>
         <MainApp />
