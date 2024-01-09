@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import AddFriendModal from '../components/add-friend-modal.js'
+import AddFriendModal from '../components/AddFriendModal.jsx'
 import { useAuth } from "../contexts/AuthContext";
 // import AddFriendModal from '../components/add-friend-modal.js'
 
@@ -109,6 +109,7 @@ const NewUser = () => {
       <p>
         Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
       </p>
+      <AddFriendModal></AddFriendModal>
     </div>
   );
 };
