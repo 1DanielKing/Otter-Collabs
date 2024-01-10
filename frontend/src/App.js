@@ -18,7 +18,6 @@ import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
 
-
 const AuthenticatedApp = () => {
   const {loading } = useAuth();
 

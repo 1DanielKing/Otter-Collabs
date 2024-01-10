@@ -11,6 +11,7 @@ const FindUsers = () => {
   const { user } = useAuth();
 
   const handleSearch = () => {
+    // Implement your search logic here, e.g., update state, make API calls, etc.
     console.log(`Search by ${selectedOption}: ${searchInput}`);
   };
 
@@ -37,7 +38,6 @@ const FindUsers = () => {
         <button onClick={handleSearch}>Search</button>
       </div>
       <div>
-        {/* Render the FindUser component with props */}
         <FindUser searchInput={searchInput} selectedOption={selectedOption} />
       </div>
     </div>

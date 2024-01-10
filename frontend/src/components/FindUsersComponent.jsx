@@ -1,48 +1,30 @@
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect, useState } from "react";
 
 function FindUser({ searchInput, selectedOption }) {
   const { user } = useAuth();
   const [results, setResults] = useState(null);
 
-  const displayResults = async () => {
+  const displayResults = () => {
     if (selectedOption === "Username") {
-      await nameSearch();
+      nameSearch();
     }
-    // TODO: Add later when functionality is in the backend for the search features
+    //todo add later when functionality is in the backend for the search features
     // if (selectedOption === "Song") {
-    //   await songSearch();
+    //   songSearch();
     // }
     // if (selectedOption === "Instrument") {
-    //   await instrumentSearch();
+    //   instrumentSearch();
     // }
   };
-
-  useEffect(() => {
-    const displayResults = async () => {
-      if (selectedOption === "Username") {
-        await nameSearch();
-      }
-      // Add other search options here when functionality is available in the backend
-    };
-    console.log("Search Input:", searchInput);
-    console.log("Selected Option:", selectedOption);
-    displayResults();
-  }, [searchInput, selectedOption]);
 
   const nameSearch = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/users/search?username=${searchInput}`
+        `http://localhost:8080/api/recommendations/${searchInput}`
       );
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        if (Array.isArray(data)) {
-          setResults(data);
-        } // Update results state with the fetched data
+        const results = await response.json();
       } else {
-        setResults([]);
         console.error("Failed to load profile data");
       }
     } catch (error) {
