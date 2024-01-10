@@ -146,10 +146,19 @@ code {
 .chatbox-content {
   padding: 20px;
   overflow-y: auto;
+  height: 150px;
+}
+
+.chatbox-content::-webkit-scrollbar {
+  width: 0.5em;
 }
 
 .chatbox-header {
   padding: 10px;
   background-color: #e9ecef;
   border-bottom: 1px solid #ced4da;
+}
+
+.chatbox-input {
+  margin-bottom: 1px;
 }
