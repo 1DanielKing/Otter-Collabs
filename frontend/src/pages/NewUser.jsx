@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import AddFriendModal from '../components/AddFriendModal.jsx'
 import { useNavigate, Link } from "react-router-dom";
 import "./NewUser.css";
 import { useAuth } from "../contexts/AuthContext";
