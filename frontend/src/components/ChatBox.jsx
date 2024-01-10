@@ -124,17 +124,25 @@ const ChatBox = () => {
         <div className={isExpanded ? "chatbox" : "chatbox-collapsed"}>
             {isExpanded ? (
                 <>
-                    <div className="chatbox-header" onClick={toggleChatBox}>
-                        <div>Messages</div> {/* Title or similar */}
+                    <div className="chatbox-header">
+                        <div className="chatbox-header-arrow-space">
+                            {selectedUser ? (
+                                <div className="chatbox-back-arrow" onClick={() => setSelectedUser(null)}>
+                                    &#8592; {/* Left arrow */}
+                                </div>
+                            ) : (
+                                <div className="chatbox-back-arrow">&nbsp;</div>
+                            )}
+                        </div>
+                        <div className="chatbox-title" onClick={toggleChatBox}>Messages</div>
                     </div>
                     {selectedUser ? (
                         <>
-                            <button onClick={() => setSelectedUser(null)}>Back to Users</button>
                             <div className='chatbox-content'>
                                 {messages.map((msg) => (
                                     <div key={msg.id}>{msg.sender}: {msg.text}</div>
                                 ))}
-                                {/* Invisible element at the end of your messages */}
+                                {/* Invisible element for auto scroll down */}
                                 <div ref={messagesEndRef} />
                             </div>
                             <input
