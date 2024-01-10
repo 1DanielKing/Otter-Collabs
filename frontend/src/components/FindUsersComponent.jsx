@@ -38,11 +38,9 @@ function FindUser({ searchInput, selectedOption }) {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        if (Array.isArray(data)) {
-          setResults(data);
-        } // Update results state with the fetched data
+        setResults(data); // Set result as an object directly
       } else {
-        setResults([]);
+        setResults(null); // Set results to null on error
         console.error("Failed to load profile data");
       }
     } catch (error) {
