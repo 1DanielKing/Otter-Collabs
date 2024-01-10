@@ -89,4 +89,24 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    /**
+     * Retrieves the user data for the sender by username.
+     *
+     * @param senderUsername the username of the sender
+     * @return the sender user data
+     */
+    public User getSenderUserData(String senderUsername) {
+        return userRepository.findByUsername(senderUsername).orElse(null);
+    }
+
+    /**
+     * Retrieves the user data for the receiver by username.
+     *
+     * @param receiverUsername the username of the receiver
+     * @return the receiver user data
+     */
+    public User getReceiverUserData(String receiverUsername) {
+        return userRepository.findByUsername(receiverUsername).orElse(null);
+    }
 }
