@@ -1,5 +1,6 @@
 package org.wecancodeit.backend.controllers;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,12 @@ public class ChatController {
     }
 
     @MessageMapping("/api/message")
-    public void sendMessage(ChatMessage chatMessage) {
+    public void sendMessage(ChatMessage chatMessage, Principal principal) {
+        if (principal != null) {
+            System.out.println("Message from principal: " + principal.getName());
+        } else {
+            System.out.println("Principal is null in message mapping");
+        }
         chatMessage.setTimestamp(new Date());
         chatMessageRepository.save(chatMessage);
         messagingTemplate.convertAndSendToUser(chatMessage.getRecipient(), "/queue/messages", chatMessage);
