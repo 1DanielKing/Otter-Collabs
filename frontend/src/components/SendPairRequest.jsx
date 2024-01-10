@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
-// import backend content?
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const SendPairRequest = () => {
   const [showModal, setShowModal] = useState(false);
+  const [senderUserData, setSenderUserData] = useState(null);
+  const [receiverUserData, setReceiverUserData] = useState(null);
+
+  useEffect(() => {
+    // Fetch sender user data from the API
+    axios.get('http://localhost:8080/api/users/sender') // Replace with your actual endpoint
+      .then(response => setSenderUserData(response.data))
+      .catch(error => console.error('Error fetching sender user data:', error));
+
+    // Fetch receiver user data from the API
+    axios.get('http://localhost:8080/api/users/receiver') // Replace with your actual endpoint
+      .then(response => setReceiverUserData(response.data))
+      .catch(error => console.error('Error fetching receiver user data:', error));
+  }, []); 
 
   const openModal = () => {
     setShowModal(true);
@@ -13,13 +26,28 @@ const SendPairRequest = () => {
     setShowModal(false);
   };
 
+  // Perform actions when Add Friend is clicked
   const handleSendPairRequest = async () => {
-    // Perform actions when Add Friend is clicked
     try {
-      await console.log('Pair request sent'); // add proper logic for backend processes here
+      // Ensure both sender and receiver data are available before sending the request
+      if (!senderUserData || !receiverUserData) {
+        console.error('Sender or receiver data not available');
+        return;
+      }
+      const pairRequestData = {
+        senderUsername: senderUserData.username,
+        receiverUsername: receiverUserData.username,
+        message: "Your message here",
+      };
+      // Make a POST request to the back-end API
+      await axios.post(
+        "http://localhost:8080/api/pair-requests/send",
+        pairRequestData
+      );
+      console.log("Pair request sent");
       closeModal();
-    }catch (error) {
-    console.error('Failed to send pair request:', error);
+    } catch (error) {
+      console.error("Failed to send pair request:", error);
     }
   };
 
@@ -40,6 +68,6 @@ const SendPairRequest = () => {
       )}
     </div>
   );
-}
+};
 
 export default SendPairRequest;
