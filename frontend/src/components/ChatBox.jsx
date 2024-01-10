@@ -28,10 +28,11 @@ const ChatBox = () => {
     }, []);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/chat');
+        const socket = new SockJS(`http://localhost:8080/chat`);
         const client = Stomp.over(socket);
 
         let isConnected = false;
+        console.log('Current token: ' + user.token);
 
         client.connect({
             'Authorization': `Bearer ${user.token}`
@@ -39,7 +40,11 @@ const ChatBox = () => {
             isConnected = true;
             setStompClient(client);
             client.subscribe('/user/queue/messages', message => {
-                setMessages(prev => [...prev, JSON.parse(message.body)]);
+                const incomingMessage = JSON.parse(message.body);
+                // add message only if that conversation is open
+                if (selectedUser && (incomingMessage.sender === selectedUser.username)) {
+                    setMessages(prev => [...prev, incomingMessage]);
+                }
             });
         });
 
@@ -76,7 +81,7 @@ const ChatBox = () => {
     const sendMessage = () => {
         if (stompClient && newMessage && selectedUser) {
             const chatMessage = { sender: user.username, recipient: selectedUser.username, text: newMessage };
-            stompClient.send("/api/message", {}, JSON.stringify(chatMessage));
+            stompClient.send("/api/message", { 'Authorization': `Bearer ${user.token}` }, JSON.stringify(chatMessage));
             setNewMessage("");
             setMessages(prev => [...prev, chatMessage]); // Optionally add to local state
         }
@@ -87,6 +92,7 @@ const ChatBox = () => {
             <div>
                 {selectedUser ? (
                     <>
+                        <button onClick={() => setSelectedUser(null)}>Back to Users</button>
                         <div>
                             {messages.map((msg) => (
                                 <div key={msg.id}>{msg.sender}: {msg.text}</div>
