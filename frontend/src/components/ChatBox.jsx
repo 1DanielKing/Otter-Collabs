@@ -94,12 +94,13 @@ const ChatBox = () => {
                 {selectedUser ? (
                     <>
                         <button onClick={() => setSelectedUser(null)}>Back to Users</button>
-                        <div>
+                        <div className='chatbox-content'>
                             {messages.map((msg) => (
                                 <div key={msg.id}>{msg.sender}: {msg.text}</div>
                             ))}
                         </div>
                         <input
+                            className="chatbox-input"
                             type="text"
                             value={newMessage}
                             onChange={e => setNewMessage(e.target.value)}
