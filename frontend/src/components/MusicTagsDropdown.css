@@ -1,0 +1,17 @@
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+   }
+   
+   button {
+    margin-bottom: 10px;
+   }
+
+   select {
+    margin-bottom: 10px;
+   }
+
+   input {
+    margin-bottom: 10px;
+   }
