@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
+import AddFriendModal from '../components/AddFriendModal.jsx'
+import { useNavigate, Link } from "react-router-dom";
+import "./NewUser.css";
+import { useAuth } from "../contexts/AuthContext";
+
+
 
 
 const NewUser = () => {
@@ -106,6 +112,7 @@ const NewUser = () => {
       <p>
         Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
       </p>
+
     </div>
   );
 };
