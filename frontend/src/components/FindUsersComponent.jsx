@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 function FindUser({ searchInput, selectedOption }) {
   const { user } = useAuth();
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState(null);
 
   const displayResults = async () => {
     if (selectedOption === "Username") {
@@ -38,28 +38,33 @@ function FindUser({ searchInput, selectedOption }) {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        if (Array.isArray(data)) {
-          setResults(data);
-        } // Update results state with the fetched data
+        setResults(data); // Set result as an object directly
       } else {
-        setResults([]);
+        setResults(null); // Set results to null on error
         console.error("Failed to load profile data");
       }
     } catch (error) {
+      setResults(null); // Set results to null on error
       console.error("Error fetching profile data:", error);
     }
   };
 
-  // TODO: Implement other search functions similarly
-
   return (
     <div>
       <h2>Search Results</h2>
-      <ul>
-        {results.map((result) => (
-          <li key={result.id}>{/* Render each result item here */}</li>
-        ))}
-      </ul>
+      {results !== null ? (
+        <ul>
+          <li key={results.id}>
+            <p>Username: {results.username}</p>
+            <p>Profile Picture: {results.imageURL}</p>
+            <p>Genre: {results.genre}</p>
+            <p>Instrument: {results.instrument}</p>
+            <p>Experience Level: {results.experienceLevel}</p>
+          </li>
+        </ul>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
