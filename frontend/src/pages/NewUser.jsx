@@ -5,6 +5,7 @@ import "./NewUser.css";
 import { useAuth } from "../contexts/AuthContext";
 
 
+
 const NewUser = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState("");
@@ -109,6 +110,7 @@ const NewUser = () => {
       <p>
         Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
       </p>
+
     </div>
   );
 };
