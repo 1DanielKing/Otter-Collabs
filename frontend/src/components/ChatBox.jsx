@@ -41,7 +41,6 @@ const ChatBox = () => {
             setStompClient(client);
             client.subscribe('/user/queue/messages', message => {
                 const incomingMessage = JSON.parse(message.body);
-                console.log(selectedUser.username);
                 // add message only if that conversation is open
                 if (selectedUser && (incomingMessage.sender === selectedUser.username)) {
                     setMessages(prev => [...prev, incomingMessage]);
