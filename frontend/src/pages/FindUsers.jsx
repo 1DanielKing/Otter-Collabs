@@ -37,6 +37,7 @@ const FindUsers = () => {
         <button onClick={handleSearch}>Search</button>
       </div>
       <div>
+        {/* Render the FindUser component with props */}
         <FindUser searchInput={searchInput} selectedOption={selectedOption} />
       </div>
     </div>
