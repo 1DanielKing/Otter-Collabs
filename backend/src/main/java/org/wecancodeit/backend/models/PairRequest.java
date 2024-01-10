@@ -90,13 +90,13 @@ public class PairRequest {
 
     @Override
     public String toString() {
-        return "PairRequest{" + 
-        "id=" + id + 
-        ", sender=" + sender + 
-        ", receiver=" + receiver + 
-        ",sentDateTime="+ sentDateTime + 
-        ", requestStatus=" + requestStatus + 
-        ", message=" + message + '\''+'}';
+        return "PairRequest{" +
+                "id=" + id +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
+                ",sentDateTime=" + sentDateTime +
+                ", requestStatus=" + requestStatus +
+                ", message=" + message + '\'' + '}';
     }
 
 }

@@ -58,6 +58,17 @@ public class UserController {
         }
     }
 
+    // Fetch sender user data
+    @GetMapping("/sender")
+    public ResponseEntity<User> getSenderUserData(@RequestParam String senderUsername) {
+        // create a method in service to get the sender user data
+        User senderUser = userService.getSenderUserData(senderUsername);
+        if (senderUser != null) {
+            return ResponseEntity.ok(senderUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
     /**
      * POST endpoint to create a new user.
      *
@@ -67,6 +78,17 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
+    }
+
+    // Fetch receiver user data
+    @GetMapping("/receiver")
+    public ResponseEntity<User> getReceiverUserData(@RequestParam String receiverUsername) {
+        User receiverUser = userService.getReceiverUserData(receiverUsername);
+        if (receiverUser != null) {
+            return ResponseEntity.ok(receiverUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
