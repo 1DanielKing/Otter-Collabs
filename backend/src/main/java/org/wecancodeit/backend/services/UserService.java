@@ -1,5 +1,6 @@
 package org.wecancodeit.backend.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.UserRepository;
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -29,10 +32,30 @@ public class UserService {
      * Finds a user by their ID.
      *
      * @param id the ID of the user
-     * @return an Optional possibly containing the found user
+     * @return an Optional containing the user if found
      */
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    /**
+     * Finds a user by their email.
+     *
+     * @param email the email of the user
+     * @return an Optional containing the user if found
+     */
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Finds a user by their email.
+     *
+     * @param email the email of the user
+     * @return an Optional containing the user if found
+     */
+    public Optional<User> findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     /**
@@ -41,7 +64,20 @@ public class UserService {
      * @param user the user to save or update
      * @return the saved or updated user
      */
-    public User saveOrUpdateUser(User user) {
+    public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    /**
+     * Updates an existing user in the repository.
+     *
+     * @param user the user with updated information
+     * @return the updated user
+     */
+    public User updateUser(User user) {
+        // Assumes the password is already set correctly (either unmodified or null if
+        // not updating the password)
         return userRepository.save(user);
     }
 
@@ -52,5 +88,25 @@ public class UserService {
      */
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    /**
+     * Retrieves the user data for the sender by username.
+     *
+     * @param senderUsername the username of the sender
+     * @return the sender user data
+     */
+    public User getSenderUserData(String senderUsername) {
+        return userRepository.findByUsername(senderUsername).orElse(null);
+    }
+
+    /**
+     * Retrieves the user data for the receiver by username.
+     *
+     * @param receiverUsername the username of the receiver
+     * @return the receiver user data
+     */
+    public User getReceiverUserData(String receiverUsername) {
+        return userRepository.findByUsername(receiverUsername).orElse(null);
     }
 }
