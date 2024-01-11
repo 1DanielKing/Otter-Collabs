@@ -7,11 +7,13 @@ const FindUsers = () => {
   const searchOptions = ["Username", "Song", "Instrument"];
   const [selectedOption, setSelectedOption] = useState(searchOptions[0]);
   const [searchInput, setSearchInput] = useState("");
+  const [showResults, setShowResults] = useState(false);
 
   const { user } = useAuth();
 
   const handleSearch = () => {
     console.log(`Search by ${selectedOption}: ${searchInput}`);
+    setShowResults(true);
   };
 
   return (
@@ -37,7 +39,9 @@ const FindUsers = () => {
         <button onClick={handleSearch}>Search</button>
       </div>
       <div>
-        <FindUser searchInput={searchInput} selectedOption={selectedOption} />
+        {showResults && (
+          <FindUser searchInput={searchInput} selectedOption={selectedOption} />
+        )}
       </div>
     </div>
   );
