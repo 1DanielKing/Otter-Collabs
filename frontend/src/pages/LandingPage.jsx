@@ -44,7 +44,7 @@ const LandingPage = () => {
               ) : (
                 <>
                   <button onClick={() => setShowLoginForm(true)}>Login</button>
-                  <Link to="/profile-creation">Signup</Link>
+                  <Link to="/new-user">Signup</Link>
                 </>
               )}
               <p>
