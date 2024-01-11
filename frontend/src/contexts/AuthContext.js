@@ -62,32 +62,33 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-  const login = async (username, password) => {
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    const login = async (username, password) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("authToken", data.token);
-        setUser({ token: data.token, username: username });
-      } else {
-        console.error("Login failed");
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
-  };
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("authToken", data.token);
+                setUser({ token: data.token, username: username });
+                console.log("successfully logged in");
+            } else {
+                console.error("Login failed");
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    };
 
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    setUser(null);
-  };
+    const logout = () => {
+        localStorage.removeItem("authToken");
+        setUser(null);
+    };
 
     return (
         <AuthContext.Provider value={{ user, login, logout, loadProfileData }}>
@@ -97,5 +98,5 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+    return useContext(AuthContext);
 };
