@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }) => {
                 const data = await response.json();
                 localStorage.setItem("authToken", data.token);
                 setUser({ token: data.token, username: username });
+                loadProfileData(username);
                 console.log("successfully logged in");
             } else {
                 console.error("Login failed");
