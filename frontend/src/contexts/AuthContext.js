@@ -60,30 +60,6 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
-
-    };
-
-
-    const loadProfileData = async (username) => {
-        if (username === null || username === undefined) {
-            username = user.username;
-        }
-        try {
-            const response = await fetch(`http://localhost:8080/api/users/search?username=${username}`);
-            if (response.ok) {
-
-                const data = await response.json();
-                localStorage.setItem("authToken", data.token);
-                setUser({ token: data.token, username: username });
-                loadProfileData(username);
-
-            } else {
-                console.error('Failed to load profile data');
-            }
-        } catch (error) {
-            console.error('Error fetching profile data:', error);
-        }
-
     };
 
   const login = async (username, password) => {
