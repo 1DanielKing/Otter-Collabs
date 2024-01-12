@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  Switch,
   Navigate,
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
@@ -14,24 +15,28 @@ import Layout from "./components/Layout";
 import LandingPage from "./pages/LandingPage";
 
 import AudioPortfolio from "./pages/AudioPortfolio";
+import AudioPlayer from "./components/AudioPlayer";
 import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
 
 const AuthenticatedApp = () => {
-  const {loading } = useAuth();
+  const { loading } = useAuth();
 
   return (
     <Layout>
-    {loading ? (
+      {loading ? (
         <p>Loading Sick Beats...</p>
       ) : (
-      <Routes>
-        <Route path="/" element={<ProfilePage />} />
-        <Route path="/portfolio" element={<AudioPortfolio />} />
-        <Route path="/portfolio/upload" element={<AudioUpload />} />
-        <Route path="/findUsers" element={<FindUsers />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<ProfilePage />} />
+          <Route path="/portfolio" element={<AudioPortfolio />} />
+          <Route path="/portfolio/upload" element={<AudioUpload />} />
+          <Route path="/findUsers" element={<FindUsers />} />
+          <Switch>
+            <Route path="/audio/:id" element={<AudioPlayer />} />
+          </Switch>
+        </Routes>
       )}
     </Layout>
   );
@@ -42,7 +47,7 @@ const UnauthenticatedApp = () => {
 
   return (
     <Routes>
-      <Route path="/"element={<LandingPage user={user} loading={loading}/>}/>
+      <Route path="/" element={<LandingPage user={user} loading={loading} />} />
       <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
       <Route path="/sign-in" element={<SignIn />} />
@@ -52,7 +57,6 @@ const UnauthenticatedApp = () => {
 
 function App() {
   return (
-    
     <AuthProvider>
       <Router>
         <MainApp />
