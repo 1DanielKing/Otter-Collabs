@@ -1,6 +1,8 @@
 package org.wecancodeit.backend.models;
 
 import jakarta.persistence.*;
+
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.Objects;
 
@@ -148,6 +150,11 @@ public class AudioMetadata {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, artist, genre, duration, uploadDate, filePath);
+    }
+
+    public Path getFileName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getFileName'");
     }
 
 }

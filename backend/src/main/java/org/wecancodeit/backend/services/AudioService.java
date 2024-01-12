@@ -1,5 +1,7 @@
 package org.wecancodeit.backend.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,12 +12,16 @@ import org.wecancodeit.backend.repositories.AudioMetadataRepository;
 import org.wecancodeit.backend.repositories.UserRepository;
 
 // imports for Checking Duration of uploaded audio files
+
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +34,7 @@ public class AudioService {
 
     private final AudioMetadataRepository audioMetaDataRepository;
     private final UserRepository userRepository;
+    private static final Logger log = LoggerFactory.getLogger(AudioService.class);
 
     @Value("${app.file.storage-location}") // Storage location configuration
     private String storageLocation;
@@ -114,6 +121,51 @@ public class AudioService {
     // no videos allowed
     private boolean isVideoContentType(String contentType) {
         return contentType.startsWith("video/");
+    }
+
+    /**
+     * Plays the audio associated with the given audio metadata ID.
+     *
+     * @param id the ID of the audio metadata
+     */
+    public void playAudio(Long id) {
+        try {
+            Optional<AudioMetadata> metaData = audioMetaDataRepository.findById(id);
+            metaData.ifPresent(m -> {
+                String filePath = Paths.get(storageLocation).resolve(m.getFileName()).toString();
+                playAudioFile(filePath);
+            });
+        } catch (Exception e) {
+            // Log the exception
+            log.error("Error during audio playback: {}", e.getMessage(), e);
+
+            // Throw a custom exception
+            throw new AudioPlayBackException("Error during audio playback", e);
+        }
+    }
+
+    // New method for playing audio using Clip
+    private void playAudioFile(String filePath) {
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(inputStream);
+
+            Clip audioClip = AudioSystem.getClip();
+            audioClip.addLineListener(event -> {
+                if (LineEvent.Type.START == event.getType()) {
+                    System.out.println("Playback started.");
+                } else if (LineEvent.Type.STOP == event.getType()) {
+                    System.out.println("Playback completed.");
+                    audioClip.close();
+                }
+            });
+
+            audioClip.open(audioStream);
+            audioClip.start();
+        } catch (Exception e) {
+            // Log the exception
+            log.error("Error during audio playback: {}", e.getMessage(), e);
+        }
     }
 
     /**
