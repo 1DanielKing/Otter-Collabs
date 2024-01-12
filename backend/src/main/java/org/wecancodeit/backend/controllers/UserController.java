@@ -6,6 +6,7 @@ import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.services.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -89,6 +90,12 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/{userId}/friends")
+    public ResponseEntity<Set<User>> getUserFriends(@PathVariable Long userId) {
+        Set<User> friends = userService.getUserFriends(userId);
+        return ResponseEntity.ok(friends);
     }
 
     /**

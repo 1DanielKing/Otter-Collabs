@@ -19,7 +19,7 @@ public class PairRequestService {
     @Autowired
     private UserRepository userRepository;
 
-    public void sendPairRequest(String senderUsername, String receiverUsername, String message) {
+    public PairRequest sendPairRequest(String senderUsername, String receiverUsername, String message) {
         // Find The members of the attempted pairing in the Database
         User sender = userRepository.findByUsername(senderUsername)
                 .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
@@ -36,7 +36,7 @@ public class PairRequestService {
         pairRequest.setRequestStatus(RequestStatus.PENDING);
 
         // Save the new PairRequest instance to the database
-        pairRequestRepository.save(pairRequest);
+        return pairRequestRepository.save(pairRequest);
     }
 
     // Service method to handle different states of a pair request
@@ -55,14 +55,23 @@ public class PairRequestService {
     }
 
     public void respondToPairRequest(Long pairRequestId, RequestStatus response) {
-        // Retrieve the pair request from the database using the provided ID
         PairRequest pairRequest = pairRequestRepository.findById(pairRequestId)
                 .orElseThrow(() -> new IllegalArgumentException("Pair Request not found"));
 
-        // Update the status of the pair request based on the user's response
         pairRequest.setRequestStatus(response);
 
-        // Save the updated pair request to the database
+        // If the request is accepted, add each user to the other's friend list
+        if (response == RequestStatus.ACCEPTED) {
+            User sender = pairRequest.getSender();
+            User receiver = pairRequest.getReceiver();
+
+            sender.addFriend(receiver);
+            receiver.addFriend(sender);
+
+            userRepository.save(sender);
+            userRepository.save(receiver);
+        }
+
         pairRequestRepository.save(pairRequest);
     }
 
