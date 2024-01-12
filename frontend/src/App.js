@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
@@ -48,7 +49,7 @@ const UnauthenticatedApp = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<LandingPage user={user} loading={loading} />} />
+      <Route path="/"  element={<LandingPage user={user} loading={loading}  />}  />
       <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
       <Route path="/sign-in" element={<SignIn />} />
