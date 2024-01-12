@@ -6,7 +6,9 @@ import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.UserRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -108,5 +110,11 @@ public class UserService {
      */
     public User getReceiverUserData(String receiverUsername) {
         return userRepository.findByUsername(receiverUsername).orElse(null);
+    }
+
+    public Set<User> getUserFriends(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        return user.getFriends();
     }
 }

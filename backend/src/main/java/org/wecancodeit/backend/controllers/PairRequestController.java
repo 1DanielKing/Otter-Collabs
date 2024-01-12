@@ -6,6 +6,7 @@ import org.wecancodeit.backend.models.PairRequest.RequestStatus;
 import org.wecancodeit.backend.services.PairRequestService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +23,20 @@ public class PairRequestController {
     @Autowired
     private PairRequestService pairRequestService;
 
-    // Sending a pair request 
+    // Sending a pair request
     @PostMapping("/send")
-    public ResponseEntity<Void> sendPairRequest(@RequestParam String senderUsername,
+    public ResponseEntity<?> sendPairRequest(@RequestParam String senderUsername,
             @RequestParam String receiverUsername, @RequestParam String message) {
-        pairRequestService.sendPairRequest(senderUsername, receiverUsername, message);
-        return ResponseEntity.ok().build();
+        PairRequest createdRequest = pairRequestService.sendPairRequest(senderUsername, receiverUsername, message);
+        return ResponseEntity.ok(Map.of("pairRequestId", createdRequest.getId()));
     }
-     // Fetch Pair Requests by Status
-     @GetMapping("/status/{status}")
-     public ResponseEntity<List<PairRequest>> getPairRequestsByStatus(@PathVariable RequestStatus status) {
-         List<PairRequest> pairRequests = pairRequestService.getPairRequestsByStatus(status);
-         return ResponseEntity.ok(pairRequests);
-     }
+
+    // Fetch Pair Requests by Status
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<PairRequest>> getPairRequestsByStatus(@PathVariable RequestStatus status) {
+        List<PairRequest> pairRequests = pairRequestService.getPairRequestsByStatus(status);
+        return ResponseEntity.ok(pairRequests);
+    }
 
     // Fetch Pending requests for the user
     @GetMapping("/pending/{username}")
@@ -42,10 +44,11 @@ public class PairRequestController {
         List<PairRequest> pendingPairRequests = pairRequestService.getPendingPairRequests(username);
         return ResponseEntity.ok(pendingPairRequests);
     }
-    
-    //Handle Response to a request
+
+    // Handle Response to a request
     @PostMapping("/respond")
-    public ResponseEntity<Void> respondToPairRequest(@RequestParam Long pairRequestId, @RequestParam RequestStatus response){
+    public ResponseEntity<Void> respondToPairRequest(@RequestParam Long pairRequestId,
+            @RequestParam RequestStatus response) {
         pairRequestService.respondToPairRequest(pairRequestId, response);
         return ResponseEntity.ok().build();
     }
