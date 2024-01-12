@@ -1,5 +1,6 @@
 package org.wecancodeit.backend.services;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.User;
@@ -36,7 +37,7 @@ public class UserService {
      * @param id the ID of the user
      * @return an Optional containing the user if found
      */
-    public Optional<User> findUserById(Long id) {
+    public Optional<User> findUserById(@NonNull Long id) {
         return userRepository.findById(id);
     }
 
@@ -77,7 +78,7 @@ public class UserService {
      * @param user the user with updated information
      * @return the updated user
      */
-    public User updateUser(User user) {
+    public User updateUser(@NonNull User user) {
         // Assumes the password is already set correctly (either unmodified or null if
         // not updating the password)
         return userRepository.save(user);
@@ -88,7 +89,7 @@ public class UserService {
      *
      * @param id the ID of the user to delete
      */
-    public void deleteUser(Long id) {
+    public void deleteUser(@NonNull Long id) {
         userRepository.deleteById(id);
     }
 
@@ -112,7 +113,7 @@ public class UserService {
         return userRepository.findByUsername(receiverUsername).orElse(null);
     }
 
-    public Set<User> getUserFriends(Long userId) {
+    public Set<User> getUserFriends(@NonNull Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         return user.getFriends();

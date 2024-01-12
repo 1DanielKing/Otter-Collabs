@@ -2,6 +2,7 @@ package org.wecancodeit.backend.Security;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.WebSocketHandler;
@@ -20,8 +21,8 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
     }
 
     @Override
-    protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler,
-            Map<String, Object> attributes) {
+    protected Principal determineUser(@NonNull ServerHttpRequest request, @NonNull WebSocketHandler wsHandler,
+            @NonNull Map<String, Object> attributes) {
         String token = extractToken(request);
         if (token != null && authService.validateToken(token)) {
             Authentication authentication = authService.getAuthentication(token);

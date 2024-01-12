@@ -2,6 +2,7 @@ package org.wecancodeit.backend.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 import org.wecancodeit.backend.Security.CustomHandshakeHandler;
@@ -16,7 +17,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private AuthService authService;
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
+    public void registerStompEndpoints(@NonNull StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")
                 .setHandshakeHandler(new CustomHandshakeHandler(authService))
                 .setAllowedOriginPatterns("*")
@@ -26,7 +27,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
+    public void configureMessageBroker(@NonNull MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/queue");
         registry.setUserDestinationPrefix("/user");
     }
