@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AudioService {
@@ -123,30 +124,6 @@ public class AudioService {
         return contentType.startsWith("video/");
     }
 
-    // New method for playing audio using Clip
-    private void playAudioFile(String filePath) {
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(inputStream);
-
-            Clip audioClip = AudioSystem.getClip();
-            audioClip.addLineListener(event -> {
-                if (LineEvent.Type.START == event.getType()) {
-                    System.out.println("Playback started.");
-                } else if (LineEvent.Type.STOP == event.getType()) {
-                    System.out.println("Playback completed.");
-                    audioClip.close();
-                }
-            });
-
-            audioClip.open(audioStream);
-            audioClip.start();
-        } catch (Exception e) {
-            // Log the exception
-            log.error("Error during audio playback: {}", e.getMessage(), e);
-        }
-    }
-
     /**
      * Deletes audio metadata and its corresponding file by the metadata's ID.
      *
@@ -180,9 +157,19 @@ public class AudioService {
     }
 
     private String storeFile(MultipartFile file) throws IOException {
-        Path fileStorageLocation = Paths.get(storageLocation);
-        Path targetLocation = fileStorageLocation.resolve(file.getOriginalFilename());
-        Files.createDirectories(fileStorageLocation);
+        String originalFilename = file.getOriginalFilename();
+        String fileExtension = "";
+
+        if (originalFilename != null && !originalFilename.isEmpty()) {
+            fileExtension = Optional.ofNullable(originalFilename)
+                    .filter(f -> f.contains("."))
+                    .map(f -> f.substring(originalFilename.lastIndexOf(".") + 1))
+                    .orElse("");
+        }
+
+        String newFilename = UUID.randomUUID().toString() + (fileExtension.isEmpty() ? "" : "." + fileExtension);
+
+        Path targetLocation = Paths.get(storageLocation).resolve(newFilename);
         Files.copy(file.getInputStream(), targetLocation);
 
         return targetLocation.toString();
