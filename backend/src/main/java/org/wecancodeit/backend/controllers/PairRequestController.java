@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +48,7 @@ public class PairRequestController {
 
     // Handle Response to a request
     @PostMapping("/respond")
-    public ResponseEntity<Void> respondToPairRequest(@RequestParam Long pairRequestId,
+    public ResponseEntity<Void> respondToPairRequest(@RequestParam @NonNull Long pairRequestId,
             @RequestParam RequestStatus response) {
         pairRequestService.respondToPairRequest(pairRequestId, response);
         return ResponseEntity.ok().build();

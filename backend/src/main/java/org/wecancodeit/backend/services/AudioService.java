@@ -3,6 +3,7 @@ package org.wecancodeit.backend.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,7 +65,7 @@ public class AudioService {
      * @param id the ID of the audio metadata
      * @return an Optional containing the audio metadata if found
      */
-    public Optional<AudioMetadata> findById(Long id) {
+    public Optional<AudioMetadata> findById(@NonNull Long id) {
         return audioMetaDataRepository.findById(id);
     }
 
@@ -84,7 +85,7 @@ public class AudioService {
      * @param audioMetaData the audio metadata to save or update
      * @return the saved or updated audio metadata
      */
-    public AudioMetadata updateMetadata(AudioMetadata audioMetaData) {
+    public AudioMetadata updateMetadata(@NonNull AudioMetadata audioMetaData) {
         return audioMetaDataRepository.save(audioMetaData);
     }
 
@@ -197,7 +198,7 @@ public class AudioService {
      * @param id the ID of the audio metadata to delete
      */
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(@NonNull Long id) {
         Optional<AudioMetadata> metaData = audioMetaDataRepository.findById(id);
         metaData.ifPresent(m -> {
             deleteFile(m.getFilePath());

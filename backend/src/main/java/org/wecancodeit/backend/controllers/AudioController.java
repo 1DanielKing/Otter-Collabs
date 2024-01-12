@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.wecancodeit.backend.models.AudioMetadata;
@@ -44,7 +45,7 @@ public class AudioController {
             @RequestParam("title") String title,
             @RequestParam("artist") String artist,
             @RequestParam("genre") String genre,
-            @RequestParam("userId") Long userId) {
+            @RequestParam("userId") @NonNull Long userId) {
         try {
             Optional<AudioMetadata> metadataOptional = audioService.uploadAudio(file, title, artist, genre, userId);
             if (metadataOptional.isPresent()) {
@@ -88,7 +89,7 @@ public class AudioController {
      * @return a response entity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAudio(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAudio(@PathVariable @NonNull Long id) {
         audioService.deleteById(id);
         return ResponseEntity.ok().build();
     }

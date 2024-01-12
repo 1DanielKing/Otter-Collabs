@@ -1,6 +1,7 @@
 package org.wecancodeit.backend.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.services.UserService;
@@ -93,7 +94,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/friends")
-    public ResponseEntity<Set<User>> getUserFriends(@PathVariable Long userId) {
+    public ResponseEntity<Set<User>> getUserFriends(@PathVariable @NonNull Long userId) {
         Set<User> friends = userService.getUserFriends(userId);
         return ResponseEntity.ok(friends);
     }
@@ -106,7 +107,7 @@ public class UserController {
      * @return ResponseEntity containing the updated user or a not found status
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<User> updateUser(@PathVariable @NonNull Long id, @RequestBody User updatedUser) {
         return userService.findUserById(id)
                 .map(existingUser -> {
                     updatedUser.setPassword(existingUser.getPassword());
@@ -125,7 +126,7 @@ public class UserController {
      * @return a response entity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable @NonNull Long id) {
         return userService.findUserById(id)
                 .map(user -> {
                     userService.deleteUser(id);

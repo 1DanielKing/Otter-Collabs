@@ -3,6 +3,7 @@ package org.wecancodeit.backend.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.PairRequest;
 import org.wecancodeit.backend.models.PairRequest.RequestStatus;
@@ -54,7 +55,7 @@ public class PairRequestService {
         return pairRequestRepository.findByReceiverAndRequestStatus(user, RequestStatus.PENDING);
     }
 
-    public void respondToPairRequest(Long pairRequestId, RequestStatus response) {
+    public void respondToPairRequest(@NonNull Long pairRequestId, RequestStatus response) {
         PairRequest pairRequest = pairRequestRepository.findById(pairRequestId)
                 .orElseThrow(() -> new IllegalArgumentException("Pair Request not found"));
 
