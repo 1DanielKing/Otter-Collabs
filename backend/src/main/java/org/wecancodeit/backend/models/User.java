@@ -11,9 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 /**
  * Represents a user in the OtterCollab platform.
