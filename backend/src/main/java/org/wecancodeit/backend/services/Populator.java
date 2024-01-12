@@ -4,7 +4,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
 import org.wecancodeit.backend.models.User;
-import org.wecancodeit.backend.repositories.UserRepository;
 
 @Component
 public class Populator implements CommandLineRunner {
