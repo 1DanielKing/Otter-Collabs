@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Switch,
   Navigate,
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
@@ -33,9 +32,7 @@ const AuthenticatedApp = () => {
           <Route path="/portfolio" element={<AudioPortfolio />} />
           <Route path="/portfolio/upload" element={<AudioUpload />} />
           <Route path="/findUsers" element={<FindUsers />} />
-          <Switch>
-            <Route path="/audio/:id" element={<AudioPlayer />} />
-          </Switch>
+          <Route path="/audio/:id" element={<AudioPlayer />} />
         </Routes>
       )}
     </Layout>
