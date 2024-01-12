@@ -1,65 +1,40 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 
-function FindUser({ searchInput, selectedOption }) {
+function FindUser({ results }) {
   const { user } = useAuth();
-  const [results, setResults] = useState([]);
-
-  const displayResults = async () => {
-    if (selectedOption === "Username") {
-      await nameSearch();
-    }
-    // TODO: Add later when functionality is in the backend for the search features
-    // if (selectedOption === "Song") {
-    //   await songSearch();
-    // }
-    // if (selectedOption === "Instrument") {
-    //   await instrumentSearch();
-    // }
-  };
-
-  useEffect(() => {
-    const displayResults = async () => {
-      if (selectedOption === "Username") {
-        await nameSearch();
-      }
-      // Add other search options here when functionality is available in the backend
-    };
-    console.log("Search Input:", searchInput);
-    console.log("Selected Option:", selectedOption);
-    displayResults();
-  }, [searchInput, selectedOption]);
-
-  const nameSearch = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/users/search?username=${searchInput}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        if (Array.isArray(data)) {
-          setResults(data);
-        } // Update results state with the fetched data
-      } else {
-        setResults([]);
-        console.error("Failed to load profile data");
-      }
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
-
-  // TODO: Implement other search functions similarly
 
   return (
     <div>
       <h2>Search Results</h2>
-      <ul>
-        {results.map((result) => (
-          <li key={result.id}>{/* Render each result item here */}</li>
-        ))}
-      </ul>
+      {Array.isArray(results) ? (
+        results.length > 0 ? (
+          <ul>
+            {results.map((result) => (
+              <li key={result.id}>
+                <p>Username: {result.username}</p>
+                <p>Profile Picture: {result.imageURL}</p>
+                <p>Genre: {result.genre}</p>
+                <p>Instrument: {result.instrument}</p>
+                <p>Experience Level: {result.experienceLevel}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No array results found.</p>
+        )
+      ) : // Assuming results is an object
+      results !== null ? (
+        <div>
+          <p>Username: {results.username}</p>
+          <p>Profile Picture: {results.imageURL}</p>
+          <p>Genre: {results.genre}</p>
+          <p>Instrument: {results.instrument}</p>
+          <p>Experience Level: {results.experienceLevel}</p>
+        </div>
+      ) : (
+        <p>No object results found.</p>
+      )}
     </div>
   );
 }

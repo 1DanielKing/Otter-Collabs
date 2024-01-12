@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from 'stompjs/lib/stomp.min.js'
 import { useAuth } from '../contexts/AuthContext';
@@ -9,8 +11,12 @@ const ChatBox = () => {
     const [newMessage, setNewMessage] = useState("");
     const [friends, setFriends] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
-
+    const [isExpanded, setIsExpanded] = useState(false);
+    const selectedUserRef = useRef();
+    const messagesEndRef = useRef(null);
     const { user } = useAuth();
+
+    const toggleChatBox = () => setIsExpanded(!isExpanded);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -42,8 +48,13 @@ const ChatBox = () => {
             client.subscribe('/user/queue/messages', message => {
                 const incomingMessage = JSON.parse(message.body);
                 // add message only if that conversation is open
-                if (selectedUser && (incomingMessage.sender === selectedUser.username)) {
+                if (selectedUserRef.current && (incomingMessage.sender === selectedUserRef.current.username)) {
                     setMessages(prev => [...prev, incomingMessage]);
+                }
+                if (selectedUser) {
+                    console.log(selectedUser.username === incomingMessage.sender ? "sender matches selected user" : "sender does not match selected user");
+                } else {
+                    console.log("selectedUser is null");
                 }
             });
         });
@@ -55,73 +66,110 @@ const ChatBox = () => {
         };
     }, []);
 
-    useEffect(() => {
+    const fetchMessageHistory = async () => {
         if (selectedUser) {
-            const fetchMessageHistory = async () => {
-                const response = await fetch(`http://localhost:8080/api/message/history?user1=${user.username}&user2=${selectedUser.username}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setMessages(Array.isArray(data) ? data : []);
-                } else {
-                    console.error('Failed to fetch message history');
-                }
-            };
-
-            fetchMessageHistory();
+            const response = await fetch(`http://localhost:8080/api/message/history?user1=${user.username}&user2=${selectedUser.username}`);
+            if (response.ok) {
+                const data = await response.json();
+                setMessages(Array.isArray(data) ? data : []);
+            } else {
+                console.error('Failed to fetch message history');
+            }
         }
+    };
+
+    useEffect(() => {
+        function logMessagesOnChange() {
+            console.log(messages);
+        }
+        logMessagesOnChange();
+    }, [messages]);
+
+    useEffect(() => {
+        function updateSelectedUserRef() {
+            selectedUserRef.current = selectedUser;
+        }
+        updateSelectedUserRef();
+    }, [selectedUser]);
+
+    useEffect(() => {
+        fetchMessageHistory();
     }, [selectedUser, user.username]);
 
     const handleUserSelect = (user) => {
         setSelectedUser(user);
-        setMessages([]); // Clear previous messages
+        setMessages([]);
     };
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
 
-    const sendMessage = () => {
+
+    const sendMessage = async () => {
         if (stompClient && newMessage && selectedUser) {
             const chatMessage = { sender: user.username, recipient: selectedUser.username, text: newMessage };
             stompClient.send("/api/message", { 'Authorization': `Bearer ${user.token}` }, JSON.stringify(chatMessage));
             setNewMessage("");
-            setMessages(prev => [...prev, chatMessage]); // Optionally add to local state
+            await fetchMessageHistory();
         }
     };
 
     return (
-        <div className="chatbox">
-            <div>
-                {selectedUser ? (
-                    <>
-                        <button onClick={() => setSelectedUser(null)}>Back to Users</button>
-                        <div className='chatbox-content'>
-                            {messages.map((msg) => (
-                                <div key={msg.id}>{msg.sender}: {msg.text}</div>
-                            ))}
+        <div className={isExpanded ? "chatbox" : "chatbox-collapsed"}>
+            {isExpanded ? (
+                <>
+                    <div className="chatbox-header">
+                        <div className="chatbox-header-arrow-space">
+                            {selectedUser ? (
+                                <div className="chatbox-back-arrow" onClick={() => setSelectedUser(null)}>
+                                    &#8592; {/* Left arrow */}
+                                </div>
+                            ) : (
+                                <div className="chatbox-back-arrow">&nbsp;</div>
+                            )}
                         </div>
-                        <input
-                            className="chatbox-input"
-                            type="text"
-                            value={newMessage}
-                            onChange={e => setNewMessage(e.target.value)}
-                        />
-                        <button onClick={sendMessage}>Send</button>
-                    </>
-                ) : (
-                    <div>
-                        Select a user to chat with
-                        <div>
+                        <div className="chatbox-title" onClick={toggleChatBox}>Messages</div>
+                    </div>
+                    {selectedUser ? (
+                        <>
+                            <div className='chatbox-content'>
+                                {messages.map((msg) => (
+                                    <div key={msg.id}>{msg.sender}: {msg.text}</div>
+                                ))}
+                                {/* Invisible element for auto scroll down */}
+                                <div ref={messagesEndRef} />
+                            </div>
+                            <input
+                                className="chatbox-input"
+                                type="text"
+                                value={newMessage}
+                                onChange={e => setNewMessage(e.target.value)}
+                                onKeyDown={e => { if (e.key === 'Enter') sendMessage(); }}
+                            />
+                            <button onClick={sendMessage}>Send</button>
+                        </>
+                    ) : (
+                        <div className="chatbox-user-selection-container">
+                            Select a user to chat with:
                             {friends.map((friend) => (
-                                <div key={friend.id} onClick={() => handleUserSelect(friend)}>
+                                <div key={friend.id} onClick={() => handleUserSelect(friend)} className="chatbox-user-item">
                                     {friend.username}
                                 </div>
                             ))}
                         </div>
-                    </div>
-
-                )}
-            </div>
+                    )}
+                </>
+            ) : (
+                <div onClick={toggleChatBox}>Messages</div> // Collapsed state
+            )}
         </div>
     );
-};
+}
 
 export default ChatBox;

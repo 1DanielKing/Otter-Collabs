@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+
     const [user, setUser] = useState(null);
     const [profileLoaded, setProfileLoaded] = useState(false);
 
@@ -59,7 +60,6 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
-
     };
 
     const login = async (username, password) => {
@@ -77,6 +77,7 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem("authToken", data.token);
                 setUser({ token: data.token, username: username });
                 loadProfileData(username);
+                console.log("successfully logged in");
             } else {
                 console.error("Login failed");
             }

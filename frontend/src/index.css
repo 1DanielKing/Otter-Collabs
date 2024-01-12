@@ -129,6 +129,60 @@ code {
   margin: 3px;
 }
 
+.chatbox-collapsed {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100px;
+  height: 30px;
+  background-color: #f8f9fa;
+  opacity: 0.8;
+  border-top: 3px solid #ced4da;
+  border-left: 3px solid #ced4da;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.chatbox-header {
+  background-color: #22262b;
+  /* Darker background color */
+  border-bottom: 1px solid #545658;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.chatbox-header div {
+  text-align: center;
+  color: white;
+}
+
+.chatbox-back-arrow-space {
+  width: 1em;
+  display: flex;
+  flex-shrink: 0;
+  flex-grow: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatbox-back-arrow {
+  width: 1em;
+  cursor: pointer;
+}
+
+.chatbox-title {
+  flex-grow: 10;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+}
+
 .chatbox {
   position: fixed;
   bottom: 0;
@@ -137,14 +191,20 @@ code {
   height: 300px;
   background-color: #f8f9fa;
   opacity: 0.8;
-  border-top: 3px solid #ced4da;
+  border-top: 0;
   border-left: 3px solid #ced4da;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   z-index: 1001;
 }
 
+.chatbox input button {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+}
+
 .chatbox-content {
   padding: 20px;
+  padding-bottom: 10px;
   overflow-y: auto;
   height: 150px;
 }
@@ -153,12 +213,53 @@ code {
   width: 0.5em;
 }
 
-.chatbox-header {
+/* User selection container */
+.chatbox-user-selection-container {
   padding: 10px;
-  background-color: #e9ecef;
-  border-bottom: 1px solid #ced4da;
+  max-height: 150px;
+  /* Adjust as needed */
+  overflow-y: auto;
+  /* Makes the list scrollable */
+  background-color: #f0f0f0;
+  /* Light background for the section */
+  border-top: 1px solid #ced4da;
 }
 
-.chatbox-input {
-  margin-bottom: 1px;
+/* Individual user items */
+.chatbox-user-item {
+  padding: 5px 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.chatbox-user-item:hover {
+  background-color: #e0e0e0;
+}
+
+/* User selection scrollbar */
+.chatbox-user-selection-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chatbox-user-selection-container::-webkit-scrollbar-thumb {
+  background-color: #ced4da;
+  border-radius: 10px;
+}
+
+.chatbox-user-selection-container::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.chatbox input {
+  margin-bottom: 0.25em;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+}
+
+.chatbox button {
+  margin-right: 0.25em;
+  margin-left: 0.25em;
 }

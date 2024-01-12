@@ -108,6 +108,7 @@ const NewUser = () => {
       <p>
         Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
       </p>
+
     </div>
   );
 };
