@@ -34,7 +34,13 @@ public class ChatController {
         }
         chatMessage.setTimestamp(new Date());
         chatMessageRepository.save(chatMessage);
-        messagingTemplate.convertAndSendToUser(chatMessage.getRecipient(), "/queue/messages", chatMessage);
+        
+        String recipient = chatMessage.getRecipient();
+        if (recipient != null) {
+            messagingTemplate.convertAndSendToUser(recipient, "/queue/messages", chatMessage);
+        } else {
+            System.out.println("Recipient is null");
+        }
     }
 
     @GetMapping("/api/message/history")
