@@ -123,27 +123,6 @@ public class AudioService {
         return contentType.startsWith("video/");
     }
 
-    /**
-     * Plays the audio associated with the given audio metadata ID.
-     *
-     * @param id the ID of the audio metadata
-     */
-    public void playAudio(Long id) {
-        try {
-            Optional<AudioMetadata> metaData = audioMetaDataRepository.findById(id);
-            metaData.ifPresent(m -> {
-                String filePath = Paths.get(storageLocation).resolve(m.getFileName()).toString();
-                playAudioFile(filePath);
-            });
-        } catch (Exception e) {
-            // Log the exception
-            log.error("Error during audio playback: {}", e.getMessage(), e);
-
-            // Throw a custom exception
-            throw new AudioPlayBackException("Error during audio playback", e);
-        }
-    }
-
     // New method for playing audio using Clip
     private void playAudioFile(String filePath) {
         try {
