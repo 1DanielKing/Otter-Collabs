@@ -32,7 +32,8 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // Require auth for all other requests
                 )
                 .headers(headers -> headers // Set headers to allow frame options for H2 console
-                        .frameOptions().sameOrigin());
+                        .frameOptions(frameOptions -> frameOptions
+                                .sameOrigin()));
 
         return http.build();
     }
