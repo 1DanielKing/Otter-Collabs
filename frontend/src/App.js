@@ -17,21 +17,23 @@ import AudioPortfolio from "./pages/AudioPortfolio";
 import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
+import ViewUserProfile from "./pages/ViewUserProfile";
 
 const AuthenticatedApp = () => {
-  const {loading } = useAuth();
+  const { loading } = useAuth();
 
   return (
     <Layout>
-    {loading ? (
+      {loading ? (
         <p>Loading Sick Beats...</p>
       ) : (
-      <Routes>
-        <Route path="/" element={<ProfilePage />} />
-        <Route path="/portfolio" element={<AudioPortfolio />} />
-        <Route path="/portfolio/upload" element={<AudioUpload />} />
-        <Route path="/findUsers" element={<FindUsers />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<ProfilePage />} />
+          <Route path="/portfolio" element={<AudioPortfolio />} />
+          <Route path="/portfolio/upload" element={<AudioUpload />} />
+          <Route path="/findUsers" element={<FindUsers />} />
+          <Route path="/user/:username" element={<ViewUserProfile />} />
+        </Routes>
       )}
     </Layout>
   );
@@ -42,7 +44,7 @@ const UnauthenticatedApp = () => {
 
   return (
     <Routes>
-      <Route path="/"element={<LandingPage user={user} loading={loading}/>}/>
+      <Route path="/" element={<LandingPage user={user} loading={loading} />} />
       <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
       <Route path="/sign-in" element={<SignIn />} />
@@ -52,7 +54,6 @@ const UnauthenticatedApp = () => {
 
 function App() {
   return (
-    
     <AuthProvider>
       <Router>
         <MainApp />
