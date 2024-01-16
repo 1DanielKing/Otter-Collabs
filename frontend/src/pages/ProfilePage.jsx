@@ -28,7 +28,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="main-container">
+    <div className="main-container display-profile-container">
       <div className="item-box">
         {editMode ? (
           <EditProfileForm user={user} toggleEditMode={toggleEditMode} />
