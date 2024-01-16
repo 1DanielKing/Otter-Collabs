@@ -9,9 +9,7 @@ import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
-
 import LandingPage from "./pages/LandingPage";
-
 import AudioPortfolio from "./pages/AudioPortfolio";
 import AudioPlayer from "./components/AudioPlayer";
 import AudioUpload from "./pages/AudioUpload";
