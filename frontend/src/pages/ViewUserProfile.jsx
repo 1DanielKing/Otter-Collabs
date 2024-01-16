@@ -13,6 +13,7 @@ const ViewUserProfile = ({ location }) => {
       <div className="display-profile-container">
         <UserView data={username} />
         <Portfolio data={username} />
+      </div>
     </div>
   );
 };
