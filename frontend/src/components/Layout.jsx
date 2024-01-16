@@ -13,7 +13,6 @@ const Layout = ({ children }) => {
         <>
             <div className="layout">
                 <Navbar openLogoutModal={openLogoutModal} />
-                <LogoutModal isOpen={isLogoutModalOpen} onClose={closeLogoutModal} />
                 <main>{children}</main>
                 <ChatBox />
             </div>
