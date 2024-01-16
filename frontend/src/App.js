@@ -3,16 +3,13 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
-
 import LandingPage from "./pages/LandingPage";
-
 import AudioPortfolio from "./pages/AudioPortfolio";
 import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
