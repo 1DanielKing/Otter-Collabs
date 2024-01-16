@@ -285,3 +285,14 @@ code {
   margin: 0 auto 2em;
   text-align: center;
 }
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-username {
+  margin: 0;
+  display: inline;
+}
