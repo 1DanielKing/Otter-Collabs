@@ -17,6 +17,7 @@ import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
 import ViewUserProfile from "./pages/ViewUserProfile";
 import { ModalProvider } from "./contexts/ModalContext";
+import FriendsPage from "./pages/FriendsPage";
 
 const AuthenticatedApp = () => {
   const { loading } = useAuth();
@@ -30,7 +31,8 @@ const AuthenticatedApp = () => {
             <Route path="/" element={<ProfilePage />} />
             <Route path="/portfolio" element={<AudioPortfolio />} />
             <Route path="/portfolio/upload" element={<AudioUpload />} />
-            <Route path="/findUsers" element={<FindUsers />} />
+            <Route path="/friends" element={<FriendsPage />} />
+          <Route path="/findUsers" element={<FindUsers />} />
           <Route path="/user/:username" element={<ViewUserProfile />} />
             <Route path="/audio/:id" element={<AudioPlayer />} />
         </Routes>
