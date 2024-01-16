@@ -19,6 +19,14 @@ function AudioUpload() {
         setGenre('');
     };
 
+    const handleSuccessfulUpload = () => {
+        // Reset form fields
+        setFile(null);
+        setTitle('');
+        setArtist('');
+        setGenre('');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -50,6 +58,14 @@ function AudioUpload() {
                 navigate("/portfolio");
             } else {
                 console.error('Upload error: Server responded with a non-2xx status code');
+                 // Check if the response body is not empty before parsing as JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                console.error('Error Details:', errorData.message);
+            }else{
+                console.error('Error Details: No additional information');
+            }
             }
         } catch (error) {
             console.error('Upload error:', error.message);

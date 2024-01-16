@@ -13,7 +13,6 @@ import org.wecancodeit.backend.repositories.AudioMetadataRepository;
 import org.wecancodeit.backend.repositories.UserRepository;
 
 // imports for Checking Duration of uploaded audio files
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -135,8 +134,7 @@ public class AudioService {
     private boolean isVideoContentType(String contentType) {
         return contentType.startsWith("video/");
     }
-
-
+    
     // Process the audio file based on its format
     private void processAudioFile(String fileName, String filePath) {
         String fileExtension = getFileExtension(fileName);
