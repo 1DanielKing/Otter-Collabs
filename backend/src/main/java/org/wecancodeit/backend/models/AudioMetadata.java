@@ -3,6 +3,7 @@ package org.wecancodeit.backend.models;
 import jakarta.persistence.*;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Objects;
 
@@ -153,8 +154,10 @@ public class AudioMetadata {
     }
 
     public Path getFileName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFileName'");
+        if (filePath != null) {
+            return Paths.get(filePath).getFileName();
+        } else {
+            throw new IllegalStateException("File path is null");
+        }
     }
-
 }

@@ -12,16 +12,20 @@ import org.wecancodeit.backend.repositories.AudioMetadataRepository;
 import org.wecancodeit.backend.repositories.UserRepository;
 
 // imports for Checking Duration of uploaded audio files
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
+
+import javazoom.jl.decoder.Bitstream;
+//MP3 File Processing
+import javazoom.jl.decoder.Header;
+import javazoom.jl.decoder.JavaLayerException;
+
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +40,7 @@ public class AudioService {
     private final AudioMetadataRepository audioMetaDataRepository;
     private final UserRepository userRepository;
     private static final Logger log = LoggerFactory.getLogger(AudioService.class);
+    
 
     @Value("${app.file.storage-location}") // Storage location configuration
     private String storageLocation;
@@ -107,6 +112,7 @@ public class AudioService {
         if (isVideoContentType(contentType)) {
             throw new IllegalArgumentException("Video uploads are not allowed");
         }
+        
 
         String fileName = storeFile(file);
 
@@ -118,11 +124,66 @@ public class AudioService {
         metaData.setUser(owner);
         return audioMetaDataRepository.save(metaData);
     }
-
-    // no videos allowed
     private boolean isVideoContentType(String contentType) {
         return contentType.startsWith("video/");
     }
+
+    // Process the audio file based on its format
+    private void processAudioFile(String fileName, String filePath) {
+        String fileExtension = getFileExtension(fileName);
+        if ("mp3".equalsIgnoreCase(fileExtension)) {
+            // Process MP3 file
+            processMp3File(filePath);
+        } else if ("wav".equalsIgnoreCase(fileExtension)) {
+            // Process WAV file
+            // Implement your logic for WAV file processing
+            log.info("Processing WAV file: {}", fileName);
+        } else if ("ogg".equalsIgnoreCase(fileExtension)) {
+            // Process OGG file
+            // Implement your logic for OGG file processing
+            log.info("Processing OGG file: {}", fileName);
+        } else {
+            // Unsupported file format
+            log.warn("Unsupported audio file format: {}", fileExtension);
+        }
+    }
+    private String getFileExtension(String fileName) {
+        return Optional.ofNullable(fileName)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(fileName.lastIndexOf(".") + 1))
+                .orElse("");
+    }
+
+    // MP3 File Processing 
+    private void processMp3File(String filePath) {
+        try {
+            // Create a Bitstream object from the FileInputStream of the MP3 file
+            Bitstream bitstream = new Bitstream(new FileInputStream(filePath));
+        
+            // Read the header of the MP3 file to get information about the audio
+            Header header = bitstream.readFrame();
+    
+            // Initialize frameCount to 0
+            int frameCount = 0;
+    
+            // Check if there are frames in the MP3 file before attempting to read frame count
+            if (bitstream.readFrame() != null) {
+                // Read the frame count from the MP3 file using the max_number_of_frames method
+                frameCount = bitstream.readFrame().max_number_of_frames(frameCount);
+            }
+    
+            // Assign the frame count as the duration (this might not be accurate, depends on the use case)
+            int durationInSeconds = frameCount;
+    
+            // Log the duration information
+            log.info("MP3 file duration: {} seconds", durationInSeconds);
+    
+        } catch (JavaLayerException | IOException e) {
+            // Handle exceptions that might occur during MP3 file processing
+            log.error("Error processing MP3 file", e);
+        }
+    }
+
 
     /**
      * Deletes audio metadata and its corresponding file by the metadata's ID.

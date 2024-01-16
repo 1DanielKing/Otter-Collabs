@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
-
 /**
  * Represents a user in the OtterCollab platform.
  * This class holds user details relevant for music collaboration.
