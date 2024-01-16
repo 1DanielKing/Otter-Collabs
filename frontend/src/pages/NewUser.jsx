@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./NewUser.css";
 import { useAuth } from "../contexts/AuthContext";
 
-const NewUser = () => {
+const NewUser = ({ toggleLoginFunc }) => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -105,7 +105,10 @@ const NewUser = () => {
         </div>
       </form>
       <p>
-        Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
+        Already on OtterCollab?{' '}
+        <span className="create-account-link" onClick={toggleLoginFunc}>
+          Sign in
+        </span>
       </p>
 
     </div>
