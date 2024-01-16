@@ -8,8 +8,8 @@ function Navbar({ openLogoutModal }) {
       <ul className="nav-links">
         <div className="Logo-Home-Button">
           <li>
-            <Link to="/">
-              <img src="/" alt="LOGO OTTERCOLLAB"></img>
+            <Link className="logo-home-button" to="/">
+              <img src="/media/pictures/logo.png" alt="LOGO OTTERCOLLAB"></img>
             </Link>
           </li>
         </div>

@@ -18,6 +18,8 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
+  margin-block-start: 0.5em;
+  margin-block-end: 0;
 }
 
 .Logo-Home-Button,
@@ -55,7 +57,7 @@
   display: block;
   text-decoration: none;
   color: black;
-  padding: 10px;
+  padding: 0;
   transition: color 0.3s ease;
   align-items: stretch;
 }
@@ -66,4 +68,15 @@
   background-color: black;
   align-items: stretch;
   height: 100%;
+}
+
+.logo-home-button img {
+  height: 40px;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .logo-home-button img {
+    height: 40px;
+  }
 }
