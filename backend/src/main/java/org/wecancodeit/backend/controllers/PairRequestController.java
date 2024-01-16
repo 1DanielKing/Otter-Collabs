@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +27,8 @@ public class PairRequestController {
 
     // Sending a pair request
     @PostMapping("/send")
-    public ResponseEntity<?> sendPairRequest(@RequestParam String senderUsername,
-            @RequestParam String receiverUsername, @RequestParam String message) {
-        PairRequest createdRequest = pairRequestService.sendPairRequest(senderUsername, receiverUsername, message);
+    public ResponseEntity<?> sendPairRequest(@RequestBody PairRequest request) {
+        PairRequest createdRequest = pairRequestService.savePairRequest(request);
         return ResponseEntity.ok(Map.of("pairRequestId", createdRequest.getId()));
     }
 
