@@ -77,29 +77,31 @@ export const Portfolio = ({ data }) => {
   const [audios, setAudios] = useState([]);
   const [userData, setUserData] = useState(null);
 
-  const fetchAudios = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/audio/user/${userData.id}`,
-        {
-          // headers: {
-          //   Authorization: `Bearer ${userData.token}`,
-          // },
-        }
-      );
-      setAudios(response.data);
-    } catch (error) {
-      console.error("Error fetching audios:", error);
-    }
-  };
 
   useEffect(() => {
     const url = `http://localhost:8080/api/users/search?username=${data}`;
     fetchData(url, (result) => result, setUserData);
   }, [data]);
 
+
+
   useEffect(() => {
     function fetchAudiosOnUserDataChange() {
+      const fetchAudios = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/api/audio/user/${userData.id}`,
+            {
+              // headers: {
+              //   Authorization: `Bearer ${userData.token}`,
+              // },
+            }
+          );
+          setAudios(response.data);
+        } catch (error) {
+          console.error("Error fetching audios:", error);
+        }
+      };
       fetchAudios();
     }
     if (userData) {
