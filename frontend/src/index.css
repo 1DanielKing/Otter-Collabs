@@ -118,6 +118,8 @@ code {
 
 .main-container {
   display: flex;
+  max-width: 100%;
+  min-width: 80vh;
   flex-direction: column;
   padding: 25px;
   border: 15px solid #000000f5;
