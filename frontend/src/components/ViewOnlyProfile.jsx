@@ -74,9 +74,9 @@ export const Portfolio = ({ data }) => {
       const response = await axios.get(
         `http://localhost:8080/api/audio/user/${userData.id}`,
         {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${userData.token}`,
+          // },
         }
       );
       setAudios(response.data);
