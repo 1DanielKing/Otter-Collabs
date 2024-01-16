@@ -18,6 +18,7 @@ import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
 import ViewUserProfile from "./pages/ViewUserProfile";
+import { ModalProvider } from "./contexts/ModalContext";
 
 const AuthenticatedApp = () => {
   const { loading } = useAuth();
@@ -55,9 +56,11 @@ const UnauthenticatedApp = () => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <MainApp />
-      </Router>
+      <ModalProvider>
+        <Router>
+          <MainApp />
+        </Router>
+      </ModalProvider>
     </AuthProvider>
   );
 }
