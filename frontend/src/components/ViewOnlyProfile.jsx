@@ -96,6 +96,7 @@ export const UserView = ({ data }) => {
       )}
     </div>
   );
+
 };
 
 export const Portfolio = ({ data }) => {
@@ -169,6 +170,6 @@ export const Portfolio = ({ data }) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
