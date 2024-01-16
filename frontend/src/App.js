@@ -17,6 +17,7 @@ import AudioPlayer from "./components/AudioPlayer";
 import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
+import ViewUserProfile from "./pages/ViewUserProfile";
 
 const AuthenticatedApp = () => {
   const { loading } = useAuth();
@@ -26,12 +27,13 @@ const AuthenticatedApp = () => {
       {loading ? (
         <p>Loading Sick Beats...</p>
       ) : (
-        <Routes>
-          <Route path="/" element={<ProfilePage />} />
-          <Route path="/portfolio" element={<AudioPortfolio />} />
-          <Route path="/portfolio/upload" element={<AudioUpload />} />
-          <Route path="/findUsers" element={<FindUsers />} />
-          <Route path="/audio/:id" element={<AudioPlayer />} />
+          <Routes>
+            <Route path="/" element={<ProfilePage />} />
+            <Route path="/portfolio" element={<AudioPortfolio />} />
+            <Route path="/portfolio/upload" element={<AudioUpload />} />
+            <Route path="/findUsers" element={<FindUsers />} />
+          <Route path="/user/:username" element={<ViewUserProfile />} />
+            <Route path="/audio/:id" element={<AudioPlayer />} />
         </Routes>
       )}
     </Layout>

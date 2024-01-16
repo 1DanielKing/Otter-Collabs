@@ -1,5 +1,5 @@
 import { useAuth } from "../contexts/AuthContext";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import FindUser from "../components/FindUsersComponent";
 
 const FindUsers = () => {
