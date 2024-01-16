@@ -1,8 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import { useModal } from "../contexts/ModalContext";
+import LogoutModal from "./LogOutModal";
 
-function Navbar({ openLogoutModal }) {
+function Navbar() {
+  const { showModal } = useModal();
+
+  const handleLogoutClick = (event) => {
+    event.preventDefault();
+    showModal(<LogoutModal />);
+  };
+
   return (
     <nav className="navbar">
       <ul className="nav-links">
@@ -37,9 +46,9 @@ function Navbar({ openLogoutModal }) {
         </div>
         <div>
           <li>
-            <a href="#" onClick={openLogoutModal}>
+            <button onClick={handleLogoutClick} className='link-button'>
               Log Out
-            </a>
+            </button>
           </li>
         </div>
       </ul>
