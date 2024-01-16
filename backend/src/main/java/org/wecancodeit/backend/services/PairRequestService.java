@@ -20,24 +20,18 @@ public class PairRequestService {
     @Autowired
     private UserRepository userRepository;
 
-    public PairRequest sendPairRequest(String senderUsername, String receiverUsername, String message) {
+    public PairRequest savePairRequest(PairRequest request) {
         // Find The members of the attempted pairing in the Database
-        User sender = userRepository.findByUsername(senderUsername)
+        User sender = userRepository.findByUsername(request.getSender().getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
-        User receiver = userRepository.findByUsername(receiverUsername)
+        User receiver = userRepository.findByUsername(request.getReceiver().getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
 
-        // New pair request instance
-        PairRequest pairRequest = new PairRequest();
-        pairRequest.setSender(sender);
-        pairRequest.setReceiver(receiver);
-        pairRequest.setMessage(message);
+        request.setSender(sender);
+        request.setReceiver(receiver);
+        request.setRequestStatus(RequestStatus.PENDING);
 
-        // Defaults to pending
-        pairRequest.setRequestStatus(RequestStatus.PENDING);
-
-        // Save the new PairRequest instance to the database
-        return pairRequestRepository.save(pairRequest);
+        return pairRequestRepository.save(request);
     }
 
     // Service method to handle different states of a pair request
