@@ -10,10 +10,8 @@ const ViewUserProfile = ({ location }) => {
   }, [username]);
   return (
     <div className="main-container">
-      <div className="main-container">
+      <div className="display-profile-container">
         <UserView data={username} />
-      </div>
-      <div className="main-container">
         <Portfolio data={username} />
       </div>
     </div>

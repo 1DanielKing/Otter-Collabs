@@ -3,10 +3,18 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useAuth } from '../contexts/AuthContext.js';
 import { useNotifications } from "../contexts/NotificationsContext.js";
+import { useModal } from "../contexts/ModalContext";
+import LogoutModal from "./LogOutModal";
 
 function Navbar({ openLogoutModal }) {
   const { notifications } = useNotifications();
   const { user } = useAuth();
+  const { showModal } = useModal();
+
+  const handleLogoutClick = (event) => {
+    event.preventDefault();
+    showModal(<LogoutModal />);
+  };
 
   return (
     <nav className="navbar">
@@ -31,7 +39,7 @@ function Navbar({ openLogoutModal }) {
           </div>
           <div>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/friends">Friends</Link>
             </li>
           </div>
           <div>
@@ -49,9 +57,9 @@ function Navbar({ openLogoutModal }) {
       </div>
         <div>
           <li>
-            <a href="#" onClick={openLogoutModal}>
+            <button onClick={handleLogoutClick} className='link-button'>
               Log Out
-            </a>
+            </button>
           </li>
         </div>
       </ul>

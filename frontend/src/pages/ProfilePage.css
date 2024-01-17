@@ -1,18 +1,18 @@
 .display-profile-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
-    max-width: 600px;
+    max-width: 900px;
     margin: auto;
     padding: 20px;
 }
 
 .profile-picture-section {
-    text-align: center;
+    text-align: left;
 }
 
 .profile-picture {
-    max-width: 100%;
+    max-width: 10em;
     height: auto;
     border-radius: 50%;
 }
@@ -23,9 +23,17 @@
     justify-content: center;
 }
 
+.profile-portfolio-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top: 1px black solid;
+}
+
 .profile-username {
-    text-align: center;
+    text-align: left;
     margin-bottom: 15px;
+    display: inline;
 }
 
 .profile-info {

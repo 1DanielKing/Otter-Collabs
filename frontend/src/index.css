@@ -118,6 +118,8 @@ code {
 
 .main-container {
   display: flex;
+  max-width: 100%;
+  min-width: 80vh;
   flex-direction: column;
   padding: 25px;
   border: 15px solid #000000f5;
@@ -284,4 +286,15 @@ code {
   max-width: 600px;
   margin: 0 auto 2em;
   text-align: center;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-username {
+  margin: 0;
+  display: inline;
 }
