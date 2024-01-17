@@ -20,7 +20,7 @@ const ProfilePage = () => {
     if (location.pathname.includes("/") && location.search.includes("?code=")) {
       HandleCallback(location, navigate);
     }
-  }, [location]);
+  }, [location, navigate]);
 
   if (!user) {
     console.log(user);
