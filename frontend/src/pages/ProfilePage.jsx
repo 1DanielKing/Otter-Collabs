@@ -4,7 +4,6 @@ import DisplayProfile from "../components/DisplayProfile";
 import { SpotifyAuth, HandleCallback } from "../contexts/SpotifyAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
-import { client_Secret, client_Id, redirect_Uri } from "../contexts/SpotifyId";
 import EditProfileForm from "../components/EditProfileForm";
 
 const ProfilePage = () => {
