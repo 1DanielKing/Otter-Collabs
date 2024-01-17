@@ -1,4 +1,5 @@
 body {
+  overflow: auto;
   font-family: Arial, sans-serif;
   background-color: #ffffff;
   color: #000000;
@@ -8,6 +9,14 @@ body {
   height: 100vh;
   background-image: url("/public/media/pictures/music.jpg");
   background-size: cover;
+}
+
+a {
+  color: inherit;
+}
+
+a:visited {
+  color: inherit;
 }
 
 code {
@@ -111,15 +120,17 @@ code {
 
 .profile-pic-option img {
   width: 50px;
-
   height: 50px;
 
 }
 
 .main-container {
+  overflow-y: auto;
+  height: auto;
   display: flex;
   max-width: 100%;
   min-width: 80vh;
+  max-height: none;
   flex-direction: column;
   padding: 25px;
   border: 15px solid #000000f5;
@@ -297,4 +308,30 @@ code {
 .profile-username {
   margin: 0;
   display: inline;
+}
+
+.friends-profile-picture {
+  width: 3.125em;
+  height: 3.125em;
+  border-radius: 50%;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+.friend-list-container {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  max-height: 25em;
+}
+
+.friend-list-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.friend-list-container li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1em;
 }
