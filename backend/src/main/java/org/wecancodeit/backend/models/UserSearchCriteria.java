@@ -1,13 +1,21 @@
 package org.wecancodeit.backend.models;
 
 public class UserSearchCriteria {
+    private Long id;
     private String email;
     private String username;
     private String instrument;
-    public UserSearchCriteria(String email, String username, String instrument) {
+    public UserSearchCriteria(Long id, String email, String username, String instrument) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.instrument = instrument;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     public String getEmail() {
         return email;
