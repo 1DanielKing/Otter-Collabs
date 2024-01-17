@@ -19,7 +19,10 @@ const SendPairRequest = ({ senderUser, receiverUser }) => {
         pairRequestData
       );
       console.log("Pair request sent");
-      addNotification({ message: "New pair request sent!" });
+      addNotification({
+        receiver: receiverUser,
+        message: "New pair request sent!",
+      });
       hideModal();
     } catch (error) {
       console.error("Error in sending pair request: ", error);
