@@ -64,11 +64,7 @@ public class UserController {
     @PostMapping("/search-all")
     public ResponseEntity<List<User>> searchUsers(@RequestBody UserSearchCriteria criteria) {
         List<User> users = userService.searchUsers(criteria);
-        if (!users.isEmpty()) {
-            return ResponseEntity.ok(users);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(users);
     }
 
     // Fetch sender user data
