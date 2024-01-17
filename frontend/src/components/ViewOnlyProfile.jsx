@@ -24,6 +24,7 @@ const fetchData = async (url, processData, setData) => {
 
 export const UserView = ({ data }) => {
   const [userData, setUserData] = useState(null);
+  const [isFriends, setIsFriends] = useState(null);
   const { showModal } = useModal();
   const { user } = useAuth();
 
@@ -31,6 +32,27 @@ export const UserView = ({ data }) => {
     const url = `http://localhost:8080/api/users/search?username=${data}`;
     fetchData(url, (result) => result, setUserData);
   }, [data]);
+
+  useEffect(() => {
+    const checkFriendship = async () => {
+      if (user && userData) {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/api/users/${user.id}/friends`
+          );
+          const friendsList = response.data;
+          const isFriends = friendsList.some(friend => friend.id === userData.id);
+          console.log(isFriends);
+          setIsFriends(isFriends);
+          console.log(isFriends);
+        } catch (error) {
+          console.error("Error checking friendship:", error);
+        }
+      }
+    };
+
+    checkFriendship();
+  }, [user, userData]);
 
   if (!userData) {
     return <p>Loading...</p>;
@@ -67,8 +89,11 @@ export const UserView = ({ data }) => {
         <h2>Genre:</h2>
         <p>{userData.genre}</p>
       </div>
-      {/* Add the button */}
-      <button onClick={handleSendPairRequest}>Send Pair Request</button>
+      {isFriends ? (
+        <p>You are friends with this user</p>
+      ) : (
+        <button onClick={handleSendPairRequest}>Send Pair Request</button>
+      )}
     </div>
   );
 };
