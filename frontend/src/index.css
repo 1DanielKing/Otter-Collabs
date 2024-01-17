@@ -4,9 +4,10 @@ body {
   background-color: #ffffff;
   color: #000000;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: flex-start;
+  height: 98vh;
   background-image: url("/public/media/pictures/music.jpg");
   background-size: cover;
 }
@@ -132,10 +133,14 @@ code {
   min-width: 80vh;
   max-height: none;
   flex-direction: column;
+  margin-top: 4.5em;
   padding: 25px;
   border: 15px solid #000000f5;
   border-radius: 16px;
   background-color: rgba(255, 255, 255, 0.8);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  max-height: 82vh;
 }
 
 .profile-box {
@@ -316,12 +321,6 @@ code {
   border-radius: 50%;
   padding-right: 1em;
   padding-left: 1em;
-}
-
-.friend-list-container {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  max-height: 25em;
 }
 
 .friend-list-container ul {
