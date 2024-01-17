@@ -1,10 +1,9 @@
 package org.wecancodeit.backend.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.wecancodeit.backend.models.User;
-
-
 
 import java.util.Optional;
 import java.util.Set;
@@ -28,10 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     Optional<User> findByEmail(String email);
 
-
     /**
      * finds users by similar User tags
-     */ 
+     */
     default Set<User> findBySimilarTags(String username, Set<String> userTags) {
         return findByMusicTagsInAndUsernameNot(userTags, username);
     }
@@ -40,5 +38,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Finds users with similar music tags.
      */
     Set<User> findByMusicTagsInAndUsernameNot(Set<String> musicTags, String username);
+
+    @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.friends f WHERE u.id = :userId AND f.id = :friendId")
+    boolean areAlreadyFriends(Long userId, Long friendId);
 
 }
