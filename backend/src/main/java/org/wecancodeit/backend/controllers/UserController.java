@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.wecancodeit.backend.models.User;
+import org.wecancodeit.backend.models.UserSearchCriteria;
 import org.wecancodeit.backend.services.UserService;
 
 import java.util.List;
@@ -60,6 +61,16 @@ public class UserController {
         }
     }
 
+    @GetMapping("/search-all")
+    public ResponseEntity<List<User>> searchUsers(@RequestBody UserSearchCriteria criteria) {
+        List<User> users = userService.searchUsers(criteria);
+        if (!users.isEmpty()) {
+            return ResponseEntity.ok(users);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // Fetch sender user data
     @GetMapping("/sender")
     public ResponseEntity<User> getSenderUserData(@RequestParam String senderUsername) {
@@ -71,6 +82,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     /**
      * POST endpoint to create a new user.
      *
