@@ -1,9 +1,9 @@
 package org.wecancodeit.backend.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.Notification;
 import org.wecancodeit.backend.models.PairRequest;
@@ -21,33 +21,20 @@ public class NotificationService {
         return notificationRepository.findByOrderByTimestampDesc();
     }
 
-    public Notification getNotificationById(Long id) {
-        Optional<Notification> optionalNotification = notificationRepository.findById(id);
-        return optionalNotification.orElse(null);
+    public Notification getNotificationById(@NonNull Long id) {
+        return notificationRepository.findById(id).orElse(null);
     }
 
-    // service method to save a notification
-    public Notification saveNotification(Notification notification) {
+    public List<Notification> getNotificationsByUserId(Long userId) {
+        return notificationRepository.findByUserId(userId);
+    }
+
+    public Notification saveNotification(@NonNull Notification notification) {
         return notificationRepository.save(notification);
     }
 
-    public List<Notification> getNotificationsOrderByTimestampDesc() {
-        return notificationRepository.findByOrderByTimestampDesc();
-    }
-
-    public void deleteNotification(Long id) {
+    public void deleteNotification(@NonNull Long id) {
         notificationRepository.deleteById(id);
-    }
-
-    public void sendPairRequestNotification(User receiver, PairRequest pairRequest) {
-        // Create a notification for the pair request
-        Notification notification = new Notification();
-        notification.setUser(receiver);
-        notification.setMessage("You have a new pair request from " + pairRequest.getSender().getUsername());
-        notification.setPairRequestId(pairRequest.getId());
-
-        // Save the notification
-        notificationRepository.save(notification);
     }
 
 }
