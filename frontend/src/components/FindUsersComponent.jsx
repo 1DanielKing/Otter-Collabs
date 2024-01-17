@@ -1,39 +1,32 @@
-import { useAuth } from "../contexts/AuthContext";
-import { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import "./FindUser.css"; // Import the CSS file
 
 function FindUser({ results }) {
-  const { user } = useAuth();
-
   return (
     <div>
       <h2>Search Results</h2>
-      {Array.isArray(results) ? (
-        results.length > 0 ? (
-          <ul>
-            {results.map((result) => (
-              <li key={result.id}>
+      {Array.isArray(results) && results.length > 0 ? (
+        <ul className="search-results">
+          {results.map((result) => (
+            <li key={result.id} className="search-result-item">
+              <img
+                src={result.imageURL || 'default-image-url.jpg'} // Fallback to a default image if imageURL is not available
+                alt={`Profile of ${result.username}`}
+                className="profile-image"
+              />
+              <div className="user-info">
                 <Link to={`/user/${result.username}`}>
-                  <p>Username: {result.username}</p>
+                  <p id="username">{result.username}</p>
                 </Link>
-                <p>Profile Picture: {result.imageURL}</p>
                 <p>Experience Level: {result.experienceLevel}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No array results found.</p>
-        )
-      ) : results !== null ? (
-        <div>
-          <Link to={`/user/${results.username}`}>
-            <p>Username: {results.username}</p>
-          </Link>
-          <p>Profile Picture: {results.imageURL}</p>
-          <p>Experience Level: {results.experienceLevel}</p>
-        </div>
+                <p>Instrument: {result.instrument}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       ) : (
-        <p>No object results found.</p>
+        <p>No results found.</p>
       )}
     </div>
   );
