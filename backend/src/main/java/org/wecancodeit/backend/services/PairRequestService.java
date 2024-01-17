@@ -23,6 +23,9 @@ public class PairRequestService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService; // Added this line
+
     public PairRequest savePairRequest(PairRequest request) {
         // Find The members of the attempted pairing in the Database
         User sender = userRepository.findByUsername(request.getSender().getUsername())
@@ -34,7 +37,13 @@ public class PairRequestService {
         request.setReceiver(receiver);
         request.setRequestStatus(RequestStatus.PENDING);
 
-        return pairRequestRepository.save(request);
+        // Save the pair request
+        PairRequest savedRequest = pairRequestRepository.save(request);
+
+        // Send notification to the receiver
+        notificationService.sendPairRequestNotification(savedRequest.getReceiver(), savedRequest);
+
+        return savedRequest;
     }
 
     // Service method to handle different states of a pair request
@@ -70,5 +79,4 @@ public class PairRequestService {
 
         pairRequestRepository.save(pairRequest);
     }
-
 }

@@ -46,6 +46,7 @@ public class PairRequest {
         this.sentDateTime = sentDateTime;
         this.requestStatus = requestStatus;
         this.message = message;
+
     }
 
     public long getId() {
