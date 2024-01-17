@@ -189,6 +189,8 @@ public class User {
         this.pendingPairRequests = pendingPairRequests;
     }
 
+    
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -221,5 +223,13 @@ public class User {
                 ", experienceLevel=" + experienceLevel +
                 ", imageURL='" + imageURL + '\'' +
                 '}';
+    }
+
+    public List<AudioMetadata> getAudioFiles() {
+        return audioFiles;
+    }
+
+    public void setAudioFiles(List<AudioMetadata> audioFiles) {
+        this.audioFiles = audioFiles;
     }
 }
