@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function FindUser({ results }) {
-  const { user } = useAuth();
 
   return (
     <div>
