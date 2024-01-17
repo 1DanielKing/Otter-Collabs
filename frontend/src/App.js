@@ -17,6 +17,7 @@ import FindUsers from "./pages/FindUsers";
 import ViewUserProfile from "./pages/ViewUserProfile";
 import { ModalProvider } from "./contexts/ModalContext";
 import FriendsPage from "./pages/FriendsPage";
+import { Navigate } from "react-router-dom";
 
 const AuthenticatedApp = () => {
   const { loading } = useAuth();
@@ -33,6 +34,7 @@ const AuthenticatedApp = () => {
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/findUsers" element={<FindUsers />} />
           <Route path="/user/:username" element={<ViewUserProfile />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
     </Layout>
@@ -48,6 +50,7 @@ const UnauthenticatedApp = () => {
       <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
       <Route path="/sign-in" element={<SignIn />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };
