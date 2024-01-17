@@ -1,9 +1,14 @@
 package org.wecancodeit.backend.services;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
 import org.wecancodeit.backend.models.User;
+
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 @Component
 public class Populator implements CommandLineRunner {
@@ -16,23 +21,85 @@ public class Populator implements CommandLineRunner {
 
         @Override
         public void run(String... args) throws Exception {
-                User user1 = new User("user1", "password1", "user1@example.com", "Guitar", "Rock",
-                                ExperienceLevelEnum.INTERMEDIATE, "/media/pictures/default-pfp/Otter1.png");
-                user1.addMusicTag("Tag1");
-                user1.addMusicTag("Tag2");
+                String[] usernames = {
+                                "CoffeeNerd42", "GizmoGadget", "SoccerFan1990", "Velociraptor", "GlazedDonut",
+                                "PixelPirate", "ZenGarden", "RusticBarn", "Moonwalker", "FrostByte",
+                                "SkaterDude", "TechieGal", "LostAstronaut", "CaramelTwist", "CosmicSurfer",
+                                "BakerStreet221b", "LavaLampLove", "SunsetRider", "QuantumQuokka", "GamerGiraffe",
+                                "NeonKnight", "MangoSalsa", "BinaryBard", "EvergreenElf", "StormChaser",
+                                "BookishBadger", "ChilliPepper", "JazzHippo", "NoodleNinja", "PixelPanda",
+                                "RetroRocket", "SushiSamurai", "TacoTuesday", "WaffleWizard", "ZenZebra",
+                                "ArtsyAardvark", "BlizzardBear", "CupcakeConnoisseur", "DaringDragonfly", "EchoEagle",
+                                "FunkyFrog", "GroovyGiraffe", "HikingHedgehog", "InkyImpala", "JollyJellyfish",
+                                "KookyKangaroo", "LivelyLynx", "MysticMongoose", "NobleNarwhal", "OceanOctopus",
+                                "User1", "User2", "User3"
+                };
+                String[] instruments = {
+                                "Piano", "Guitar", "Violin", "Drums", "Flute",
+                                "Saxophone", "Cello", "Clarinet", "Trumpet", "Harp",
+                                "Accordion", "Trombone", "Bass Guitar", "Oboe", "Mandolin",
+                                "Banjo", "Synthesizer", "Ukulele", "Xylophone", "French Horn"
+                };
+                String[] defaultProfilePics = {
+                                "/media/pictures/default-pfp/Otter1.png",
+                                "/media/pictures/default-pfp/Otter2.png",
+                                "/media/pictures/default-pfp/Otter3.png",
+                                "/media/pictures/default-pfp/Otter4.png",
+                                "/media/pictures/default-pfp/Otter5.png",
+                                "/media/pictures/default-pfp/Otter6.png",
+                                "/media/pictures/default-pfp/Otter7.png",
+                                "/media/pictures/default-pfp/Otter8.png",
+                                "/media/pictures/default-pfp/Otter9.png"
+                };
+                User[] users = new User[usernames.length];
 
-                User user2 = new User("user2", "password2", "user2@example.com", "Piano", "Classical",
-                                ExperienceLevelEnum.ADVANCED, "/media/pictures/default-pfp/Otter2.png");
-                user2.addMusicTag("Tag3");
-                user2.addMusicTag("Tag4");
+                for (int i = 0; i < usernames.length; i++) {
+                        String username = usernames[i];
+                        String password = "password";
+                        String email = username + "@example.com";
+                        String instrument = getRandomItemFromArray(instruments);
+                        String genre = getRandomItemFromArray(instruments);
+                        String imageURL = getRandomItemFromArray(defaultProfilePics);
+                        ExperienceLevelEnum experienceLevel = getRandomItemFromArray(ExperienceLevelEnum.values());
 
-                User user3 = new User("user3", "password3", "user3@example.com", "Drums", "Pop",
-                                ExperienceLevelEnum.BEGINNER, "/media/pictures/default-pfp/Otter3.png");
-                user3.addMusicTag("Tag5");
-                user3.addMusicTag("Tag6");
+                        User user = new User(username, password, email, instrument, genre, experienceLevel, imageURL);
+                        users[i] = user;
+                        userService.createUser(user);
+                }
 
-                userService.createUser(user1);
-                userService.createUser(user2);
-                userService.createUser(user3);
+                // addRandomFriendsToUsers(users);
+                // updateAllUsers(users);
+
+        }
+
+        public void addRandomFriendsToUsers(@NonNull User[] users) {
+                Random random = new Random();
+
+                for (User user : users) {
+                        if (user == null) {
+                                continue;
+                        }
+                        int numberOfFriends = 4 + random.nextInt(17); // Random number between 4 and 20
+                        Set<User> addedFriends = new HashSet<>();
+
+                        while (addedFriends.size() < numberOfFriends) {
+                                User friend = getRandomItemFromArray(users);
+
+                                if (!friend.equals(user) && !user.getFriends().contains(friend)) {
+                                        user.addFriend(friend);
+                                }
+                        }
+                }
+        }
+
+        public void updateAllUsers(User[] users) {
+                for (User user : users) {
+                        userService.updateUser(user);
+                }
+        }
+
+        public static <T> T getRandomItemFromArray(T[] array) {
+                Random random = new Random();
+                return array[random.nextInt(array.length)];
         }
 }
