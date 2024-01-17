@@ -34,7 +34,7 @@ const FindUsers = () => {
   const nameSearch = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/users/search?username=${searchInput}`
+        `http://localhost:8080/api/users/search-all?username=${searchInput}`
       );
       if (response.ok) {
         const data = await response.json();
