@@ -18,6 +18,7 @@ import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
 import ViewUserProfile from "./pages/ViewUserProfile";
+import { NotificationsProvider } from "./contexts/NotificationsContext";
 
 const AuthenticatedApp = () => {
   const { loading } = useAuth();
@@ -55,9 +56,11 @@ const UnauthenticatedApp = () => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <MainApp />
-      </Router>
+    <NotificationsProvider>
+        <Router>
+          <MainApp />
+        </Router>
+      </NotificationsProvider>
     </AuthProvider>
   );
 }

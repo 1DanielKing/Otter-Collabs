@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNotifications } from "../contexts/NotificationsContext.js";
 
 const SendPairRequest = () => {
+  const { addNotification } = useNotifications();
   const [showModal, setShowModal] = useState(false);
   const [senderUserData, setSenderUserData] = useState(null);
   const [receiverUserData, setReceiverUserData] = useState(null);
@@ -45,6 +47,7 @@ const SendPairRequest = () => {
         pairRequestData
       );
       console.log("Pair request sent");
+      addNotification({ message: "New pair request sent!" });
       closeModal();
     } catch (error) {
       console.error("Failed to send pair request:", error);

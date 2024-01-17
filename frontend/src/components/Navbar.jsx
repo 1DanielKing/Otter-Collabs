@@ -1,8 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import { useAuth } from '../contexts/AuthContext.js';
+import { useNotifications } from "../contexts/NotificationsContext.js";
 
 function Navbar({ openLogoutModal }) {
+  const { notifications } = useNotifications();
+  const { user } = useAuth();
+
   return (
     <nav className="navbar">
       <ul className="nav-links">
@@ -35,6 +40,13 @@ function Navbar({ openLogoutModal }) {
             </li>
           </div>
         </div>
+        <div>
+        {user && (
+          <li>
+            <span>Notifications: {notifications.length}</span>
+          </li>
+        )}
+      </div>
         <div>
           <li>
             <a href="#" onClick={openLogoutModal}>
