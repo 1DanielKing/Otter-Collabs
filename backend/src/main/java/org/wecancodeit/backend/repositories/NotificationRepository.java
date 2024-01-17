@@ -9,5 +9,6 @@ import org.wecancodeit.backend.models.Notification;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    List<Notification> findByOrderByTimestampDesc(); // Example: Get notifications ordered by timestamp in descending order
+    List<Notification> findByOrderByTimestampDesc();
+    List<Notification> findByUserId(Long userId);
 }
