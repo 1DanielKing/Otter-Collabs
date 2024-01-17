@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
