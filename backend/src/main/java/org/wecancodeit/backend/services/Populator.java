@@ -40,6 +40,12 @@ public class Populator implements CommandLineRunner {
                                 "Accordion", "Trombone", "Bass Guitar", "Oboe", "Mandolin",
                                 "Banjo", "Synthesizer", "Ukulele", "Xylophone", "French Horn"
                 };
+                String[] genres = {
+                                "Rock", "Pop", "Jazz", "Classical", "Electronic",
+                                "Country", "Blues", "Hip Hop", "Reggae", "Folk",
+                                "Metal", "Punk", "Funk", "Soul", "R&B",
+                                "Disco", "Gospel", "Opera", "Ska", "Grime"
+                };
                 String[] defaultProfilePics = {
                                 "/media/pictures/default-pfp/Otter1.png",
                                 "/media/pictures/default-pfp/Otter2.png",
@@ -58,7 +64,7 @@ public class Populator implements CommandLineRunner {
                         String password = "password";
                         String email = username + "@example.com";
                         String instrument = getRandomItemFromArray(instruments);
-                        String genre = getRandomItemFromArray(instruments);
+                        String genre = getRandomItemFromArray(genres);
                         String imageURL = getRandomItemFromArray(defaultProfilePics);
                         ExperienceLevelEnum experienceLevel = getRandomItemFromArray(ExperienceLevelEnum.values());
 
