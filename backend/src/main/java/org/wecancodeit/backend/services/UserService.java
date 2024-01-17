@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -119,10 +121,13 @@ public class UserService {
         return user.getFriends();
     }
 
+    @Transactional
     public void setUserFriends(@NonNull User user1, @NonNull User user2) {
-        user1.addFriend(user2);
-        user2.addFriend(user1);
-        userRepository.save(user1);
-        userRepository.save(user2);
+        if (!userRepository.areAlreadyFriends(user1.getId(), user2.getId()) &&
+                !userRepository.areAlreadyFriends(user2.getId(), user1.getId())) {
+            user1.addFriend(user2);
+            userRepository.save(user1);
+            // userRepository.save(user2);
+        }
     }
 }
