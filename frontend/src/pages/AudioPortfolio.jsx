@@ -33,35 +33,25 @@ const AudioPortfolio = () => {
   return (
     <div className="main-container">
       <h2>Your Audio Uploads</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Genre</th>
-            <th>Duration (s)</th>
-            <th>Upload Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {audios.map((audio) => (
-            <tr key={audio.id}>
-              <td>
-                <Link to={`/audio/${audio.id}`}>Play Audio</Link>
-              </td>
-              <td>{audio.title}</td>
-              <td>{audio.artist}</td>
-              <td>{audio.genre}</td>
-              <td>{audio.duration}</td>
-              <td>
-                {audio.uploadDate
-                  ? format(new Date(audio.uploadDate), "yyyy-MM-dd")
-                  : ""}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="audio-list">
+        {audios.map((audio) => (
+          <div key={audio.id} className="audio-item">
+            <h3>{audio.title}</h3>
+            <p>Artist: {audio.artist}</p>
+            <p>Genre: {audio.genre}</p>
+            <audio controls>
+              <source src={`http://localhost:8080/api/audio/stream/${audio.id}`} type="audio/mpeg" />
+              Your browser does not support the audio tag.
+            </audio>
+            <p>
+              Upload Date:{" "}
+              {audio.uploadDate
+                ? format(new Date(audio.uploadDate), "yyyy-MM-dd")
+                : ""}
+            </p>
+          </div>
+        ))}
+      </div>
       <Link to="/portfolio/upload">Upload New Audio</Link>
     </div>
   );
