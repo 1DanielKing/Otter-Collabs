@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.Notification;
-import org.wecancodeit.backend.models.PairRequest;
 import org.wecancodeit.backend.repositories.NotificationRepository;
-import org.wecancodeit.backend.models.User;
-
 @Service
 public class NotificationService {
 
