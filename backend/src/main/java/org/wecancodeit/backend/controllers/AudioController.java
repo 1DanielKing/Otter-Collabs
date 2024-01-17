@@ -4,19 +4,19 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-// import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.wecancodeit.backend.models.AudioMetadata;
 import org.wecancodeit.backend.services.AudioService;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/audio")
@@ -46,12 +46,19 @@ public class AudioController {
             @RequestParam("genre") String genre,
             @RequestParam("userId") Long userId) {
         try {
-            AudioMetadata metadata = audioService.uploadAudio(file, title, artist, genre, userId);
-            return ResponseEntity.ok(metadata);
+            Optional<AudioMetadata> metadataOptional = audioService.uploadAudio(file, title, artist, genre, userId);
+            if (metadataOptional.isPresent()) {
+                AudioMetadata metadata = metadataOptional.get();
+                return ResponseEntity.ok(metadata);
+            } else {
+                // Handle the case where the user is not found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
         } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
     /**
      * Endpoint to retrieve all audio metadata.
@@ -93,7 +100,7 @@ public class AudioController {
                     .orElseThrow(() -> new RuntimeException("Audio not found"));
             Path filePath = Paths.get(metaData.getFilePath());
             Resource resource = new UrlResource(filePath.toUri());
-
+            
             if (resource.exists() || resource.isReadable()) {
                 long resourceLength = resource.contentLength();
                 String rangeString = request.getHeader(HttpHeaders.RANGE);
@@ -123,3 +130,4 @@ public class AudioController {
         }
     }
 }
+

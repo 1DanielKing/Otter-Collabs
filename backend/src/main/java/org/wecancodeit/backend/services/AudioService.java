@@ -99,11 +99,12 @@ public class AudioService {
      * @return the saved audio metadata
      */
     @Transactional
-    public AudioMetadata uploadAudio(MultipartFile file, String title, String artist, String genre, Long userId)
-            throws IOException {
-        User owner = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public Optional<AudioMetadata> uploadAudio(MultipartFile file, String title, String artist, String genre, Long userId)
+        throws IOException {
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (userOptional.isPresent()) {
+        User owner = userOptional.get();
+                
         String contentType = file.getContentType();
         if (contentType == null || !contentType.startsWith("audio/")) {
             throw new IllegalArgumentException("File must be an audio file");
@@ -122,8 +123,13 @@ public class AudioService {
 
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
         metaData.setUser(owner);
-        return audioMetaDataRepository.save(metaData);
+        return Optional.of(audioMetaDataRepository.save(metaData));
+    } else {
+        // Log a warning or handle the case where the user is not found
+        log.warn("User not found for userId: {}", userId);
+        return Optional.empty();
     }
+}
     private boolean isVideoContentType(String contentType) {
         return contentType.startsWith("video/");
     }
