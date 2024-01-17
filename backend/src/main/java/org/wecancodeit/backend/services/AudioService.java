@@ -18,7 +18,6 @@ import javax.sound.sampled.AudioSystem;
 
 import javazoom.jl.decoder.Bitstream;
 //MP3 File Processing
-import javazoom.jl.decoder.Header;
 import javazoom.jl.decoder.JavaLayerException;
 
 
@@ -39,10 +38,10 @@ public class AudioService {
 
     private final AudioMetadataRepository audioMetaDataRepository;
     private final UserRepository userRepository;
-    private static final Logger log = LoggerFactory.getLogger(AudioService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AudioService.class);
     
 
-    @Value("${app.file.storage-location}") // Storage location configuration
+    @Value("${app.file.storage-location}") 
     private String storageLocation;
 
     public AudioService(AudioMetadataRepository audioMetaDataRepository, UserRepository userRepository) {
@@ -120,13 +119,13 @@ public class AudioService {
         // Finds the file being uploaded and calculates the audio files duration
         String filePath = Paths.get(storageLocation).resolve(fileName).toString();
         Double duration = getAudioFileDuration(filePath);
-
+        processAudioFile(fileName, filePath);
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
         metaData.setUser(owner);
         return Optional.of(audioMetaDataRepository.save(metaData));
     } else {
         // Log a warning or handle the case where the user is not found
-        log.warn("User not found for userId: {}", userId);
+        logger.warn("User not found for userId: {}", userId);
         return Optional.empty();
     }
 }
@@ -140,24 +139,28 @@ public class AudioService {
         if ("mp3".equalsIgnoreCase(fileExtension)) {
             // Process MP3 file
             processMp3File(filePath);
-        } else if ("wav".equalsIgnoreCase(fileExtension)) {
+            logger.info("Processing mp3 file: {}", fileName);
+        } 
+        else if ("wav".equalsIgnoreCase(fileExtension)) {
             // Process WAV file
-            // Implement your logic for WAV file processing
-            log.info("Processing WAV file: {}", fileName);
+            // processWavFile(filePath);
+            logger.info("Processing WAV file: {}", fileName);
         } else if ("ogg".equalsIgnoreCase(fileExtension)) {
             // Process OGG file
-            // Implement your logic for OGG file processing
-            log.info("Processing OGG file: {}", fileName);
+            // processOggFile(filePath);
+            logger.info("Processing OGG file: {}", fileName);
         } else {
             // Unsupported file format
-            log.warn("Unsupported audio file format: {}", fileExtension);
+            // handleUnsupportedFormat(fileExtension);
+            logger.warn("Unsupported audio file format: {}", fileExtension);
         }
     }
     private String getFileExtension(String fileName) {
-        return Optional.ofNullable(fileName)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(fileName.lastIndexOf(".") + 1))
-                .orElse("");
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(lastDotIndex + 1).toLowerCase();
     }
 
     // MP3 File Processing 
@@ -167,7 +170,7 @@ public class AudioService {
             Bitstream bitstream = new Bitstream(new FileInputStream(filePath));
         
             // Read the header of the MP3 file to get information about the audio
-            Header header = bitstream.readFrame();
+            bitstream.readFrame();
     
             // Initialize frameCount to 0
             int frameCount = 0;
@@ -182,15 +185,12 @@ public class AudioService {
             int durationInSeconds = frameCount;
     
             // Log the duration information
-            log.info("MP3 file duration: {} seconds", durationInSeconds);
-    
+            logger.info("MP3 file duration: {} seconds", durationInSeconds);
         } catch (JavaLayerException | IOException e) {
             // Handle exceptions that might occur during MP3 file processing
-            log.error("Error processing MP3 file", e);
+            logger.error("Error processing MP3 file", e);
         }
     }
-
-
     /**
      * Deletes audio metadata and its corresponding file by the metadata's ID.
      *
