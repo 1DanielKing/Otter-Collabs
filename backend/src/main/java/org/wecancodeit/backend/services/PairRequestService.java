@@ -63,7 +63,9 @@ public class PairRequestService {
             User sender = pairRequest.getSender();
             User receiver = pairRequest.getReceiver();
 
-            userService.setUserFriends(sender, receiver);
+            if (sender != null && receiver != null) {
+                userService.setUserFriends(sender, receiver);
+            }
         }
 
         pairRequestRepository.save(pairRequest);
