@@ -46,10 +46,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean areAlreadyFriends(Long userId, Long friendId);
 
     @Query("SELECT u FROM User u WHERE " +
-            "(:#{#criteria.email} IS NULL OR u.email = :#{#criteria.email}) AND " +
-            "(:#{#criteria.username} IS NULL OR LOWER(u.username) LIKE LOWER('%' || :#{#criteria.username} || '%')) AND "
+            "(COALESCE(:#{#criteria.email}, '') = '' OR u.email = :#{#criteria.email}) AND " +
+            "(COALESCE(:#{#criteria.username}, '') = '' OR LOWER(u.username) LIKE LOWER('%' || :#{#criteria.username} || '%')) AND "
             +
-            "(:#{#criteria.instrument} IS NULL OR LOWER(u.instrument) LIKE LOWER('%' || :#{#criteria.instrument} || '%'))")
+            "(COALESCE(:#{#criteria.instrument}, '') = '' OR LOWER(u.instrument) LIKE LOWER('%' || :#{#criteria.instrument} || '%'))")
     List<User> findUsersByCriteria(@Param("criteria") UserSearchCriteria criteria);
 
 }
