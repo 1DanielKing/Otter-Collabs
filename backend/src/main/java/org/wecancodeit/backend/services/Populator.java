@@ -67,8 +67,7 @@ public class Populator implements CommandLineRunner {
                         userService.createUser(user);
                 }
 
-                // addRandomFriendsToUsers(users);
-                // updateAllUsers(users);
+                addRandomFriendsToUsers(users);
 
         }
 
@@ -86,14 +85,19 @@ public class Populator implements CommandLineRunner {
                                 User friend = getRandomItemFromArray(users);
 
                                 if (!friend.equals(user) && !user.getFriends().contains(friend)) {
+                                        addedFriends.add(friend);
                                         user.addFriend(friend);
                                 }
                         }
                 }
+                updateAllUsers(users);
         }
 
-        public void updateAllUsers(User[] users) {
+        public void updateAllUsers(@NonNull User[] users) {
                 for (User user : users) {
+                        if (user == null) {
+                                continue;
+                        }
                         userService.updateUser(user);
                 }
         }
