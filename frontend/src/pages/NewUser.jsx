@@ -81,7 +81,8 @@ const NewUser = ({ toggleLoginFunc }) => {
           <label htmlFor="emailInput">Email: </label>
           <input
             id="emailInput"
-            type="text"
+            type="email"
+            name="email"
             value={userEmail}
             onChange={handleEmailChange}
             placeholder="Email"
