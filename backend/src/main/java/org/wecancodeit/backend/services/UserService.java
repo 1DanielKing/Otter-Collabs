@@ -118,4 +118,11 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         return user.getFriends();
     }
+
+    public void setUserFriends(@NonNull User user1, @NonNull User user2) {
+        user1.addFriend(user2);
+        user2.addFriend(user1);
+        userRepository.save(user1);
+        userRepository.save(user2);
+    }
 }
