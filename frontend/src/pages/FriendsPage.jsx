@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '../contexts/AuthContext'; // Import the AuthContext
+import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
+
 const FriendsPage = () => {
     const [friends, setFriends] = useState([]);
     const [pendingRequests, setPendingRequests] = useState([]);
@@ -35,11 +37,16 @@ const FriendsPage = () => {
             </ul>
             <h2>My Friends</h2>
             {friends.length > 0 ? (
-                <ul>
-                    {friends.map((friend) => (
-                        <li key={friend.id}>{friend.name}</li>
-                    ))}
-                </ul>
+                <div className="friend-list-container">
+                    <ul>
+                        {friends.map((friend) => (
+                            <li key={friend.id}>
+                                <img src={friend.imageURL} alt='otter wearing headphones' className="friends-profile-picture" />
+                                <Link to={`/user/${friend.username}`}>{friend.username}</Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             ) : (
                 <p>No friends yet.</p>
             )}
