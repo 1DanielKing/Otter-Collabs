@@ -15,10 +15,12 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     private String message;
     private LocalDateTime timestamp;
-    private long pairRequestId; // Add this field
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Notification() {
         this.timestamp = LocalDateTime.now();
@@ -45,17 +47,13 @@ public class Notification {
         return timestamp;
     }
 
-    public long getPairRequestId() {
-        return pairRequestId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setPairRequestId(long pairRequestId) {
-        this.pairRequestId = pairRequestId;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public User getUser() {
         return user;
@@ -71,7 +69,6 @@ public class Notification {
                 "id=" + id +
                 ", message='" + message + '\'' +
                 ", timestamp=" + timestamp +
-                ", pairRequestId=" + pairRequestId + // Include pairRequestId in the toString method
                 ", user=" + user +
                 '}';
     }
