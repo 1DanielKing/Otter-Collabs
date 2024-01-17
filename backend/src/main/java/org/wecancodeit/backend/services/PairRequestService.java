@@ -20,6 +20,9 @@ public class PairRequestService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     public PairRequest savePairRequest(PairRequest request) {
         // Find The members of the attempted pairing in the Database
         User sender = userRepository.findByUsername(request.getSender().getUsername())
@@ -60,11 +63,9 @@ public class PairRequestService {
             User sender = pairRequest.getSender();
             User receiver = pairRequest.getReceiver();
 
-            sender.addFriend(receiver);
-            receiver.addFriend(sender);
-
-            userRepository.save(sender);
-            userRepository.save(receiver);
+            if (sender != null && receiver != null) {
+                userService.setUserFriends(sender, receiver);
+            }
         }
 
         pairRequestRepository.save(pairRequest);
