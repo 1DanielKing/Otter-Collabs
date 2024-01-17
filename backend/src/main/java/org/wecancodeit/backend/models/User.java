@@ -13,7 +13,6 @@ import java.util.Set;
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 /**
  * Represents a user in the OtterCollab platform.
  * This class holds user details relevant for music collaboration.
@@ -93,7 +92,12 @@ public class User {
     }
 
     public void addFriend(User user) {
-        this.friends.add(user);
+        if (!friends.contains(user)) {
+            friends.add(user);
+            if (!user.getFriends().contains(this)) {
+                user.addFriend(this);
+            }
+        }
     }
 
     public Long getId() {
