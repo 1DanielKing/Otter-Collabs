@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "../pages/ProfilePage.css";
 
-const MusicTagsDropdown = () => {
+const MusicTagsDropdown = ({ selectedTags, setSelectedTags }) => {
   const [tags, setTags] = useState([]);
-  const [selectedTag, setSelectedTag] = useState('');
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -20,19 +19,35 @@ const MusicTagsDropdown = () => {
   }, []);
 
   const handleTagChange = (event) => {
-    setSelectedTag(event.target.value);
+    const selectedTag = event.target.value;
+    if (!selectedTags.includes(selectedTag)) {
+      setSelectedTags([...selectedTags, selectedTag]);
+    }
+  };
+
+  const handleTagDelete = (tagToDelete) => {
+    const updatedTags = selectedTags.filter(tag => tag !== tagToDelete);
+    setSelectedTags(updatedTags);
   };
 
   return (
     <div className="music-tags-dropdown">
-      <select value={selectedTag} onChange={handleTagChange}>
-        <option value="">Select a tag</option>
+      <select value="" onChange={handleTagChange}>
+        <option value="" disabled>Select a tag</option>
         {tags.map((tag) => (
           <option key={tag} value={tag}>
             {tag}
           </option>
         ))}
       </select>
+      <div className="selected-tags">
+        {selectedTags.map((tag) => (
+          <div key={tag} className="tag">
+            <span>{tag}</span>
+            <button onClick={() => handleTagDelete(tag)}>&times;</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

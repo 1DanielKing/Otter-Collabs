@@ -8,16 +8,17 @@ import MusicTagsDropdown from '../components/MusicTagsDropdown';
 const ProfilePage = () => {
   const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
 
-
   if (!user) {
     console.log(user);
     return <div>Loading profile...</div>;
   }
+
   return (
     <div className="main-container">
       <div className="item-box">
@@ -26,11 +27,10 @@ const ProfilePage = () => {
         ) : (
           <DisplayProfile data={user} toggleEditMode={toggleEditMode} />
         )}
-         <MusicTagsDropdown />
+        <MusicTagsDropdown selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
       </div>
     </div>
   );
 };
 
 export default ProfilePage;
-
