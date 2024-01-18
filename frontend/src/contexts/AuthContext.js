@@ -12,29 +12,30 @@ export const AuthProvider = ({ children }) => {
         const validateToken = async () => {
             const storedToken = localStorage.getItem('authToken');
             console.log('Retrieved token from localStorage:', storedToken);
+
             if (storedToken) {
-                axiosBase.get('/api/auth/checkStatus', {
-                    headers: {
-                        'Authorization': `Bearer ${storedToken}`,
-                    },
-                })
-                    .then(async response => {
-                        // Token is valid, set the user state
-                        const username = await response.text();
-                        setUser({ token: storedToken, username });
-                        loadProfileData(username);
-                    })
-                    .catch(error => {
-                        console.error('Error validating token:', error);
-                        localStorage.removeItem('authToken');
-                        setUser(null);
+                try {
+                    const response = await axiosBase.get('/api/auth/checkStatus', {
+                        headers: {
+                            'Authorization': `Bearer ${storedToken}`,
+                        },
                     });
+
+                    const username = response.data;
+                    setUser({ token: storedToken, username });
+                    loadProfileData(username);
+
+                } catch (error) {
+                    console.error('Error validating token:', error);
+                    localStorage.removeItem('authToken');
+                    setUser(null);
+                }
             }
             console.log("current user:", user);
         };
 
         validateToken();
-    }, [user]);
+    }, []);
 
     useEffect(() => {
         console.log("profileLoaded updated to: ", profileLoaded);
