@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         validateToken();
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         console.log("profileLoaded updated to: ", profileLoaded);
