@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   
+
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
@@ -34,8 +35,8 @@ const AuthenticatedApp = () => {
             <Route path="/portfolio" element={<AudioPortfolio />} />
             <Route path="/portfolio/upload" element={<AudioUpload />} />
             <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/findUsers" element={<FindUsers />} />
-          <Route path="/user/:username" element={<ViewUserProfile />} />
+            <Route path="/findUsers" element={<FindUsers />} />
+            <Route path="/user/:username" element={<ViewUserProfile />} />
             <Route path="/audio/:id" element={<AudioPlayer />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
@@ -49,7 +50,7 @@ const UnauthenticatedApp = () => {
 
   return (
     <Routes>
-      <Route path="/"  element={<LandingPage user={user} loading={loading}  />}  />
+      <Route path="/" element={<LandingPage user={user} loading={loading} />} />
       <Route path="/new-user" element={<NewUser />} />
       <Route path="/profile-creation" element={<ProfileCreation />} />
       <Route path="/sign-in" element={<SignIn />} />
