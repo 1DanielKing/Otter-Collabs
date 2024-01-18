@@ -108,8 +108,6 @@ export const Portfolio = ({ data }) => {
     fetchData(url, (result) => result, setUserData);
   }, [data]);
 
-
-
   useEffect(() => {
     function fetchAudiosOnUserDataChange() {
       const fetchAudios = async () => {

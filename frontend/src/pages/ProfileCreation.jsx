@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { ExperienceLevelEnum } from "../shared/Enums";
 
 const ProfileCreation = () => {
   const location = useLocation();
@@ -10,18 +11,18 @@ const ProfileCreation = () => {
   const [instrument, setInstrument] = useState("");
   const [genre, setGenre] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
-  const [imageURL, setImageURL] = useState("");
+  const [imageURL, setImageURL] = useState("ExperienceLevelEnum.BEGINNER");
   const { user, login } = useAuth();
   const defaultProfilePics = [
-    '/media/pictures/default-pfp/Otter1.png',
-    '/media/pictures/default-pfp/Otter2.png',
-    '/media/pictures/default-pfp/Otter3.png',
-    '/media/pictures/default-pfp/Otter4.png',
-    '/media/pictures/default-pfp/Otter5.png',
-    '/media/pictures/default-pfp/Otter6.png',
-    '/media/pictures/default-pfp/Otter7.png',
-    '/media/pictures/default-pfp/Otter8.png',
-    '/media/pictures/default-pfp/Otter9.png',
+    "/media/pictures/default-pfp/Otter1.png",
+    "/media/pictures/default-pfp/Otter2.png",
+    "/media/pictures/default-pfp/Otter3.png",
+    "/media/pictures/default-pfp/Otter4.png",
+    "/media/pictures/default-pfp/Otter5.png",
+    "/media/pictures/default-pfp/Otter6.png",
+    "/media/pictures/default-pfp/Otter7.png",
+    "/media/pictures/default-pfp/Otter8.png",
+    "/media/pictures/default-pfp/Otter9.png",
   ];
 
   useEffect(() => {
@@ -109,7 +110,6 @@ const ProfileCreation = () => {
     );
   };
 
-
   return (
     <div className="main-container">
       <h1>User Information</h1>
@@ -146,13 +146,17 @@ const ProfileCreation = () => {
         </div>
         <div className="profile-box">
           <label htmlFor="experienceLevel">Experience Level: </label>
-          <input
-            id="emailInput"
-            type="text"
+          <select
+            id="experienceInput"
             value={experienceLevel}
             onChange={handleExperienceChange}
-            placeholder="1-5"
-          />
+          >
+              {Object.values(ExperienceLevelEnum).map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="profile-box">
           <label htmlFor="imageUrl">Profile Picture: </label>

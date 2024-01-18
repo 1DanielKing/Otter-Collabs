@@ -3,6 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  
+
 } from "react-router-dom";
 import NewUser from "./pages/NewUser";
 import ProfileCreation from "./pages/ProfileCreation";
@@ -11,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
 import LandingPage from "./pages/LandingPage";
 import AudioPortfolio from "./pages/AudioPortfolio";
+import AudioPlayer from "./components/AudioPlayer";
 import AudioUpload from "./pages/AudioUpload";
 import SignIn from "./pages/SignIn";
 import FindUsers from "./pages/FindUsers";
@@ -27,13 +30,14 @@ const AuthenticatedApp = () => {
       {loading ? (
         <p>Loading Sick Beats...</p>
       ) : (
-        <Routes>
-          <Route path="/" element={<ProfilePage />} />
-          <Route path="/portfolio" element={<AudioPortfolio />} />
-          <Route path="/portfolio/upload" element={<AudioUpload />} />
-          <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/findUsers" element={<FindUsers />} />
-          <Route path="/user/:username" element={<ViewUserProfile />} />
+          <Routes>
+            <Route path="/" element={<ProfilePage />} />
+            <Route path="/portfolio" element={<AudioPortfolio />} />
+            <Route path="/portfolio/upload" element={<AudioUpload />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/findUsers" element={<FindUsers />} />
+            <Route path="/user/:username" element={<ViewUserProfile />} />
+            <Route path="/audio/:id" element={<AudioPlayer />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}

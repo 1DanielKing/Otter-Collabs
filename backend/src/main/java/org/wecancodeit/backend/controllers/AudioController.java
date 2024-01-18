@@ -1,14 +1,23 @@
 package org.wecancodeit.backend.controllers;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.wecancodeit.backend.models.AudioMetadata;
 import org.wecancodeit.backend.services.AudioService;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/audio")
@@ -38,12 +47,19 @@ public class AudioController {
             @RequestParam("genre") String genre,
             @RequestParam("userId") @NonNull Long userId) {
         try {
-            AudioMetadata metadata = audioService.uploadAudio(file, title, artist, genre, userId);
-            return ResponseEntity.ok(metadata);
+            Optional<AudioMetadata> metadataOptional = audioService.uploadAudio(file, title, artist, genre, userId);
+            if (metadataOptional.isPresent()) {
+                AudioMetadata metadata = metadataOptional.get();
+                return ResponseEntity.ok(metadata);
+            } else {
+                // Handle the case where the user is not found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
         } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
     /**
      * Endpoint to retrieve all audio metadata.
@@ -77,4 +93,42 @@ public class AudioController {
         audioService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/stream/{id}")
+    public ResponseEntity<Resource> streamAudioFile(@PathVariable Long id, HttpServletRequest request) {
+        try {
+            AudioMetadata metaData = audioService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Audio not found"));
+            Path filePath = Paths.get(metaData.getFilePath());
+            Resource resource = new UrlResource(filePath.toUri());
+            
+            if (resource.exists() || resource.isReadable()) {
+                long resourceLength = resource.contentLength();
+                String rangeString = request.getHeader(HttpHeaders.RANGE);
+                long start = 0, end = resourceLength - 1;
+
+                if (rangeString != null && rangeString.startsWith("bytes=")) {
+                    String[] ranges = rangeString.substring("bytes=".length()).split("-");
+                    start = Long.parseLong(ranges[0]);
+                    end = ranges.length > 1 ? Long.parseLong(ranges[1]) : end;
+                }
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_TYPE, "audio/mpeg");
+                headers.add(HttpHeaders.ACCEPT_RANGES, "bytes");
+                headers.add(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + resourceLength);
+                headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(end - start + 1));
+
+                return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                        .headers(headers)
+                        .body(resource);
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
+

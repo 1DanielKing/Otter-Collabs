@@ -19,7 +19,7 @@ function DisplayProfile({ toggleEditMode }) {
         </div>
         <div className="profile-info">
           <h2>Experience:</h2>
-          <p>{user.experience}</p>
+          <p>{user.experienceLevel}</p>
         </div>
         <div className="profile-info">
           <h2>Genre:</h2>

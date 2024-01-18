@@ -1,5 +1,7 @@
 package org.wecancodeit.backend.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -15,22 +17,33 @@ import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import javazoom.jl.decoder.Bitstream;
+//MP3 File Processing
+import javazoom.jl.decoder.JavaLayerException;
+
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AudioService {
 
     private final AudioMetadataRepository audioMetaDataRepository;
     private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(AudioService.class);
+    
 
-    @Value("${app.file.storage-location}") // Storage location configuration
+
+    @Value("${app.file.storage-location}") 
     private String storageLocation;
 
     public AudioService(AudioMetadataRepository audioMetaDataRepository, UserRepository userRepository) {
@@ -87,11 +100,12 @@ public class AudioService {
      * @return the saved audio metadata
      */
     @Transactional
-    public AudioMetadata uploadAudio(MultipartFile file, String title, String artist, String genre, @NonNull Long userId)
-            throws IOException {
-        User owner = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public Optional<AudioMetadata> uploadAudio(MultipartFile file, String title, String artist, String genre, Long userId)
+        throws IOException {
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (userOptional.isPresent()) {
+        User owner = userOptional.get();
+                
         String contentType = file.getContentType();
         if (contentType == null || !contentType.startsWith("audio/")) {
             throw new IllegalArgumentException("File must be an audio file");
@@ -100,23 +114,85 @@ public class AudioService {
         if (isVideoContentType(contentType)) {
             throw new IllegalArgumentException("Video uploads are not allowed");
         }
+        
 
         String fileName = storeFile(file);
 
         // Finds the file being uploaded and calculates the audio files duration
         String filePath = Paths.get(storageLocation).resolve(fileName).toString();
         Double duration = getAudioFileDuration(filePath);
-
+        processAudioFile(fileName, filePath);
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
         metaData.setUser(owner);
-        return audioMetaDataRepository.save(metaData);
+        return Optional.of(audioMetaDataRepository.save(metaData));
+    } else {
+        // Log a warning or handle the case where the user is not found
+        logger.warn("User not found for userId: {}", userId);
+        return Optional.empty();
     }
-
-    // no videos allowed
+}
     private boolean isVideoContentType(String contentType) {
         return contentType.startsWith("video/");
     }
+    
+    // Process the audio file based on its format
+    private void processAudioFile(String fileName, String filePath) {
+        String fileExtension = getFileExtension(fileName);
+        if ("mp3".equalsIgnoreCase(fileExtension)) {
+            // Process MP3 file
+            processMp3File(filePath);
+            logger.info("Processing mp3 file: {}", fileName);
+        } 
+        else if ("wav".equalsIgnoreCase(fileExtension)) {
+            // Process WAV file
+            // processWavFile(filePath);
+            logger.info("Processing WAV file: {}", fileName);
+        } else if ("ogg".equalsIgnoreCase(fileExtension)) {
+            // Process OGG file
+            // processOggFile(filePath);
+            logger.info("Processing OGG file: {}", fileName);
+        } else {
+            // Unsupported file format
+            // handleUnsupportedFormat(fileExtension);
+            logger.warn("Unsupported audio file format: {}", fileExtension);
+        }
+    }
+    private String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(lastDotIndex + 1).toLowerCase();
+    }
 
+    // MP3 File Processing 
+    private void processMp3File(String filePath) {
+        try {
+            // Create a Bitstream object from the FileInputStream of the MP3 file
+            Bitstream bitstream = new Bitstream(new FileInputStream(filePath));
+        
+            // Read the header of the MP3 file to get information about the audio
+            bitstream.readFrame();
+    
+            // Initialize frameCount to 0
+            int frameCount = 0;
+    
+            // Check if there are frames in the MP3 file before attempting to read frame count
+            if (bitstream.readFrame() != null) {
+                // Read the frame count from the MP3 file using the max_number_of_frames method
+                frameCount = bitstream.readFrame().max_number_of_frames(frameCount);
+            }
+    
+            // Assign the frame count as the duration (this might not be accurate, depends on the use case)
+            int durationInSeconds = frameCount;
+    
+            // Log the duration information
+            logger.info("MP3 file duration: {} seconds", durationInSeconds);
+        } catch (JavaLayerException | IOException e) {
+            // Handle exceptions that might occur during MP3 file processing
+            logger.error("Error processing MP3 file", e);
+        }
+    }
     /**
      * Deletes audio metadata and its corresponding file by the metadata's ID.
      *
@@ -150,9 +226,19 @@ public class AudioService {
     }
 
     private String storeFile(MultipartFile file) throws IOException {
-        Path fileStorageLocation = Paths.get(storageLocation);
-        Path targetLocation = fileStorageLocation.resolve(file.getOriginalFilename());
-        Files.createDirectories(fileStorageLocation);
+        String originalFilename = file.getOriginalFilename();
+        String fileExtension = "";
+
+        if (originalFilename != null && !originalFilename.isEmpty()) {
+            fileExtension = Optional.ofNullable(originalFilename)
+                    .filter(f -> f.contains("."))
+                    .map(f -> f.substring(originalFilename.lastIndexOf(".") + 1))
+                    .orElse("");
+        }
+
+        String newFilename = UUID.randomUUID().toString() + (fileExtension.isEmpty() ? "" : "." + fileExtension);
+
+        Path targetLocation = Paths.get(storageLocation).resolve(newFilename);
         Files.copy(file.getInputStream(), targetLocation);
 
         return targetLocation.toString();
