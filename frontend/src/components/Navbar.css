@@ -1,6 +1,6 @@
 /* Navbar styles */
 .navbar {
-  background-color: #CED4DA;
+  background-color: #ced4da;
   border-bottom: 10px solid black;
   padding: 5px;
   position: fixed;
@@ -64,7 +64,7 @@
 
 /* Hover effect */
 .nav-links a:hover {
-  color: #E9ECEF;
+  color: #e9ecef;
   background-color: black;
   align-items: stretch;
   height: 100%;
@@ -73,6 +73,68 @@
 .logo-home-button img {
   height: 40px;
   width: auto;
+}
+
+.notification-container {
+  position: relative;
+}
+
+.notification-button {
+  background: rgb(175, 154, 129);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+}
+
+.notification-badge {
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px; /* Adjust as needed */
+  background-color: #fff;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  padding: 8px;
+  display: none;
+}
+
+.notification-container:hover .notification-dropdown {
+  display: block;
+}
+
+.notification-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.notif-accept,
+.notif-deny {
+  padding: 8px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: white;
+  border: none;
+}
+
+.notif-accept {
+  background-color: #4e6d4f; /* Green for "Accept" */
+}
+
+.notif-deny {
+  background-color: #77413d; /* Red for "Decline" */
 }
 
 @media (max-width: 768px) {
