@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useModal } from "../contexts/ModalContext";
+import axiosBase from "../contexts/axiosBase";
 
 const SendPairRequest = ({ senderUser, receiverUser }) => {
   const { hideModal } = useModal();
@@ -12,17 +12,17 @@ const SendPairRequest = ({ senderUser, receiverUser }) => {
         message: "Let's collaborate!"
       };
 
-      let response = await axios.post("http://localhost:8080/api/pair-requests/send", pairRequestData);
+      const { status } = await axiosBase.post("/api/pair-requests/send", pairRequestData);
 
-      if (response.status === 200) {
+      if (status === 200) {
         console.log("Pair request sent successfully");
       } else {
-        console.error("Failed to send pair request: ", response.status);
+        console.error("Failed to send pair request: ", status);
       }
     } catch (error) {
       console.error("Error in sending pair request: ", error);
     }
-  }
+  };
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import { useAuth } from "../contexts/AuthContext";
 import React, { useState } from "react";
 import FindUser from "../components/FindUsersComponent";
-import axios from 'axios';
+import axiosBase from '../contexts/axiosBase';
 
 const FindUsers = () => {
   const { user } = useAuth();
@@ -25,25 +25,19 @@ const FindUsers = () => {
     setShowResults(true);
   };
 
-  const searchUsers = async () => {
-    try {
-      const response = await axios.post('http://localhost:8080/api/users/search-all', searchCriteria, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status === 200) {
-        setResults(response.data);
-      } else {
+  const searchUsers = () => {
+    axiosBase.post('/api/users/search-all', searchCriteria, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => setResults(response.data))
+      .catch(error => {
         setResults(null);
-        console.error("Failed to fetch search results");
-      }
-    } catch (error) {
-      setResults(null);
-      console.error("Error fetching search results:", error);
-    }
+        console.error("Error fetching search results:", error);
+      });
   };
+
 
   return (
     <div className="main-container">

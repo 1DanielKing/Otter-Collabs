@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import axiosBase from '../contexts/axiosBase';
 
 const ConnectionStatus = () => {
     const [status, setStatus] = useState('Checking...');
@@ -7,31 +8,24 @@ const ConnectionStatus = () => {
     const token = user?.token;
 
     useEffect(() => {
-        const checkLoginStatus = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/auth/checkStatus', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                if (response.ok) {
-                    setStatus('Connected');
-                } else {
-                    setStatus('Not Connected');
-                }
-            } catch (error) {
-                console.error('An error occurred:', error);
-                setStatus('Not Connected');
-            }
-        };
-
         if (token) {
-            checkLoginStatus();
+            axiosBase.get('/api/auth/checkStatus', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+                .then(({ status }) => {
+                    setStatus(status === 200 ? 'Connected' : 'Not Connected');
+                })
+                .catch((error) => {
+                    console.error('An error occurred:', error);
+                    setStatus('Not Connected');
+                });
         } else {
             setStatus('Not Connected');
         }
     }, [token]);
+
 
     return (
         <div>

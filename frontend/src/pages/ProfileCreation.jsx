@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { ExperienceLevelEnum } from "../shared/Enums";
+import axiosBase from "../contexts/axiosBase";
 
 const ProfileCreation = () => {
   const location = useLocation();
@@ -44,36 +45,25 @@ const ProfileCreation = () => {
       experienceLevel: parseInt(experienceLevel) || 0,
       imageURL,
     };
-    try {
-      const response = await fetch("http://localhost:8080/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
 
-      if (response.ok) {
-        // User creation successful
+    axiosBase.post("/api/users", newUser)
+      .then(async () => {
         console.log("User created successfully, attempting to login...");
-        await login(username, userPassword).then(() => {
-          console.log("Current user after login attempt:", user);
-          navigate("/");
-        });
+        await login(username, userPassword);
+        console.log("Current user after login attempt:", user);
+        navigate("/");
         setUsername("");
         setInstrument("");
         setGenre("");
         setExperienceLevel("");
         setImageURL("");
-      } else {
-        // User creation failed
-        console.error("Failed to create user");
+      })
+      .catch(error => {
+        console.error("Error creating user:", error.message);
         // Handle error or show error message
-      }
-    } catch (error) {
-      console.error("Error creating user:", error.message);
-    }
+      });
   };
+
 
   const handleNameChange = (event) => {
     setUsername(event.target.value);

@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { format } from "date-fns";
 import { useModal } from "../contexts/ModalContext";
 import { useAuth } from "../contexts/AuthContext";
 import SendPairRequest from "./SendPairRequest";
+import axiosBase from "../contexts/axiosBase";
 
 const fetchData = async (url, processData, setData) => {
-  try {
-    const response = await fetch(url);
-
-    if (response.ok) {
-      const result = await response.json();
-      setData(processData(result));
-    } else {
+  axiosBase.get(url)
+    .then(response => setData(processData(response.data)))
+    .catch(error => {
       setData(null);
-      console.error("Failed to load data");
-    }
-  } catch (error) {
-    setData(null);
-    console.error("Error fetching data:", error);
-  }
+      console.error("Error fetching data:", error);
+    });
 };
 
 export const UserView = ({ data }) => {
@@ -29,25 +21,19 @@ export const UserView = ({ data }) => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const url = `http://localhost:8080/api/users/search?username=${data}`;
+    const url = `/api/users/search?username=${data}`;
     fetchData(url, (result) => result, setUserData);
   }, [data]);
 
   useEffect(() => {
     const checkFriendship = async () => {
       if (user && userData) {
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/users/${user.id}/friends`
-          );
-          const friendsList = response.data;
-          const isFriends = friendsList.some(friend => friend.id === userData.id);
-          console.log(isFriends);
-          setIsFriends(isFriends);
-          console.log(isFriends);
-        } catch (error) {
-          console.error("Error checking friendship:", error);
-        }
+        axiosBase.get(`/api/users/${user.id}/friends`)
+          .then(response => {
+            const isFriends = response.data.some(friend => friend.id === userData.id);
+            setIsFriends(isFriends);
+          })
+          .catch(error => console.error("Error checking friendship:", error));
       }
     };
 
@@ -104,32 +90,20 @@ export const Portfolio = ({ data }) => {
 
 
   useEffect(() => {
-    const url = `http://localhost:8080/api/users/search?username=${data}`;
+    const url = `/api/users/search?username=${data}`;
     fetchData(url, (result) => result, setUserData);
   }, [data]);
 
   useEffect(() => {
-    function fetchAudiosOnUserDataChange() {
-      const fetchAudios = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/audio/user/${userData.id}`,
-            {
-              // headers: {
-              //   Authorization: `Bearer ${userData.token}`,
-              // },
-            }
-          );
-          setAudios(response.data);
-        } catch (error) {
-          console.error("Error fetching audios:", error);
-        }
-      };
-      fetchAudios();
-    }
-    if (userData) {
-      fetchAudiosOnUserDataChange();
-    }
+    const fetchAudiosOnUserDataChange = async () => {
+      if (userData) {
+        axiosBase.get(`/api/audio/user/${userData.id}`)
+          .then(response => setAudios(response.data))
+          .catch(error => console.error("Error fetching audios:", error));
+      }
+    };
+
+    fetchAudiosOnUserDataChange();
   }, [userData]);
 
 

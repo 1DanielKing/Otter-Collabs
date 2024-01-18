@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosBase from '../contexts/axiosBase';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 
@@ -9,22 +9,22 @@ const FriendsPage = () => {
     const { user } = useAuth(); // Get the current user from AuthContext
 
     useEffect(() => {
-        async function getFriendsOnLoad() {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/users/${user.id}/friends`);
-                setFriends(response.data);
-            } catch (error) {
-                console.error('Error fetching friends:', error);
+        const getFriendsOnLoad = () => {
+            if (user && (user.id !== undefined)) {
+                axiosBase.get(`/api/users/${user.id}/friends`)
+                    .then(response => setFriends(response.data))
+                    .catch(error => console.error('Error fetching friends:', error));
             }
-        }
-        async function getRequestsOnLoad() {
-            //TODO logic fetching friend requests from api server
-        }
-        if (user && (user.id !== undefined)) {
-            getFriendsOnLoad();
-            getRequestsOnLoad();
-        }
+        };
+
+        const getRequestsOnLoad = () => {
+            // TODO: Logic fetching friend requests from api server
+        };
+
+        getFriendsOnLoad();
+        getRequestsOnLoad();
     }, [user, user.id]);
+
 
     return (
         <div className="main-container">

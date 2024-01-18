@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import axiosBase from "axiosBase";
 
 const AuthContext = createContext(null);
 
@@ -12,27 +13,22 @@ export const AuthProvider = ({ children }) => {
             const storedToken = localStorage.getItem('authToken');
             console.log('Retrieved token from localStorage:', storedToken);
             if (storedToken) {
-                try {
-                    const response = await fetch('http://localhost:8080/api/auth/checkStatus', {
-                        headers: {
-                            'Authorization': `Bearer ${storedToken}`,
-                        },
-                    });
-                    if (response.ok) {
+                axiosBase.get('/api/auth/checkStatus', {
+                    headers: {
+                        'Authorization': `Bearer ${storedToken}`,
+                    },
+                })
+                    .then(async response => {
                         // Token is valid, set the user state
                         const username = await response.text();
                         setUser({ token: storedToken, username });
                         loadProfileData(username);
-                    } else {
-                        // Token is invalid, clear the token and user state
+                    })
+                    .catch(error => {
+                        console.error('Error validating token:', error);
                         localStorage.removeItem('authToken');
                         setUser(null);
-                    }
-                } catch (error) {
-                    console.error('Error validating token:', error);
-                    localStorage.removeItem('authToken');
-                    setUser(null);
-                }
+                    });
             }
             console.log("current user:", user);
         };
@@ -48,42 +44,24 @@ export const AuthProvider = ({ children }) => {
         if (username === null || username === undefined) {
             username = user.username;
         }
-        try {
-            const response = await fetch(`http://localhost:8080/api/users/search?username=${username}`);
-            if (response.ok) {
-                const profileData = await response.json();
-                setUser(current => ({ ...current, ...profileData }));
+
+        axiosBase.get(`/api/users/search?username=${username}`)
+            .then(response => {
+                setUser(current => ({ ...current, ...response.data }));
                 setProfileLoaded(true);
-            } else {
-                console.error('Failed to load profile data');
-            }
-        } catch (error) {
-            console.error('Error fetching profile data:', error);
-        }
+            })
+            .catch(error => console.error('Error fetching profile data:', error));
     };
 
     const login = async (username, password) => {
-        try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem("authToken", data.token);
-                setUser({ token: data.token, username: username });
+        axiosBase.post("/api/auth/login", { username, password })
+            .then(response => {
+                localStorage.setItem("authToken", response.data.token);
+                setUser({ token: response.data.token, username: username });
                 loadProfileData(username);
                 console.log("successfully logged in");
-            } else {
-                console.error("Login failed");
-            }
-        } catch (error) {
-            console.error("An error occurred:", error);
-        }
+            })
+            .catch(error => console.error("An error occurred:", error));
     };
 
     const logout = () => {
