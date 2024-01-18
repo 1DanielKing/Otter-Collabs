@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from 'stompjs/lib/stomp.min.js'
 import { useAuth } from '../contexts/AuthContext';
+import axiosBase from '../contexts/axiosBase';
 
 const ChatBox = () => {
     const [stompClient, setStompClient] = useState(null);
@@ -20,13 +21,15 @@ const ChatBox = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            // API call to fetch all users, will replace with friends specifically once friending is established
-            const response = await fetch('http://localhost:8080/api/users');
-            if (response.ok) {
-                const data = await response.json();
-                setFriends(data);
-            } else {
-                console.error('Failed to fetch users');
+            try {
+                const { data, status } = await axiosBase.get('/api/users');
+                if (status === 200) {
+                    setFriends(data);
+                } else {
+                    console.error('Failed to fetch users');
+                }
+            } catch (error) {
+                console.error('Failed to fetch users', error);
             }
         };
 
@@ -68,13 +71,17 @@ const ChatBox = () => {
 
     const fetchMessageHistory = async () => {
         if (selectedUser) {
-            const response = await fetch(`http://localhost:8080/api/message/history?user1=${user.username}&user2=${selectedUser.username}`);
-            if (response.ok) {
-                const data = await response.json();
-                setMessages(Array.isArray(data) ? data : []);
-            } else {
-                console.error('Failed to fetch message history');
-            }
+            axiosBase.get(`/api/message/history?user1=${user.username}&user2=${selectedUser.username}`)
+                .then(({ data, status }) => {
+                    if (status === 200) {
+                        setMessages(Array.isArray(data) ? data : []);
+                    } else {
+                        console.error('Failed to fetch message history');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Failed to fetch message history', error);
+                });
         }
     };
 
