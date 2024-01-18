@@ -137,64 +137,6 @@ export const Portfolio = ({ data }) => {
     return <p>Loading...</p>;
   }
 
-  useEffect(() => {
-    function fetchAudiosOnUserDataChange() {
-      const fetchAudios = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/audio/user/${userData.id}`,
-            {
-              // headers: {
-              //   Authorization: `Bearer ${userData.token}`,
-              // },
-            }
-          );
-          setAudios(response.data);
-        } catch (error) {
-          console.error("Error fetching audios:", error);
-        }
-      };
-      fetchAudios();
-    }
-    if (userData) {
-      fetchAudiosOnUserDataChange();
-    }
-  }, [userData]);
-
-
-  if (!userData) {
-    return <p>Loading...</p>;
-  }
-
-  useEffect(() => {
-    function fetchAudiosOnUserDataChange() {
-      const fetchAudios = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/audio/user/${userData.id}`,
-            {
-              // headers: {
-              //   Authorization: `Bearer ${userData.token}`,
-              // },
-            }
-          );
-          setAudios(response.data);
-        } catch (error) {
-          console.error("Error fetching audios:", error);
-        }
-      };
-      fetchAudios();
-    }
-    if (userData) {
-      fetchAudiosOnUserDataChange();
-    }
-  }, [userData]);
-
-
-  if (!userData) {
-    return <p>Loading...</p>;
-  }
-
 
   return (
     <div className="profile-portfolio-section">
