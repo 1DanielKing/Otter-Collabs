@@ -37,14 +37,14 @@ const ProfilePage = () => {
         ) : (
           <>
             <DisplayProfile data={user} toggleEditMode={toggleEditMode} />
+            <MusicTagsDropdown selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
             {location.pathname.includes("/") &&
-            location.search.includes("?code=") ? null : (
+              location.search.includes("?code=") ? null : (
               <SpotifyAuth />
             )}{" "}
             {/* Add condition to render SpotifyAuth */}
           </>
         )}
-        <MusicTagsDropdown selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
       </div>
     </div>
   );
