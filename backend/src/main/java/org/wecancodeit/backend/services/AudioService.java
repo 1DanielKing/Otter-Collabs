@@ -119,7 +119,7 @@ public class AudioService {
         String fileName = storeFile(file);
 
         // Finds the file being uploaded and calculates the audio files duration
-        String filePath = Paths.get(storageLocation).resolve(fileName).toString();
+        String filePath = Paths.get("/wcci/OtterCollab/media").resolve(fileName).toString();
         Double duration = getAudioFileDuration(filePath);
         processAudioFile(fileName, filePath);
         AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
