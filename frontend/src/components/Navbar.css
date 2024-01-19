@@ -1,4 +1,4 @@
-/* Navbar styles */
+
 .navbar {
   background-color: #CED4DA;
   border-bottom: 10px solid black;
@@ -10,7 +10,7 @@
   z-index: 1000;
 }
 
-/* Navbar links */
+
 .nav-links {
   list-style: none;
   display: flex;
@@ -30,7 +30,7 @@
 
 .rest-of-nav {
   margin-left: auto;
-  /* Push items to the right */
+  
 
   border-left: black;
   border-right: black;
@@ -45,7 +45,7 @@
   padding: 10px;
   transition: color 0.3s ease;
   height: 100%;
-  /* Expands anchor to full height */
+  
 }
 
 .nav-links li {
@@ -62,7 +62,7 @@
   align-items: stretch;
 }
 
-/* Hover effect */
+
 .nav-links a:hover {
   color: #E9ECEF;
   background-color: black;

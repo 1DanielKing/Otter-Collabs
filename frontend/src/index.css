@@ -73,7 +73,6 @@ code {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  /* Semi-transparent black */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -167,7 +166,6 @@ code {
 
 .chatbox-header {
   background-color: #22262b;
-  /* Darker background color */
   border-bottom: 1px solid #545658;
   padding: 0.5em;
   display: flex;
@@ -231,19 +229,15 @@ code {
   width: 0.5em;
 }
 
-/* User selection container */
+
 .chatbox-user-selection-container {
   padding: 10px;
   max-height: 150px;
-  /* Adjust as needed */
   overflow-y: auto;
-  /* Makes the list scrollable */
   background-color: #f0f0f0;
-  /* Light background for the section */
   border-top: 1px solid #ced4da;
 }
 
-/* Individual user items */
 .chatbox-user-item {
   padding: 5px 10px;
   margin: 5px 0;
@@ -252,12 +246,10 @@ code {
   transition: background-color 0.3s ease;
 }
 
-/* Hover effect */
 .chatbox-user-item:hover {
   background-color: #e0e0e0;
 }
 
-/* User selection scrollbar */
 .chatbox-user-selection-container::-webkit-scrollbar {
   width: 5px;
 }

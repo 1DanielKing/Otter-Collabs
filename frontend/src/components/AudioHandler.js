@@ -20,7 +20,6 @@ const AudioHandler = ({ onFileChange }) => {
     <div>
       <p>User ID: {user ? user.id : 'Not authenticated'}</p>
       <input type="file" accept="audio/*" onChange={handleFileChange} />
-      {/* Display the selected audio file name */}
       {audioFile && (
         <div>
           <h3>Selected Audio</h3>

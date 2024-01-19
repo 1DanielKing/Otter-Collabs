@@ -60,7 +60,7 @@ const ProfileCreation = () => {
       })
       .catch(error => {
         console.error("Error creating user:", error.message);
-        // Handle error or show error message
+        
       });
   };
 
