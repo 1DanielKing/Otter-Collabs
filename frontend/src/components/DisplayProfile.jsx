@@ -4,6 +4,16 @@ import { useAuth } from "../contexts/AuthContext";
 function DisplayProfile({ toggleEditMode }) {
   const { user } = useAuth();
 
+  const formatEnum = (input) => {
+    if (input) {
+      return input.split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+    } else {
+      return '';
+    }
+  }
+
   return (
     <div className="display-profile-container">
       <div className="profile-details-section">
@@ -21,7 +31,7 @@ function DisplayProfile({ toggleEditMode }) {
         </div>
         <div className="profile-info">
           <h2>Experience:</h2>
-          <p>{user.experienceLevel}</p>
+          <p>{formatEnum(user.experienceLevel)}</p>
         </div>
         <div className="profile-info">
           <h2>Genre:</h2>
