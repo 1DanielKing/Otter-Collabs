@@ -1,7 +1,7 @@
 import { useModal } from "../contexts/ModalContext";
 import axiosBase from "../contexts/axiosBase";
 
-const SendPairRequest = ({ senderUser, receiverUser }) => {
+const SendPairRequest = ({ senderUser, receiverUser, onSendSuccess }) => {
   const { hideModal } = useModal();
 
   const handleSendPairRequest = async () => {
@@ -16,6 +16,10 @@ const SendPairRequest = ({ senderUser, receiverUser }) => {
 
       if (status === 200) {
         console.log("Pair request sent successfully");
+        hideModal();
+        if (onSendSuccess) {
+          onSendSuccess(); // Invoke the callback
+        }
       } else {
         console.error("Failed to send pair request: ", status);
       }

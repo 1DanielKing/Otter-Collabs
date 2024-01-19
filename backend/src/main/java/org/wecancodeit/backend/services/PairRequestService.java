@@ -24,17 +24,32 @@ public class PairRequestService {
     private UserService userService;
 
     public PairRequest savePairRequest(PairRequest request) {
-        // Find The members of the attempted pairing in the Database
         User sender = userRepository.findByUsername(request.getSender().getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
         User receiver = userRepository.findByUsername(request.getReceiver().getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
+
+        // Check for duplication
+        List<PairRequest> existingRequests = pairRequestRepository.findBySenderAndReceiver(sender, receiver);
+        if (!existingRequests.isEmpty()) {
+            return null;
+        }
 
         request.setSender(sender);
         request.setReceiver(receiver);
         request.setRequestStatus(RequestStatus.PENDING);
 
         return pairRequestRepository.save(request);
+    }
+
+    public boolean requestExistsBySenderAndReceiver(String senderUsername, String receiverUsername) {
+        User sender = userRepository.findByUsername(senderUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
+        User receiver = userRepository.findByUsername(receiverUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
+
+        List<PairRequest> existingRequests = pairRequestRepository.findBySenderAndReceiver(sender, receiver);
+        return !existingRequests.isEmpty();
     }
 
     // Service method to handle different states of a pair request

@@ -53,4 +53,10 @@ public class PairRequestController {
         pairRequestService.respondToPairRequest(pairRequestId, response);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/pending/{username1}/{username2}")
+    public ResponseEntity<?> requestExistsBySenderAndReceiver(@PathVariable String username1, @PathVariable String username2) {
+        boolean exists = pairRequestService.requestExistsBySenderAndReceiver(username1, username2);
+        return ResponseEntity.ok(Map.of("exists", exists));
+    }
 }
