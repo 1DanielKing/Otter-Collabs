@@ -31,22 +31,24 @@ const MusicTagsDropdown = ({ selectedTags, setSelectedTags }) => {
   };
 
   return (
-    <div className="music-tags-dropdown">
-      <select value="" onChange={handleTagChange}>
-        <option value="" disabled>Select a tag</option>
-        {tags.map((tag) => (
-          <option key={tag} value={tag}>
-            {tag}
-          </option>
-        ))}
-      </select>
-      <div className="selected-tags">
-        {selectedTags.map((tag) => (
-          <div key={tag} className="tag">
-            <span>{tag}</span>
-            <button onClick={() => handleTagDelete(tag)}>&times;</button>
-          </div>
-        ))}
+    <div className="music-tags-container">
+      <div className="music-tags-dropdown">
+        <select value="" onChange={handleTagChange}>
+          <option value="" disabled>Select a tag</option>
+          {tags.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
+        </select>
+        <div className="selected-tags">
+          {selectedTags.map((tag) => (
+            <div key={tag} className="tag">
+              <span>{tag}</span>
+              <button onClick={() => handleTagDelete(tag)}>&times;</button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
