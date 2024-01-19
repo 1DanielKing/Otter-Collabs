@@ -7,8 +7,10 @@ function DisplayProfile({ toggleEditMode }) {
   return (
     <div className="display-profile-container">
       <div className="profile-details-section">
-        <img src={user.imageURL} alt="Profile" className="profile-picture" />
-        <h1 className="profile-username">{user.username}</h1>
+        <div className="profile-header">
+          <img src={user.imageURL} alt="Profile" className="profile-picture" />
+          <h1 className="profile-username">{user.username}</h1>
+        </div>
         <div className="profile-info">
           <h2>Email:</h2>
           <p>{user.email}</p>

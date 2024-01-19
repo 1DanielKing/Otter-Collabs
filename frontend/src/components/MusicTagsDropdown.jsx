@@ -34,7 +34,7 @@ const MusicTagsDropdown = ({ selectedTags, setSelectedTags }) => {
     <div className="music-tags-container">
       <div className="music-tags-dropdown">
         <select value="" onChange={handleTagChange}>
-          <option value="" disabled>Select a tag</option>
+          <option value="" disabled>Add a tag</option>
           {tags.map((tag) => (
             <option key={tag} value={tag}>
               {tag}

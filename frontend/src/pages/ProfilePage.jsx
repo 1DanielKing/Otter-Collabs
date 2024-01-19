@@ -5,7 +5,7 @@ import { SpotifyAuth, HandleCallback } from "../contexts/SpotifyAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import EditProfileForm from "../components/EditProfileForm";
-import MusicTagsDropdown from '../components/MusicTagsDropdown';
+import MusicTagsDropdown from "../components/MusicTagsDropdown";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
