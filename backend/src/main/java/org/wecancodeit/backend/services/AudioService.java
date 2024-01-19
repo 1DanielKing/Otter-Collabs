@@ -21,7 +21,6 @@ import javazoom.jl.decoder.Bitstream;
 //MP3 File Processing
 import javazoom.jl.decoder.JavaLayerException;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -40,11 +39,6 @@ public class AudioService {
     private final AudioMetadataRepository audioMetaDataRepository;
     private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(AudioService.class);
-    
-
-
-    @Value("${app.file.storage-location}") 
-    private String storageLocation;
 
     public AudioService(AudioMetadataRepository audioMetaDataRepository, UserRepository userRepository) {
         this.audioMetaDataRepository = audioMetaDataRepository;
@@ -100,41 +94,42 @@ public class AudioService {
      * @return the saved audio metadata
      */
     @Transactional
-    public Optional<AudioMetadata> uploadAudio(MultipartFile file, String title, String artist, String genre, Long userId)
-        throws IOException {
-    Optional<User> userOptional = userRepository.findById(userId);
-    if (userOptional.isPresent()) {
-        User owner = userOptional.get();
-                
-        String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("audio/")) {
-            throw new IllegalArgumentException("File must be an audio file");
-        }
-        // no videos allowed
-        if (isVideoContentType(contentType)) {
-            throw new IllegalArgumentException("Video uploads are not allowed");
-        }
-        
+    public Optional<AudioMetadata> uploadAudio(MultipartFile file, String title, String artist, String genre,
+            Long userId)
+            throws IOException {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User owner = userOptional.get();
 
-        String fileName = storeFile(file);
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("audio/")) {
+                throw new IllegalArgumentException("File must be an audio file");
+            }
+            // no videos allowed
+            if (isVideoContentType(contentType)) {
+                throw new IllegalArgumentException("Video uploads are not allowed");
+            }
 
-        // Finds the file being uploaded and calculates the audio files duration
-        String filePath = Paths.get("/wcci/OtterCollab/media").resolve(fileName).toString();
-        Double duration = getAudioFileDuration(filePath);
-        processAudioFile(fileName, filePath);
-        AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
-        metaData.setUser(owner);
-        return Optional.of(audioMetaDataRepository.save(metaData));
-    } else {
-        // Log a warning or handle the case where the user is not found
-        logger.warn("User not found for userId: {}", userId);
-        return Optional.empty();
+            String fileName = storeFile(file);
+
+            // Finds the file being uploaded and calculates the audio files duration
+            String filePath = Paths.get("/wcci/OtterCollab/media").resolve(fileName).toString();
+            Double duration = getAudioFileDuration(filePath);
+            processAudioFile(fileName, filePath);
+            AudioMetadata metaData = new AudioMetadata(title, artist, genre, duration, new Date(), fileName);
+            metaData.setUser(owner);
+            return Optional.of(audioMetaDataRepository.save(metaData));
+        } else {
+            // Log a warning or handle the case where the user is not found
+            logger.warn("User not found for userId: {}", userId);
+            return Optional.empty();
+        }
     }
-}
+
     private boolean isVideoContentType(String contentType) {
         return contentType.startsWith("video/");
     }
-    
+
     // Process the audio file based on its format
     private void processAudioFile(String fileName, String filePath) {
         String fileExtension = getFileExtension(fileName);
@@ -142,8 +137,7 @@ public class AudioService {
             // Process MP3 file
             processMp3File(filePath);
             logger.info("Processing mp3 file: {}", fileName);
-        } 
-        else if ("wav".equalsIgnoreCase(fileExtension)) {
+        } else if ("wav".equalsIgnoreCase(fileExtension)) {
             // Process WAV file
             // processWavFile(filePath);
             logger.info("Processing WAV file: {}", fileName);
@@ -157,6 +151,7 @@ public class AudioService {
             logger.warn("Unsupported audio file format: {}", fileExtension);
         }
     }
+
     private String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex == -1) {
@@ -165,27 +160,29 @@ public class AudioService {
         return fileName.substring(lastDotIndex + 1).toLowerCase();
     }
 
-    // MP3 File Processing 
+    // MP3 File Processing
     private void processMp3File(String filePath) {
         try {
             // Create a Bitstream object from the FileInputStream of the MP3 file
             Bitstream bitstream = new Bitstream(new FileInputStream(filePath));
-        
+
             // Read the header of the MP3 file to get information about the audio
             bitstream.readFrame();
-    
+
             // Initialize frameCount to 0
             int frameCount = 0;
-    
-            // Check if there are frames in the MP3 file before attempting to read frame count
+
+            // Check if there are frames in the MP3 file before attempting to read frame
+            // count
             if (bitstream.readFrame() != null) {
                 // Read the frame count from the MP3 file using the max_number_of_frames method
                 frameCount = bitstream.readFrame().max_number_of_frames(frameCount);
             }
-    
-            // Assign the frame count as the duration (this might not be accurate, depends on the use case)
+
+            // Assign the frame count as the duration (this might not be accurate, depends
+            // on the use case)
             int durationInSeconds = frameCount;
-    
+
             // Log the duration information
             logger.info("MP3 file duration: {} seconds", durationInSeconds);
         } catch (JavaLayerException | IOException e) {
@@ -193,6 +190,7 @@ public class AudioService {
             logger.error("Error processing MP3 file", e);
         }
     }
+
     /**
      * Deletes audio metadata and its corresponding file by the metadata's ID.
      *
