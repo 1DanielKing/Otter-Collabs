@@ -60,8 +60,6 @@ function Navbar({ openLogoutModal }) {
             </li>
           </div>
         </div>
-        {/* className below is there for code 
-        readability in browser dev tools */}
         <div className="notification-menu">
           {user && (
             <li>

@@ -75,10 +75,6 @@
   width: auto;
 }
 
-.notification-container {
-  position: relative;
-}
-
 .notification-button {
   background: rgb(175, 154, 129);
   border: none;
@@ -98,11 +94,15 @@
   right: -8px;
 }
 
+.notification-container {
+  position: relative;
+}
+
 .notification-dropdown {
   position: absolute;
   top: 100%;
-  left: 0;
-  width: 200px; /* Adjust as needed */
+  left: -145%;
+  width: 400px; /* Adjust as needed */
   background-color: #fff;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
@@ -133,31 +133,46 @@
   background-color: #4e6d4f; /* Green for "Accept" */
 }
 
+.notif-accept:hover {
+  background-color: #58a15a; /* Light up to brighter green upon interaction" */
+}
+
 .notif-deny {
   background-color: #77413d; /* Red for "Decline" */
 }
 
-.notif-accept:hover{
-  background-color: #58a15a; /* Light up to brighter green upon interaction" */
-}
-
-.notif-deny:hover{
+.notif-deny:hover {
   background-color: #a54b45; /*Light up to brighter green upon interaction */
 }
 
-.notification-item{
+.notification-item {
   padding: 8px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s ease; 
+  border-bottom: 2px solid #beb2b2;
+  transition: background-color 0.3s ease;
+  background-color: #fff;
 }
 
-.notification-item:hover p{
-  background-color: rgba(114, 106, 106, 0.8);
-  border-color: rgba(114, 106, 106, 0.8);
+.notification-item:hover{
+  background-color: #c4bdbd;
+}
+
+.notification-menu p {
+  color: #000000;
+  padding: 8px;
   margin-right: 5px;
   cursor: pointer;
   border-radius: 4px;
-  border: 8px;
+  border: none;
+  text-align: center;
+}
+
+.notification-menu p:hover {
+  
+  padding: 8px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
 }
 
 @media (max-width: 768px) {
