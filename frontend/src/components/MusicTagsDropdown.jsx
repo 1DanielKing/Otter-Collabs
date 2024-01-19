@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axiosBase from '../contexts/axiosBase';
+import MusicTagsDisplay from './MusicTagsDisplay';
 import "../pages/ProfilePage.css";
 
 const MusicTagsDropdown = ({ user, loadProfileData }) => {
   const [tags, setTags] = useState([]);
-  const [selectedTag, setSelectedTag] = useState([]);
 
   useEffect(() => {
     const fetchAllTagsOnLoad = async () => {
@@ -12,6 +12,7 @@ const MusicTagsDropdown = ({ user, loadProfileData }) => {
         const response = await fetch('http://localhost:8080/api/music-tags');
         const data = await response.json();
         setTags(data);
+        console.log(tags);
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
@@ -19,15 +20,6 @@ const MusicTagsDropdown = ({ user, loadProfileData }) => {
 
     fetchAllTagsOnLoad();
   }, []);
-
-  useEffect(() => {
-    const setTagsOnUser = (tags) => {
-      setTags(tags);
-    };
-
-    setTagsOnUser(user.MusicTags);
-  }, [user]);
-
 
   const updateUserMusicTags = (userId, updatedTags) => {
     return axiosBase.put(`/api/users/${userId}/update-tags`, updatedTags)
@@ -65,14 +57,7 @@ const MusicTagsDropdown = ({ user, loadProfileData }) => {
             </option>
           ))}
         </select>
-        <div className="selected-tags">
-          {user && user.musicTags && user.musicTags.map((tag) => (
-            <div key={tag} className="tag">
-              <span>{tag}</span>
-              <button onClick={() => handleTagDelete(tag)}>&times;</button>
-            </div>
-          ))}
-        </div>
+        <MusicTagsDisplay user={user} handleTagDelete={handleTagDelete} />
       </div>
     </div>
   );
