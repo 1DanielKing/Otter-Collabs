@@ -1,18 +1,34 @@
-import { UserView, Portfolio } from "../components/ViewOnlyProfile";
-import "./ProfilePage.css";
+import React, { useEffect, useState } from "react";
+import { UserView , Portfolio } from "../components/ViewOnlyProfile";
+import MusicTagsDisplayViewOnly from "../components/MusicTagsDisplayViewOnly";
+import axiosBase from "../contexts/axiosBase";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import "./ProfilePage.css";
 
-const ViewUserProfile = ({ location }) => {
+const ViewUserProfile = () => {
+  const [selectedUser, setSelectedUser] = useState(null);
   const { username } = useParams();
+
   useEffect(() => {
-    console.log(username);
+    axiosBase.get(`/api/users/search?username=${username}`)
+      .then(response => {
+        setSelectedUser(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+      });
   }, [username]);
+
+  if (!selectedUser) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="main-container">
       <div className="display-profile-container">
-        <UserView data={username} />
-        <Portfolio data={username} />
+        <UserView selectedUser={selectedUser} />
+        <MusicTagsDisplayViewOnly data={selectedUser.musicTags} />
+        <Portfolio userId={selectedUser.id} />
       </div>
     </div>
   );
