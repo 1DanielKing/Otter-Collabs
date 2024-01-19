@@ -13,16 +13,13 @@ import org.wecancodeit.backend.models.User;
 // Queries
 public interface PairRequestRepository extends JpaRepository<PairRequest, Long> {
 
-    // Find based on receiver and request status
     List<PairRequest> findByReceiverAndRequestStatus(User receiver, PairRequest.RequestStatus requestStatus);
 
-    // Find By Request status
     List<PairRequest> findByRequestStatus(RequestStatus requestStatus);
 
-    // Find by sender
     List<PairRequest> findBySender_Username(String senderUsername);
 
-    // Find by receiver
     List<PairRequest> findByReceiver_Username(String receiverUsername);
-
+    
+    List<PairRequest> findBySenderAndReceiver(User sender, User receiver);
 }

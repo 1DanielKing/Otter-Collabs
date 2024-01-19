@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+// import backend content?
 
-
-// implement by importing and then using <AddFriendModal></AddFriendModal>
+// implement using <div><AddFriendModal></AddFriendModal></div>
 
 const AddFriendModal = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,13 +14,10 @@ const AddFriendModal = () => {
     setShowModal(false);
   };
 
-  const handleAddFriend = async () => {
-    try {
-      await console.log('Friend request sent'); 
-      closeModal();
-    }catch (error) {
-    console.error('Failed to send friend request:', error);
-    }
+  const handleAddFriend = () => {
+    // Perform actions when Add Friend is clicked
+    console.log('Friend request sent');
+    closeModal();
   };
 
   return (

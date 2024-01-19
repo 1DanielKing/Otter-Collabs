@@ -4,6 +4,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.User;
+import org.wecancodeit.backend.models.UserSearchCriteria;
 import org.wecancodeit.backend.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -31,6 +32,10 @@ public class UserService {
      */
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<User> searchUsers(UserSearchCriteria criteria) {
+        return userRepository.findUsersByCriteria(criteria);
     }
 
     /**

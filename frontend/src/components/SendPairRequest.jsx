@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useNotifications } from "../contexts/NotificationsContext.js";
 import { useModal } from "../contexts/ModalContext";
+import axiosBase from "../contexts/axiosBase";
 
-const SendPairRequest = ({ senderUser, receiverUser }) => {
+const SendPairRequest = ({ senderUser, receiverUser, onSendSuccess }) => {
   const { hideModal } = useModal();
   const { addNotification } = useNotifications();
 
@@ -13,21 +13,26 @@ const SendPairRequest = ({ senderUser, receiverUser }) => {
         receiver: receiverUser,
         message: "Let's collaborate!"
       };
-      // Make a POST request to the back-end API
-      await axios.post(
-        "http://localhost:8080/api/pair-requests/send",
-        pairRequestData
-      );
-      console.log("Pair request sent");
-      addNotification({
-        receiver: receiverUser,
-        message: "New pair request sent!",
-      });
-      hideModal();
+
+      const { status } = await axiosBase.post("/api/pair-requests/send", pairRequestData);
+
+      if (status === 200) {
+        console.log("Pair request sent successfully");
+        addNotification({
+          receiver: receiverUser,
+          message: "New pair request sent!",
+        });
+        hideModal();
+        if (onSendSuccess) {
+          onSendSuccess(); // Invoke the callback
+        }
+      } else {
+        console.error("Failed to send pair request: ", status);
+      }
     } catch (error) {
       console.error("Error in sending pair request: ", error);
     }
-  }
+  };
 
   return (
     <div>

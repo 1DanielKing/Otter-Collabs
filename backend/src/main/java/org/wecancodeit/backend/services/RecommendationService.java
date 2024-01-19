@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wecancodeit.backend.enums.MusicTagsEnum;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.repositories.UserRepository;
 
@@ -19,7 +20,7 @@ public class RecommendationService {
         Optional<User> currentUser = userRepository.findByUsername(username);
         if (currentUser.isPresent()) {
             User user = currentUser.get();
-            Set<String> userTags = user.getMusicTags();
+            Set<MusicTagsEnum> userTags = user.getMusicTags();
 
             // This is just returning people with similar tags if more in the future add here
             Set<User> recommendedUsers = userRepository.findBySimilarTags(username, userTags);
