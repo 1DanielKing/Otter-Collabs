@@ -7,23 +7,42 @@ import axiosBase from "../contexts/axiosBase";
 
 export const UserView = ({ selectedUser }) => {
   const [isFriends, setIsFriends] = useState(null);
+  const [requestSent, setRequestSent] = useState(false);
   const { showModal } = useModal();
   const { user } = useAuth();
 
-  useEffect(() => {
-    const checkFriendship = async () => {
-      if (user && selectedUser) {
-        axiosBase.get(`/api/users/${user.id}/friends`)
-          .then(response => {
-            const isFriends = response.data.some(friend => friend.id === selectedUser.id);
-            setIsFriends(isFriends);
-          })
-          .catch(error => console.error("Error checking friendship:", error));
+  const checkFriendship = async () => {
+    if (user && selectedUser) {
+      try {
+        const response = await axiosBase.get(`/api/users/${user.id}/friends`);
+        const isFriend = response.data.some(friend => friend.id === selectedUser.id);
+        setIsFriends(isFriend);
+      } catch (error) {
+        console.error("Error checking friendship:", error);
       }
-    };
+    }
+  };
 
+  const checkForSentRequest = async () => {
+    if (user && selectedUser) {
+      try {
+        const response = await axiosBase.get(`/api/pair-requests/pending/${user.username}/${selectedUser.username}`);
+        setRequestSent(response.data.exists);
+      } catch (error) {
+        console.error("Error checking sent request:", error);
+      }
+    }
+  };
+
+  const refreshChecks = () => {
     checkFriendship();
+    checkForSentRequest();
+  };
+
+  useEffect(() => {
+    refreshChecks();
   }, [user, selectedUser]);
+
 
   if (!selectedUser) {
     return <p>Loading...</p>;
@@ -31,7 +50,7 @@ export const UserView = ({ selectedUser }) => {
 
   const handleSendPairRequest = () => {
     if (user && selectedUser) {
-      showModal(<SendPairRequest senderUser={user} receiverUser={selectedUser} />);
+      showModal(<SendPairRequest senderUser={user} receiverUser={selectedUser} onSendSuccess={refreshChecks} />);
     } else if (user) {
       console.log("receiver user not loaded")
     } else if (selectedUser) {
@@ -49,6 +68,16 @@ export const UserView = ({ selectedUser }) => {
       return '';
     }
   }
+
+  const renderFriendshipStatus = () => {
+    if (isFriends) {
+      return <p>You are friends with this user</p>;
+    } else if (requestSent) {
+      return <p>You've sent a pair request to this user, they haven't responded yet</p>;
+    } else {
+      return <button onClick={handleSendPairRequest}>Send Pair Request</button>;
+    }
+  };
 
   return (
     <div className="profile-details-section">
@@ -68,11 +97,7 @@ export const UserView = ({ selectedUser }) => {
         <h2>Genre:</h2>
         <p>{selectedUser.genre}</p>
       </div>
-      {isFriends ? (
-        <p>You are friends with this user</p>
-      ) : (
-        <button onClick={handleSendPairRequest}>Send Pair Request</button>
-      )}
+      {renderFriendshipStatus()}
     </div>
   );
 };
