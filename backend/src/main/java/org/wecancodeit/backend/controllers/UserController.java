@@ -3,12 +3,14 @@ package org.wecancodeit.backend.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
+import org.wecancodeit.backend.enums.MusicTagsEnum;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.models.UserSearchCriteria;
 import org.wecancodeit.backend.services.UserService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -125,6 +127,21 @@ public class UserController {
                     return ResponseEntity.ok(userService.updateUser(updatedUser));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{userId}/update-tags")
+    public ResponseEntity<User> updateUserMusicTags(@PathVariable @NonNull Long userId,
+        @RequestBody Set<String> stringTags) {
+        return userService.findUserById(userId)
+            .map(user -> {
+            Set<MusicTagsEnum> enumTags = stringTags.stream()
+                .map(String::toUpperCase)
+                .map(MusicTagsEnum::valueOf)
+                .collect(Collectors.toSet());
+            user.setMusicTags(enumTags);
+            return ResponseEntity.ok(userService.updateUser(user));
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
