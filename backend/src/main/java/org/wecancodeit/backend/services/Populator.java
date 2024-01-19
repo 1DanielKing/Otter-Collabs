@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
+import org.wecancodeit.backend.enums.MusicTagsEnum;
 import org.wecancodeit.backend.models.User;
 
 import java.util.HashSet;
@@ -66,10 +67,16 @@ public class Populator implements CommandLineRunner {
                         String instrument = getRandomItemFromArray(instruments);
                         String genre = getRandomItemFromArray(genres);
                         String imageURL = getRandomItemFromArray(defaultProfilePics);
+                        Set<MusicTagsEnum> musicTags = new HashSet<>();
+                        for (int j = 0; j < 5; j++) {
+                                musicTags.add(getRandomItemFromArray(MusicTagsEnum.values()));
+                        }
+
                         ExperienceLevelEnum experienceLevel = getRandomItemFromArray(ExperienceLevelEnum.values());
 
                         User user = new User(username, password, email, instrument, genre, experienceLevel, imageURL);
                         users[i] = user;
+                        user.setMusicTags(musicTags);
                         userService.createUser(user);
                 }
 
