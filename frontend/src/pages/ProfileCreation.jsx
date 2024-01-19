@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { ExperienceLevelEnum } from "../shared/Enums";
+import axiosBase from "../contexts/axiosBase";
 
 const ProfileCreation = () => {
   const location = useLocation();
@@ -10,18 +12,18 @@ const ProfileCreation = () => {
   const [instrument, setInstrument] = useState("");
   const [genre, setGenre] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
-  const [imageURL, setImageURL] = useState("");
+  const [imageURL, setImageURL] = useState("ExperienceLevelEnum.BEGINNER");
   const { user, login } = useAuth();
   const defaultProfilePics = [
-    '/media/pictures/default-pfp/Otter1.png',
-    '/media/pictures/default-pfp/Otter2.png',
-    '/media/pictures/default-pfp/Otter3.png',
-    '/media/pictures/default-pfp/Otter4.png',
-    '/media/pictures/default-pfp/Otter5.png',
-    '/media/pictures/default-pfp/Otter6.png',
-    '/media/pictures/default-pfp/Otter7.png',
-    '/media/pictures/default-pfp/Otter8.png',
-    '/media/pictures/default-pfp/Otter9.png',
+    "/media/pictures/default-pfp/Otter1.png",
+    "/media/pictures/default-pfp/Otter2.png",
+    "/media/pictures/default-pfp/Otter3.png",
+    "/media/pictures/default-pfp/Otter4.png",
+    "/media/pictures/default-pfp/Otter5.png",
+    "/media/pictures/default-pfp/Otter6.png",
+    "/media/pictures/default-pfp/Otter7.png",
+    "/media/pictures/default-pfp/Otter8.png",
+    "/media/pictures/default-pfp/Otter9.png",
   ];
 
   useEffect(() => {
@@ -43,36 +45,25 @@ const ProfileCreation = () => {
       experienceLevel: parseInt(experienceLevel) || 0,
       imageURL,
     };
-    try {
-      const response = await fetch("http://localhost:8080/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
 
-      if (response.ok) {
-        // User creation successful
+    axiosBase.post("/api/users", newUser)
+      .then(async () => {
         console.log("User created successfully, attempting to login...");
-        await login(username, userPassword).then(() => {
-          console.log("Current user after login attempt:", user);
-          navigate("/");
-        });
+        await login(username, userPassword);
+        console.log("Current user after login attempt:", user);
+        navigate("/");
         setUsername("");
         setInstrument("");
         setGenre("");
         setExperienceLevel("");
         setImageURL("");
-      } else {
-        // User creation failed
-        console.error("Failed to create user");
+      })
+      .catch(error => {
+        console.error("Error creating user:", error.message);
         // Handle error or show error message
-      }
-    } catch (error) {
-      console.error("Error creating user:", error.message);
-    }
+      });
   };
+
 
   const handleNameChange = (event) => {
     setUsername(event.target.value);
@@ -108,7 +99,6 @@ const ProfileCreation = () => {
       </div>
     );
   };
-
 
   return (
     <div className="main-container">
@@ -146,13 +136,17 @@ const ProfileCreation = () => {
         </div>
         <div className="profile-box">
           <label htmlFor="experienceLevel">Experience Level: </label>
-          <input
-            id="emailInput"
-            type="text"
+          <select
+            id="experienceInput"
             value={experienceLevel}
             onChange={handleExperienceChange}
-            placeholder="1-5"
-          />
+          >
+              {Object.values(ExperienceLevelEnum).map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="profile-box">
           <label htmlFor="imageUrl">Profile Picture: </label>

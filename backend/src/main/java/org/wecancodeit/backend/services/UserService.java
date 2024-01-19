@@ -1,12 +1,18 @@
 package org.wecancodeit.backend.services;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.User;
+import org.wecancodeit.backend.models.UserSearchCriteria;
 import org.wecancodeit.backend.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -28,13 +34,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> searchUsers(UserSearchCriteria criteria) {
+        return userRepository.findUsersByCriteria(criteria);
+    }
+
     /**
      * Finds a user by their ID.
      *
      * @param id the ID of the user
      * @return an Optional containing the user if found
      */
-    public Optional<User> findUserById(Long id) {
+    public Optional<User> findUserById(@NonNull Long id) {
         return userRepository.findById(id);
     }
 
@@ -75,7 +85,7 @@ public class UserService {
      * @param user the user with updated information
      * @return the updated user
      */
-    public User updateUser(User user) {
+    public User updateUser(@NonNull User user) {
         // Assumes the password is already set correctly (either unmodified or null if
         // not updating the password)
         return userRepository.save(user);
@@ -86,7 +96,7 @@ public class UserService {
      *
      * @param id the ID of the user to delete
      */
-    public void deleteUser(Long id) {
+    public void deleteUser(@NonNull Long id) {
         userRepository.deleteById(id);
     }
 
@@ -108,5 +118,21 @@ public class UserService {
      */
     public User getReceiverUserData(String receiverUsername) {
         return userRepository.findByUsername(receiverUsername).orElse(null);
+    }
+
+    public Set<User> getUserFriends(@NonNull Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        return user.getFriends();
+    }
+
+    @Transactional
+    public void setUserFriends(@NonNull User user1, @NonNull User user2) {
+        if (!userRepository.areAlreadyFriends(user1.getId(), user2.getId()) &&
+                !userRepository.areAlreadyFriends(user2.getId(), user1.getId())) {
+            user1.addFriend(user2);
+            userRepository.save(user1);
+            // userRepository.save(user2);
+        }
     }
 }

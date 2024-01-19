@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./NewUser.css";
 import { useAuth } from "../contexts/AuthContext";
-import AddFriendModal from '../components/add-friend-modal.js'
+import axiosBase from "../contexts/axiosBase";
 
-const NewUser = () => {
+const NewUser = ({ toggleLoginFunc }) => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -28,23 +28,16 @@ const NewUser = () => {
   const checkUserExists = async (email) => {
     try {
       console.log(userEmail);
-      const response = await fetch(
-        `http://localhost:8080/api/users/search?email=${encodeURIComponent(email)}`
-      );
-      console.log(response.status);
+      const { status } = await axiosBase.get(`/api/users/search?email=${encodeURIComponent(email)}`);
+      console.log(status);
 
-      if (response.ok) {
-        return true;
-      } else if (response.status === 404) {
-        return false;
-      } else {
-        throw new Error("Network response was not ok");
-      }
+      return status === 200;
     } catch (error) {
       console.error("Error checking user:", error.message);
-      return true;
+      return error.response && error.response.status === 404 ? false : true;
     }
   };
+
 
   const handleUserInput = async (event) => {
     event.preventDefault();
@@ -82,7 +75,8 @@ const NewUser = () => {
           <label htmlFor="emailInput">Email: </label>
           <input
             id="emailInput"
-            type="text"
+            type="email"
+            name="email"
             value={userEmail}
             onChange={handleEmailChange}
             placeholder="Email"
@@ -106,7 +100,10 @@ const NewUser = () => {
         </div>
       </form>
       <p>
-        Already on OtterCollab? <Link to="/sign-in">Sign In</Link>
+        Already on OtterCollab?{' '}
+        <span className="create-account-link" onClick={toggleLoginFunc}>
+          Sign in
+        </span>
       </p>
 
     </div>

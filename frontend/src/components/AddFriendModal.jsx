@@ -15,7 +15,6 @@ const AddFriendModal = () => {
   };
 
   const handleAddFriend = async () => {
-    // Perform actions when Add Friend is clicked
     try {
       await console.log('Friend request sent'); // add proper logic for backend processes here
       closeModal();

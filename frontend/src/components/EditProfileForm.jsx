@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import axiosBase from '../contexts/axiosBase';
 
 const EditProfileForm = ({ user, toggleEditMode }) => {
   const { loadProfileData } = useAuth();
@@ -43,18 +44,13 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
     console.log(formData);
     e.preventDefault();
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/users/${user.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const { status } = await axiosBase.put(`/api/users/${user.id}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (response.ok) {
+      if (status === 200) {
         console.log("User information updated successfully");
         loadProfileData();
         toggleEditMode();

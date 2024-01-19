@@ -1,11 +1,14 @@
 package org.wecancodeit.backend.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.wecancodeit.backend.models.User;
+import org.wecancodeit.backend.models.UserSearchCriteria;
 import org.wecancodeit.backend.services.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -58,6 +61,12 @@ public class UserController {
         }
     }
 
+    @PostMapping("/search-all")
+    public ResponseEntity<List<User>> searchUsers(@RequestBody UserSearchCriteria criteria) {
+        List<User> users = userService.searchUsers(criteria);
+        return ResponseEntity.ok(users);
+    }
+
     // Fetch sender user data
     @GetMapping("/sender")
     public ResponseEntity<User> getSenderUserData(@RequestParam String senderUsername) {
@@ -69,6 +78,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     /**
      * POST endpoint to create a new user.
      *
@@ -91,6 +101,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/friends")
+    public ResponseEntity<Set<User>> getUserFriends(@PathVariable @NonNull Long userId) {
+        Set<User> friends = userService.getUserFriends(userId);
+        return ResponseEntity.ok(friends);
+    }
+
     /**
      * Updates an existing user's information, excluding the password.
      *
@@ -99,7 +115,7 @@ public class UserController {
      * @return ResponseEntity containing the updated user or a not found status
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<User> updateUser(@PathVariable @NonNull Long id, @RequestBody User updatedUser) {
         return userService.findUserById(id)
                 .map(existingUser -> {
                     updatedUser.setPassword(existingUser.getPassword());
@@ -118,7 +134,7 @@ public class UserController {
      * @return a response entity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable @NonNull Long id) {
         return userService.findUserById(id)
                 .map(user -> {
                     userService.deleteUser(id);

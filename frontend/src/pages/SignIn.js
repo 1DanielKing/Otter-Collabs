@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
 import './SignIn.css';
 
-const SignIn = () => {
+const SignIn = ({ toggleLoginFunc }) => {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +63,10 @@ const SignIn = () => {
         </div>
       </form>
       <p>
-        Not on OtterCollab? <Link to="/new-user">Create Account</Link>
+        Not on OtterCollab?{' '}
+        <span className="create-account-link" onClick={toggleLoginFunc}>
+          Create Account
+        </span>
       </p>
     </div>
   );

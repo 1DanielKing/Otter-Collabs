@@ -2,7 +2,6 @@ package org.wecancodeit.backend.models;
 
 import jakarta.persistence.*;
 
-
 import java.util.HashSet;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Represents a user in the OtterCollab platform.
@@ -24,7 +24,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     private String username;
     private String password;
     private String email;
@@ -33,20 +33,26 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private ExperienceLevelEnum experienceLevel;
-    
+
     private String imageURL;
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AudioMetadata> audioFiles = new ArrayList<>();
-    
-    //field for music tags
+
+    // field for music tags
     @ElementCollection
     private Set<String> musicTags = new HashSet<>();
 
-    //field for pending pair requests
+    // field for pending pair requests
+    @JsonIgnore
     @OneToMany(mappedBy = "receiver")
     private List<PairRequest> pendingPairRequests;
-   
+
+    @ManyToMany
+    @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    @JsonIgnore
+    private Set<User> friends = new HashSet<>();
+
     /**
      * Default constructor for JPA.
      */
@@ -65,7 +71,8 @@ public class User {
      * @param imageURL
      * @param musicTag
      */
-    public User(String username, String password, String email, String instrument, String genre, ExperienceLevelEnum experienceLevel,
+    public User(String username, String password, String email, String instrument, String genre,
+            ExperienceLevelEnum experienceLevel,
             String imageURL) {
         this.username = username;
         this.password = password;
@@ -74,6 +81,23 @@ public class User {
         this.genre = genre;
         this.experienceLevel = experienceLevel;
         this.imageURL = imageURL;
+    }
+
+    public Set<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<User> friends) {
+        this.friends = friends;
+    }
+
+    public void addFriend(User user) {
+        if (!friends.contains(user)) {
+            friends.add(user);
+            if (!user.getFriends().contains(this)) {
+                user.addFriend(this);
+            }
+        }
     }
 
     public Long getId() {
@@ -107,7 +131,7 @@ public class User {
     public String getImageURL() {
         return imageURL;
     }
-    
+
     public Set<String> getMusicTags() {
         return musicTags;
     }

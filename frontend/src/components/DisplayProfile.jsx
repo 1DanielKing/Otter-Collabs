@@ -1,14 +1,13 @@
-import React from "react";
 import { useAuth } from "../contexts/AuthContext";
+
 
 function DisplayProfile({ toggleEditMode }) {
   const { user } = useAuth();
+
   return (
     <div className="display-profile-container">
-      <div className="profile-picture-section">
-        <img src={user.imageURL} alt="Profile" className="profile-picture" />
-      </div>
       <div className="profile-details-section">
+        <img src={user.imageURL} alt="Profile" className="profile-picture" />
         <h1 className="profile-username">{user.username}</h1>
         <div className="profile-info">
           <h2>Email:</h2>
@@ -20,7 +19,7 @@ function DisplayProfile({ toggleEditMode }) {
         </div>
         <div className="profile-info">
           <h2>Experience:</h2>
-          <p>{user.experience}</p>
+          <p>{user.experienceLevel}</p>
         </div>
         <div className="profile-info">
           <h2>Genre:</h2>
@@ -31,5 +30,7 @@ function DisplayProfile({ toggleEditMode }) {
     </div>
   );
 }
+
+
 
 export default DisplayProfile;
