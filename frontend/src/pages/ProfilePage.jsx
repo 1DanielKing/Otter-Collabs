@@ -10,9 +10,8 @@ import MusicTagsDropdown from "../components/MusicTagsDropdown";
 const ProfilePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, loadProfileData } = useAuth();
   const [editMode, setEditMode] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([]);
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -37,7 +36,7 @@ const ProfilePage = () => {
         ) : (
           <>
             <DisplayProfile data={user} toggleEditMode={toggleEditMode} />
-            <MusicTagsDropdown selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+            <MusicTagsDropdown user={user} loadProfileData={loadProfileData} />
             {location.pathname.includes("/") &&
               location.search.includes("?code=") ? null : (
               <SpotifyAuth />
