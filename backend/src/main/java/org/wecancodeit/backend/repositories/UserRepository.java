@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.wecancodeit.backend.enums.MusicTagsEnum;
 import org.wecancodeit.backend.models.User;
 import org.wecancodeit.backend.models.UserSearchCriteria;
 
@@ -33,14 +34,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * finds users by similar User tags
      */
-    default Set<User> findBySimilarTags(String username, Set<String> userTags) {
+    default Set<User> findBySimilarTags(String username, Set<MusicTagsEnum> userTags) {
         return findByMusicTagsInAndUsernameNot(userTags, username);
     }
 
     /*
      * Finds users with similar music tags.
      */
-    Set<User> findByMusicTagsInAndUsernameNot(Set<String> musicTags, String username);
+    Set<User> findByMusicTagsInAndUsernameNot(Set<MusicTagsEnum> musicTags, String username);
 
     @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.friends f WHERE u.id = :userId AND f.id = :friendId")
     boolean areAlreadyFriends(Long userId, Long friendId);
