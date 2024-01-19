@@ -1,3 +1,5 @@
+// NotificationController.java
+
 package org.wecancodeit.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;

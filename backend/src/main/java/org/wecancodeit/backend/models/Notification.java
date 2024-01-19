@@ -1,3 +1,5 @@
+// Notification.java
+
 package org.wecancodeit.backend.models;
 
 import java.time.LocalDateTime;

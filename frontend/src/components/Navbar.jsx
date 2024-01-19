@@ -20,10 +20,12 @@ function Navbar({ openLogoutModal }) {
 
   const handleNotificationClick = () => {
     setDropdownVisible(!isDropdownVisible);
+    setSelectedMessage(null);
   };
 
-  const handleMessageClick = (index) => {
+  const handleMessageClick = async (index, notificationId) => {
     setSelectedMessage(index);
+    await markNotificationAsSeen(notificationId);
   };
 
   return (
@@ -70,7 +72,7 @@ function Navbar({ openLogoutModal }) {
                 >
                   {notifications.length > 0 && (
                     <div className="notification-badge">
-                      {notifications.length}
+                      {notifications.filter((n) => !n.seen).length}
                     </div>
                   )}
                   Notifications
@@ -83,10 +85,12 @@ function Navbar({ openLogoutModal }) {
                         className={`notification-item ${
                           selectedMessage === index ? "selected" : ""
                         }`}
-                        onClick={() => handleMessageClick(index)}
+                        onClick={() =>
+                          handleMessageClick(index, notification.id)
+                        }
                       >
                         {notification.message}
-                        {selectedMessage === index && (
+                        {!notification.seen && selectedMessage === index && (
                           <div>
                             <button className="notif-accept">Accept</button>
                             <button className="notif-deny">Decline</button>

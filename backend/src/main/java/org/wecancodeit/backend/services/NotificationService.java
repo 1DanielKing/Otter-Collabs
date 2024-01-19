@@ -1,3 +1,5 @@
+// NotificationService.java
+
 package org.wecancodeit.backend.services;
 
 import java.util.List;
@@ -34,5 +36,4 @@ public class NotificationService {
     public void deleteNotification(@NonNull Long id) {
         notificationRepository.deleteById(id);
     }
-
 }
