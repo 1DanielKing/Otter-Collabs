@@ -5,11 +5,12 @@ import { SpotifyAuth, HandleCallback } from "../contexts/SpotifyAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import EditProfileForm from "../components/EditProfileForm";
+import MusicTagsDropdown from "../components/MusicTagsDropdown";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, loadProfileData } = useAuth();
   const [editMode, setEditMode] = useState(false);
 
   const toggleEditMode = () => {
@@ -35,8 +36,9 @@ const ProfilePage = () => {
         ) : (
           <>
             <DisplayProfile data={user} toggleEditMode={toggleEditMode} />
+            <MusicTagsDropdown user={user} loadProfileData={loadProfileData} />
             {location.pathname.includes("/") &&
-            location.search.includes("?code=") ? null : (
+              location.search.includes("?code=") ? null : (
               <SpotifyAuth />
             )}{" "}
             {/* Add condition to render SpotifyAuth */}

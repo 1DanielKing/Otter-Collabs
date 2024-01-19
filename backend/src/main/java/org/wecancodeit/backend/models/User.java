@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.wecancodeit.backend.enums.ExperienceLevelEnum;
+import org.wecancodeit.backend.enums.MusicTagsEnum;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -41,7 +43,7 @@ public class User {
 
     // field for music tags
     @ElementCollection
-    private Set<String> musicTags = new HashSet<>();
+    private Set<MusicTagsEnum> musicTags = new HashSet<>();
 
     // field for pending pair requests
     @JsonIgnore
@@ -132,7 +134,7 @@ public class User {
         return imageURL;
     }
 
-    public Set<String> getMusicTags() {
+    public Set<MusicTagsEnum> getMusicTags() {
         return musicTags;
     }
 
@@ -173,15 +175,15 @@ public class User {
         this.imageURL = imageURL;
     }
 
-    public void setMusicTags(Set<String> musicTags) {
+    public void setMusicTags(Set<MusicTagsEnum> musicTags) {
         this.musicTags = musicTags;
     }
 
-    public void addMusicTag(String musicTag) {
+    public void addMusicTag(MusicTagsEnum musicTag) {
         this.musicTags.add(musicTag);
     }
 
-    public void removeMusicTag(String musicTag) {
+    public void removeMusicTag(MusicTagsEnum musicTag) {
         this.musicTags.remove(musicTag);
     }
 

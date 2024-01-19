@@ -18,7 +18,7 @@
 .profile-details-section {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .profile-portfolio-section {
@@ -26,6 +26,12 @@
     flex-direction: column;
     justify-content: center;
     border-top: 1px black solid;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
 }
 
 .profile-username {
@@ -40,10 +46,56 @@
 
 .profile-info h2 {
     font-size: 1.2em;
-    margin-bottom: 5px;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
 }
 
 .profile-info p {
     font-size: 1em;
     margin: 0;
+}
+
+.music-tags-container {
+    padding: 1.25em;
+    border: 1px solid #8f8c8c;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: 0.5em;
+}
+
+.music-tags-dropdown select {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    background-color: #000000;
+    padding: 2px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.tag span {
+    white-space: nowrap;
+    margin-right: 5px;
+}
+
+.tag button {
+    background: none;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 2px;
 }

@@ -96,7 +96,7 @@ const NewUser = ({ toggleLoginFunc }) => {
           <button type="submit" className="action-button">
             Create Account
           </button>
-
+          
         </div>
       </form>
       <p>
