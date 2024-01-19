@@ -137,6 +137,29 @@
   background-color: #77413d; /* Red for "Decline" */
 }
 
+.notif-accept:hover{
+  background-color: #58a15a; /* Light up to brighter green upon interaction" */
+}
+
+.notif-deny:hover{
+  background-color: #a54b45; /*Light up to brighter green upon interaction */
+}
+
+.notification-item{
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s ease; 
+}
+
+.notification-item:hover p{
+  background-color: rgba(114, 106, 106, 0.8);
+  border-color: rgba(114, 106, 106, 0.8);
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 8px;
+}
+
 @media (max-width: 768px) {
   .logo-home-button img {
     height: 40px;

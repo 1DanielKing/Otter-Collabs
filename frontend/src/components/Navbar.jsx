@@ -7,7 +7,7 @@ import { useModal } from "../contexts/ModalContext";
 import LogoutModal from "./LogOutModal";
 
 function Navbar({ openLogoutModal }) {
-  const { notifications } = useNotifications();
+  const { notifications, markNotificationAsSeen} = useNotifications();
   const { user } = useAuth();
   const { showModal } = useModal();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -70,34 +70,36 @@ function Navbar({ openLogoutModal }) {
                   className="notification-button"
                   onClick={handleNotificationClick}
                 >
-                  {notifications.length > 0 && (
+                  {notifications.filter((n) => !n.seen).length > 0 && (
                     <div className="notification-badge">
                       {notifications.filter((n) => !n.seen).length}
                     </div>
                   )}
                   Notifications
                 </button>
-                {isDropdownVisible && notifications.length > 0 && (
+                {isDropdownVisible && (
                   <div className="notification-dropdown">
-                    {notifications.map((notification, index) => (
-                      <div
-                        key={index}
-                        className={`notification-item ${
-                          selectedMessage === index ? "selected" : ""
-                        }`}
-                        onClick={() =>
-                          handleMessageClick(index, notification.id)
-                        }
-                      >
-                        {notification.message}
-                        {!notification.seen && selectedMessage === index && (
-                          <div>
-                            <button className="notif-accept">Accept</button>
-                            <button className="notif-deny">Decline</button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                    {notifications.length > 0 ? (
+                      notifications.map((notification, index) => (
+                        <div
+                          key={index}
+                          className={`notification-item ${
+                            selectedMessage === index ? "selected" : ""
+                          }`}
+                          onClick={() => handleMessageClick(index, notification.id)}
+                        >
+                          <p className="notification-message">You received a pair request from {notification.receiver.username}</p>
+                          {selectedMessage === index && (
+                            <div>
+                              <button className="notif-accept">Accept</button>
+                              <button className="notif-deny">Decline</button>
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="no-notifications-message">You have no notifications</p>
+                    )}
                   </div>
                 )}
               </div>
