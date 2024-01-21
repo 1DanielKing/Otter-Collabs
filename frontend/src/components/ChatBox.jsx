@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from 'stompjs/lib/stomp.min.js'
@@ -13,28 +11,22 @@ const ChatBox = () => {
     const [friends, setFriends] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isExpanded, setIsExpanded] = useState(false);
-    const selectedUserRef = useRef();
     const messagesEndRef = useRef(null);
     const { user } = useAuth();
 
     const toggleChatBox = () => setIsExpanded(!isExpanded);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const { data, status } = await axiosBase.get('/api/users');
-                if (status === 200) {
-                    setFriends(data);
-                } else {
-                    console.error('Failed to fetch users');
-                }
-            } catch (error) {
-                console.error('Failed to fetch users', error);
+        const getFriendsOnLoad = () => {
+            if (user && (user.id !== undefined)) {
+                axiosBase.get(`/api/users/${user.id}/friends`)
+                    .then(response => setFriends(response.data))
+                    .catch(error => console.error('Error fetching friends:', error));
             }
         };
 
-        fetchUsers();
-    }, []);
+        getFriendsOnLoad();
+    }, [user]);
 
     useEffect(() => {
         const socket = new SockJS(`http://localhost:8080/chat`);
@@ -50,15 +42,7 @@ const ChatBox = () => {
             setStompClient(client);
             client.subscribe('/user/queue/messages', message => {
                 const incomingMessage = JSON.parse(message.body);
-                // add message only if that conversation is open
-                if (selectedUserRef.current && (incomingMessage.sender === selectedUserRef.current.username)) {
-                    setMessages(prev => [...prev, incomingMessage]);
-                }
-                if (selectedUser) {
-                    console.log(selectedUser.username === incomingMessage.sender ? "sender matches selected user" : "sender does not match selected user");
-                } else {
-                    console.log("selectedUser is null");
-                }
+                handleIncomingMessage(incomingMessage);
             });
         });
 
@@ -68,6 +52,27 @@ const ChatBox = () => {
             }
         };
     }, []);
+
+    const handleIncomingMessage = (incomingMessage) => {
+        const senderUsername = incomingMessage.sender;
+        const senderUser = friends.find(friend => friend.username === senderUsername);
+        console.log("sender username: " + senderUsername)
+
+        if (senderUser) {
+            if (!isExpanded) {
+                console.log("expanding chat.")
+                setIsExpanded(true);
+            }
+
+            if (!selectedUser || selectedUser.username !== senderUsername) {
+                handleUserSelect(senderUser);
+            }
+
+            if (selectedUser && senderUsername === selectedUser.username) {
+                setMessages(prev => [...prev, incomingMessage]);
+            }
+        }
+    };
 
     const fetchMessageHistory = async () => {
         if (selectedUser) {
@@ -86,26 +91,11 @@ const ChatBox = () => {
     };
 
     useEffect(() => {
-        function logMessagesOnChange() {
-            console.log(messages);
-        }
-        logMessagesOnChange();
-    }, [messages]);
-
-    useEffect(() => {
-        function updateSelectedUserRef() {
-            selectedUserRef.current = selectedUser;
-        }
-        updateSelectedUserRef();
-    }, [selectedUser]);
-
-    useEffect(() => {
         fetchMessageHistory();
     }, [selectedUser, user.username]);
 
     const handleUserSelect = (user) => {
         setSelectedUser(user);
-        setMessages([]);
     };
 
     const scrollToBottom = () => {
@@ -148,8 +138,8 @@ const ChatBox = () => {
                             <div className='chatbox-content'>
                                 {messages.map((msg) => (
                                     <div key={msg.id}>
-                                    <span style={{ fontWeight: 'bold' }}>{msg.sender}:</span> {msg.text}
-                                </div>
+                                        <span style={{ fontWeight: 'bold' }}>{msg.sender}:</span> {msg.text}
+                                    </div>
                                 ))}
                                 {/* Invisible element for auto scroll down */}
                                 <div ref={messagesEndRef} />
