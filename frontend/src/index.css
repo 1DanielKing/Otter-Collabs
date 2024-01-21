@@ -166,7 +166,7 @@ code {
 }
 
 .chatbox-collapsed:hover {
-background-color: #727272;
+  background-color: #727272;
 }
 
 .chatbox-header {
@@ -242,7 +242,7 @@ background-color: #727272;
 
 .chatbox-user-selection-container {
   padding: 10px;
-  max-height: 150px;
+  max-height: 80%;
   overflow-y: auto;
   background-color: #f0f0f0;
   border-top: 1px solid #ced4da;
