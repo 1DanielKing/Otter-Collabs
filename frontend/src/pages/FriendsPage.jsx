@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom';
 
 const FriendsPage = () => {
     const [friends, setFriends] = useState([]);
-    const [pendingRequests, setPendingRequests] = useState([]);
-    const { user } = useAuth(); // Get the current user from AuthContext
+    const { user } = useAuth();
 
     useEffect(() => {
         const getFriendsOnLoad = () => {
@@ -17,25 +16,13 @@ const FriendsPage = () => {
             }
         };
 
-        const getRequestsOnLoad = () => {
-            // TODO: Logic fetching friend requests from api server
-        };
-
         getFriendsOnLoad();
-        getRequestsOnLoad();
     }, [user, user.id]);
 
 
     return (
         <div className="main-container">
             <h1>Friends</h1>
-            <h2>Pending Friend Requests</h2>
-            <ul>
-                {pendingRequests.map((request) => (
-                    <li key={request.id}>{request.name}</li>
-                ))}
-            </ul>
-            <h2>My Friends</h2>
             {friends.length > 0 ? (
                 <div className="friend-list-container">
                     <ul>

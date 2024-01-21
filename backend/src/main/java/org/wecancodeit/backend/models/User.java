@@ -41,11 +41,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AudioMetadata> audioFiles = new ArrayList<>();
 
-    // field for music tags
     @ElementCollection
     private Set<MusicTagsEnum> musicTags = new HashSet<>();
 
-    // field for pending pair requests
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "receiver")
     private List<PairRequest> pendingPairRequests;
@@ -191,7 +193,21 @@ public class User {
         this.pendingPairRequests = pendingPairRequests;
     }
 
-    
+    public List<AudioMetadata> getAudioFiles() {
+        return audioFiles;
+    }
+
+    public void setAudioFiles(List<AudioMetadata> audioFiles) {
+        this.audioFiles = audioFiles;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -225,13 +241,5 @@ public class User {
                 ", experienceLevel=" + experienceLevel +
                 ", imageURL='" + imageURL + '\'' +
                 '}';
-    }
-
-    public List<AudioMetadata> getAudioFiles() {
-        return audioFiles;
-    }
-
-    public void setAudioFiles(List<AudioMetadata> audioFiles) {
-        this.audioFiles = audioFiles;
     }
 }
