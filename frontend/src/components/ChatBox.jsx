@@ -147,7 +147,9 @@ const ChatBox = () => {
                         <>
                             <div className='chatbox-content'>
                                 {messages.map((msg) => (
-                                    <div key={msg.id}>{msg.sender}: {msg.text}</div>
+                                    <div key={msg.id}>
+                                    <span style={{ fontWeight: 'bold' }}>{msg.sender}:</span> {msg.text}
+                                </div>
                                 ))}
                                 {/* Invisible element for auto scroll down */}
                                 <div ref={messagesEndRef} />

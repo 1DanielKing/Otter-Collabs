@@ -147,15 +147,16 @@ code {
 }
 
 .chatbox-collapsed {
+  color: #fff;
+  background-color: #000000;
   position: fixed;
   bottom: 0;
-  right: 0;
+  right: 6px;
   width: 100px;
   height: 30px;
-  background-color: #f8f9fa;
   opacity: 0.8;
-  border-top: 3px solid #ced4da;
-  border-left: 3px solid #ced4da;
+  border: 8px solid #FFFFFFCC;
+  border-radius: 6px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   z-index: 1001;
   display: flex;
@@ -164,13 +165,21 @@ code {
   cursor: pointer;
 }
 
+.chatbox-collapsed:hover {
+background-color: #727272;
+}
+
 .chatbox-header {
   background-color: #22262b;
   border-bottom: 1px solid #545658;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   padding: 0.5em;
   display: flex;
   align-items: center;
   cursor: default;
+  position: relative;
+  right: 3px;
 }
 
 .chatbox-header div {
@@ -193,6 +202,7 @@ code {
 }
 
 .chatbox-title {
+
   flex-grow: 10;
   text-align: center;
   color: white;
