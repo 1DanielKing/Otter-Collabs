@@ -17,8 +17,6 @@ export const NotificationsProvider = ({ children }) => {
   };
 
   const markNotificationAsSeen = (notificationId) => {
-    // Assume you have a function to mark notification as seen (make a backend request, for example)
-    // Update the notifications array to mark the specified notification as seen
     setNotifications((prevNotifications) =>
       prevNotifications.map((notification) =>
         notification.id === notificationId
