@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.wecancodeit.backend.models.Notification;
 import org.wecancodeit.backend.models.PairRequest;
 import org.wecancodeit.backend.models.PairRequest.RequestStatus;
 import org.wecancodeit.backend.models.User;
@@ -22,6 +23,9 @@ public class PairRequestService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public PairRequest savePairRequest(PairRequest request) {
         User sender = userRepository.findByUsername(request.getSender().getUsername())
@@ -41,6 +45,14 @@ public class PairRequestService {
 
         // Save the pair request
         PairRequest savedRequest = pairRequestRepository.save(request);
+
+        if (savedRequest != null) {
+            Notification notification = new Notification();
+            notification.setMessage("You have a new pair request from " + savedRequest.getSender().getUsername());
+            notification.setUser(savedRequest.getReceiver());
+            notification.setRequest(savedRequest);
+            notificationService.saveNotification(notification);
+        }
         return savedRequest;
     }
 
