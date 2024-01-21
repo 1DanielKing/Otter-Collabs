@@ -34,7 +34,8 @@ function Navbar({ openLogoutModal }) {
         <div className="Logo-Home-Button">
           <li>
             <Link className="logo-home-button" to="/">
-              <img src="/media/pictures/logo.png" alt="LOGO OTTERCOLLAB"></img>
+              <img src="/media/pictures/logo.png" alt="LOGO OTTERCOLLAB" class="logo"></img>
+              <img src="/media/pictures/hover-logo.png" alt="LOGO OTTERCOLLAB TRACED IN WHITE" class="hover-logo" />
             </Link>
           </li>
         </div>
