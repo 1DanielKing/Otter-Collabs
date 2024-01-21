@@ -5,27 +5,15 @@ import { useAuth } from "../contexts/AuthContext.js";
 import { useNotifications } from "../contexts/NotificationsContext.js";
 import { useModal } from "../contexts/ModalContext";
 import LogoutModal from "./LogOutModal";
+import NotificationsMenu from "./NotificationsMenu";
 
-function Navbar({ openLogoutModal }) {
-  const { notifications, markNotificationAsSeen} = useNotifications();
+function Navbar() {
   const { user } = useAuth();
   const { showModal } = useModal();
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState(null);
 
   const handleLogoutClick = (event) => {
     event.preventDefault();
     showModal(<LogoutModal />);
-  };
-
-  const handleNotificationClick = () => {
-    setDropdownVisible(!isDropdownVisible);
-    setSelectedMessage(null);
-  };
-
-  const handleMessageClick = async (index, notificationId) => {
-    setSelectedMessage(index);
-    await markNotificationAsSeen(notificationId);
   };
 
   return (
@@ -64,49 +52,10 @@ function Navbar({ openLogoutModal }) {
         <div className="notification-menu">
           {user && (
             <li>
-              <div className="notification-container">
-                <button
-                  className="notification-button"
-                  onClick={handleNotificationClick}
-                >
-                  {notifications.filter((n) => !n.seen).length > 0 && (
-                    <div className="notification-badge">
-                      {notifications.filter((n) => !n.seen).length}
-                    </div>
-                  )}
-                  Notifications
-                </button>
-                {isDropdownVisible && (
-                  <div className="notification-dropdown">
-                    {notifications.length > 0 ? (
-                      notifications.map((notification, index) => (
-                        <div
-                          key={index}
-                          className={`notification-item ${
-                            selectedMessage === index ? "selected" : ""
-                          }`}
-                          onClick={() => handleMessageClick(index, notification.id)}
-                        >
-                          <p className="notification-message">You received a pair request from {notification.receiver.username}</p>
-                          {selectedMessage === index && (
-                            <div>
-                              <button className="notif-accept">Accept</button>
-                              <button className="notif-deny">Decline</button>
-                            </div>
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <p className="no-notifications-message">You have no notifications</p>
-                    )}
-                  </div>
-                )}
-              </div>
+              <NotificationsMenu />
             </li>
           )}
         </div>
-        {/* className below is there for code 
-        readability in browser dev tools */}
         <div className="logout-button-and-modal">
           <li>
             <button onClick={handleLogoutClick} className="link-button">

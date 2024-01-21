@@ -14,20 +14,17 @@ const SendPairRequest = ({ senderUser, receiverUser, onSendSuccess }) => {
         message: "Let's collaborate!"
       };
 
-      const { status } = await axiosBase.post("/api/pair-requests/send", pairRequestData);
+      const response = await axiosBase.post("/api/pair-requests/send", pairRequestData);
 
-      if (status === 200) {
+      if (response.status === 200) {
         console.log("Pair request sent successfully");
-        addNotification({
-          receiver: receiverUser,
-          message: "New pair request sent!",
-        });
+
         hideModal();
         if (onSendSuccess) {
-          onSendSuccess(); // Invoke the callback
+          onSendSuccess();
         }
       } else {
-        console.error("Failed to send pair request: ", status);
+        console.error("Failed to send pair request: ", response.status);
       }
     } catch (error) {
       console.error("Error in sending pair request: ", error);

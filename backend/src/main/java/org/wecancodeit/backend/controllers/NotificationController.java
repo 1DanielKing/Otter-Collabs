@@ -54,6 +54,20 @@ public class NotificationController {
         }
     }
 
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<List<Notification>> updateAllNotificationsForUser(
+            @NonNull @PathVariable Long userId,
+            @NonNull @RequestBody List<Notification> notifications) {
+
+        List<Notification> updatedNotifications = notificationService.updateAllNotificationsForUser(userId,
+                notifications);
+        if (updatedNotifications != null) {
+            return ResponseEntity.ok(updatedNotifications);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNotification(@NonNull @PathVariable Long id) {
         Notification existingNotification = notificationService.getNotificationById(id);

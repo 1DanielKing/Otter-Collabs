@@ -65,7 +65,7 @@
 }
 
 .nav-links a {
-  display: block;
+  display: inline-block;
   text-decoration: none;
   color: black;
   padding: 0.1em;
@@ -114,7 +114,8 @@
   position: absolute;
   top: 100%;
   left: -145%;
-  width: 400px; /* Adjust as needed */
+  width: 400px;
+  /* Adjust as needed */
   background-color: #fff;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
@@ -142,19 +143,19 @@
 }
 
 .notif-accept {
-  background-color: #4e6d4f; /* Green for "Accept" */
+  background-color: #4e6d4f;
 }
 
 .notif-accept:hover {
-  background-color: #58a15a; /* Light up to brighter green upon interaction" */
+  background-color: #58a15a;
 }
 
 .notif-deny {
-  background-color: #77413d; /* Red for "Decline" */
+  background-color: #77413d;
 }
 
 .notif-deny:hover {
-  background-color: #a54b45; /*Light up to brighter green upon interaction */
+  background-color: #a54b45;
 }
 
 .notification-item {

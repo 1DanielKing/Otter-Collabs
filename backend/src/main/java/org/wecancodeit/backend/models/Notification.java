@@ -3,7 +3,6 @@
 package org.wecancodeit.backend.models;
 
 import java.time.LocalDateTime;
-import org.wecancodeit.backend.models.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +18,10 @@ public class Notification {
     private long id;
     private String message;
     private LocalDateTime timestamp;
+    private boolean seen;
+
+    @ManyToOne
+    private PairRequest request;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,6 +33,13 @@ public class Notification {
 
     public Notification(String message) {
         this.message = message;
+        this.timestamp = LocalDateTime.now();
+        this.request = null; // No pair request associated
+    }
+
+    public Notification(String message, PairRequest request) {
+        this.message = message;
+        this.request = request;
         this.timestamp = LocalDateTime.now();
     }
 
@@ -63,6 +73,22 @@ public class Notification {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
+
+    public PairRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(PairRequest request) {
+        this.request = request;
     }
 
     @Override
