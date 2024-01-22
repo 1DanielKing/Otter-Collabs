@@ -11,9 +11,11 @@ const SupportButton = () => {
   };
 
   return (
-    <button className="support-button" onClick={openSupportModal}>
+    <div className="support-button-collapsed">
+    <div onClick={openSupportModal}>
       Support
-    </button>
+    </div>
+    </div>
   );
 };
 

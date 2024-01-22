@@ -7,13 +7,13 @@ Welcome to OtterCollab, where the power of music collaboration meets cutting-edg
 ## Meet the Team
 
 **Product Owner:** 
-- Aaron Zebley
+- [Aaron Zebley](https://zebleya1.github.io/)
 
 **Team:**
-- Omar Bonnet
-- Wendy Gonzalez
-- Nathan Mange
-- Daniel King
+- [Omar Bonnet](https://obonn1.github.io/)
+- [Wendy Gonzalez](GONZ997.github.io)
+- [Nathan Mange](nmange95.github.io)
+- [Daniel King](https://danielking.pro)
 
 ## Overview
 
