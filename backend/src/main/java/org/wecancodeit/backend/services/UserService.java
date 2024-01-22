@@ -127,12 +127,13 @@ public class UserService {
     }
 
     @Transactional
-    public void setUserFriends(@NonNull User user1, @NonNull User user2) {
+    public boolean setUserFriends(@NonNull User user1, @NonNull User user2) {
         if (!userRepository.areAlreadyFriends(user1.getId(), user2.getId()) &&
                 !userRepository.areAlreadyFriends(user2.getId(), user1.getId())) {
             user1.addFriend(user2);
             userRepository.save(user1);
-            // userRepository.save(user2);
+            return true;
         }
+        return false;
     }
 }
