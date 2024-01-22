@@ -236,7 +236,11 @@ public class AudioService {
 
         String newFilename = UUID.randomUUID().toString() + (fileExtension.isEmpty() ? "" : "." + fileExtension);
 
-        Path targetLocation = Paths.get("/wcci/OtterCollab/media").resolve(newFilename);
+        Path baseDir = Paths.get(System.getProperty("user.dir"), "wcci", "OtterCollab", "media");
+        Path targetLocation = baseDir.resolve(newFilename);
+
+        Files.createDirectories(baseDir);
+
         Files.copy(file.getInputStream(), targetLocation);
 
         return targetLocation.toString();
