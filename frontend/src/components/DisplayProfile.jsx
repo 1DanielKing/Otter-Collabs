@@ -6,6 +6,7 @@ function DisplayProfile({ toggleEditMode }) {
 
   const formatEnum = (input) => {
     if (input) {
+      console.log(input)
       return input.split('_')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');

@@ -16,6 +16,8 @@ const FriendsPage = () => {
             }
         };
 
+        console.log(user.experienceLevel);
+
         getFriendsOnLoad();
     }, [user, user.id]);
 
