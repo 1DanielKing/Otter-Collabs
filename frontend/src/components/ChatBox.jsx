@@ -99,7 +99,7 @@ const ChatBox = () => {
                 handleUserSelect(senderUser);
             }
 
-            fetchMessageHistory();
+            fetchMessageHistory(senderUser);
         }
     };
 
