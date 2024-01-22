@@ -8,17 +8,27 @@ import "./ProfilePage.css";
 const ViewUserProfile = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const { username } = useParams();
+  const [userAudios, setUserAudios] = useState([])
 
   useEffect(() => {
     axiosBase.get(`/api/users/search?username=${username}`)
       .then(response => {
         setSelectedUser(response.data);
+        fetchUserAudios(response.data.id);
       })
       .catch(error => {
         console.error("Error fetching user data:", error);
       });
   }, [username]);
-
+  
+  const fetchUserAudios = async (userId) => {
+    try {
+      const response = await axiosBase.get(`/api/audio/user/${userId}`);
+      setUserAudios(response.data);
+    } catch (error) {
+      console.error("Error fetching user audios:", error);
+    }
+  };
   if (!selectedUser) {
     return <p>Loading...</p>;
   }
@@ -29,6 +39,21 @@ const ViewUserProfile = () => {
         <UserView selectedUser={selectedUser} />
         <MusicTagsDisplayViewOnly data={selectedUser.musicTags} />
         <Portfolio userId={selectedUser.id} />
+        </div>
+
+        <div className="audio-list">
+        <h2>{`${selectedUser.username}'s Audio Uploads`}</h2>
+        {userAudios.map((audio) => (
+          <div key={audio.id} className="audio-item">
+            <h3>{audio.title}</h3>
+            <p>Artist: {audio.artist}</p>
+            <p>Genre: {audio.genre}</p>
+            <audio controls>
+              <source src={`http://localhost:8080/api/audio/stream/${audio.id}`} type="audio/mpeg" />
+              Your browser does not support the audio tag.
+            </audio>
+          </div>
+        ))}
       </div>
     </div>
   );
