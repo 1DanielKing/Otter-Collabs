@@ -127,6 +127,9 @@ public class UserController {
                     updatedUser.setPassword(existingUser.getPassword());
 
                     updatedUser.setId(id);
+                    
+                    updatedUser.setExperienceLevel(existingUser.getExperienceLevel());
+
 
                     return ResponseEntity.ok(userService.updateUser(updatedUser));
                 })

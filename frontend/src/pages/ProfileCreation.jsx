@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { ExperienceLevelEnum } from "../shared/Enums";
 import axiosBase from "../contexts/axiosBase";
+
 
 const ProfileCreation = () => {
   const location = useLocation();
@@ -26,6 +26,23 @@ const ProfileCreation = () => {
     "/media/pictures/default-pfp/Otter9.png",
   ];
 
+  const mapToFrontendEnum = (backendEnumValue) => {
+    switch (backendEnumValue) {
+      case "Beginner":
+        return "BEGINNER";
+      case "Intermediate":
+        return "INTERMEDIATE";
+      case "Advanced":
+        return "ADVANCED";
+      case "Expert":
+        return "EXPERT";
+      case "Professional":
+        return "PROFESSIONAL";
+      default:
+        return backendEnumValue;
+    }
+  };
+
   useEffect(() => {
     if (user) {
       console.log("User logged in:", user);
@@ -42,7 +59,7 @@ const ProfileCreation = () => {
       email: userEmail,
       instrument,
       genre,
-      experienceLevel: parseInt(experienceLevel) || 0,
+      experienceLevel: mapToFrontendEnum(experienceLevel), // Map to backend enum
       imageURL,
     };
 
@@ -80,6 +97,8 @@ const ProfileCreation = () => {
   const handlePictureChange = (event) => {
     setImageURL(event.target.value);
   };
+
+  
 
   const renderDefaultProfilePics = () => {
     return (
@@ -137,16 +156,16 @@ const ProfileCreation = () => {
         <div className="profile-box">
           <label htmlFor="experienceLevel">Experience Level: </label>
           <select
-            id="experienceInput"
-            value={experienceLevel}
-            onChange={handleExperienceChange}
-          >
-              {Object.values(ExperienceLevelEnum).map((level) => (
-              <option key={level} value={level}>
-                {level}
-              </option>
-            ))}
-          </select>
+  id="experienceInput"
+  value={experienceLevel}
+  onChange={handleExperienceChange}
+>
+  {Object.values(experienceLevel).map((level) => (
+    <option key={level} value={level}>
+      {level}
+    </option>
+  ))}
+</select>
         </div>
         <div className="profile-box">
           <label htmlFor="imageUrl">Profile Picture: </label>

@@ -1,15 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import axiosBase from '../contexts/axiosBase';
+import {ExperienceLevelEnum } from "../shared/Enums";
 
 const EditProfileForm = ({ user, toggleEditMode }) => {
   const { loadProfileData } = useAuth();
+
+  const mapToFrontendEnum = (backendEnumValue) => {
+    console.log('Mapping backend to frontend:', backendEnumValue);
+
+    switch (backendEnumValue) {
+      case "Beginner":
+        return "BEGINNER";
+      case "Intermediate":
+        return "INTERMEDIATE";
+      case "Advanced":
+        return "ADVANCED";
+      case "Expert":
+        return "EXPERT";
+      case "Professional":
+        return "PROFESSIONAL";
+      default:
+        return backendEnumValue;
+    }
+  };
+
   const [formData, setFormData] = useState({
     imageURL: user.imageURL,
     username: user.username,
     email: user.email,
     instrument: user.instrument,
-    experience: user.experience,
+    experience: user.experienceLevel,
     genre: user.genre,
   });
   const defaultProfilePics = [
@@ -30,14 +51,16 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
       username: user.username,
       email: user.email,
       instrument: user.instrument,
-      experience: user.experience,
+      experience: user.experienceLevel,
       genre: user.genre,
     });
   }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    console.log(`Changing ${name} to:`, value);
+  
+    setFormData((prevData) => ({ ...prevData, [name]: name === 'experienceLevel' ? value : mapToFrontendEnum(value) }));
   };
 
   const handleSubmit = async (e) => {
@@ -119,15 +142,19 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
           />
         </div>
         <div className="profile-info">
-          <label htmlFor="experience">Experience</label>
-          <input
-            type="text"
-            id="experience"
-            name="experience"
-            value={formData.experience}
+          <label htmlFor="experienceLevel">Experience</label>
+          <select
+            id="experienceInput"
+            value={formData.experienceLevel}
             onChange={handleChange}
-          />
-        </div>
+            >
+    {Object.values(ExperienceLevelEnum).map((level) => (
+      <option key={level} value={level}>
+        {level}
+      </option>
+    ))}
+  </select>
+</div>
         <div className="profile-info">
           <label htmlFor="genre">Genre</label>
           <input

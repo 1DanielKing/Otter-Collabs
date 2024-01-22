@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
 
                     const username = response.data;
                     setUser({ token: storedToken, username });
-                    loadProfileData(username);
-
+                    await loadProfileData(username);
+                    setProfileLoaded(true)
                 } catch (error) {
                     console.error('Error validating token:', error);
                     localStorage.removeItem('authToken');
