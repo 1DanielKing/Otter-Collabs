@@ -38,9 +38,6 @@ public class User {
 
     private String imageURL;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AudioMetadata> audioFiles = new ArrayList<>();
-
     @ElementCollection
     private Set<MusicTagsEnum> musicTags = new HashSet<>();
 
@@ -191,14 +188,6 @@ public class User {
 
     public void setPendingPairRequests(List<PairRequest> pendingPairRequests) {
         this.pendingPairRequests = pendingPairRequests;
-    }
-
-    public List<AudioMetadata> getAudioFiles() {
-        return audioFiles;
-    }
-
-    public void setAudioFiles(List<AudioMetadata> audioFiles) {
-        this.audioFiles = audioFiles;
     }
 
     public List<Notification> getNotifications() {
