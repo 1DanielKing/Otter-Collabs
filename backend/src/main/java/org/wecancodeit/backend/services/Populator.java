@@ -7,9 +7,11 @@ import org.wecancodeit.backend.enums.ExperienceLevelEnum;
 import org.wecancodeit.backend.enums.MusicTagsEnum;
 import org.wecancodeit.backend.models.User;
 
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.Arrays;
 
 @Component
 public class Populator implements CommandLineRunner {
@@ -87,17 +89,22 @@ public class Populator implements CommandLineRunner {
         public void addRandomFriendsToUsers(@NonNull User[] users) {
                 Random random = new Random();
 
+                Set<String> excludedUsernames = new HashSet<>(Arrays.asList("User1", "User2", "User3"));
+
                 for (User user : users) {
                         if (user == null) {
                                 continue;
                         }
-                        int numberOfFriends = 4 + random.nextInt(17); // Random number between 4 and 20
+                        int numberOfFriends = 4 + random.nextInt(17);
                         Set<User> addedFriends = new HashSet<>();
 
                         while (addedFriends.size() < numberOfFriends) {
                                 User friend = getRandomItemFromArray(users);
 
-                                if (!friend.equals(user) && !user.getFriends().contains(friend)) {
+                                boolean isExcludedPair = excludedUsernames.contains(user.getUsername()) &&
+                                                excludedUsernames.contains(friend.getUsername());
+
+                                if (!friend.equals(user) && !user.getFriends().contains(friend) && !isExcludedPair) {
                                         addedFriends.add(friend);
                                         user.addFriend(friend);
                                 }
