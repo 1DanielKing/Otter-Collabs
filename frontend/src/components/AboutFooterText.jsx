@@ -5,13 +5,32 @@ const AboutFooterText = () => {
   const openReadmeInNewTab = async () => {
     try {
       const readmeUrl = '/media/README.html'; // Adjust the path as needed
+
       const response = await fetch(readmeUrl);
-      const markdownContent = await response.text();
+      const readmeContent = await response.text();
 
       const newTab = window.open();
-      newTab.document.write(`<pre>${markdownContent}</pre>`);
+      if (!newTab) {
+        console.error('Failed to open a new tab');
+        return;
+      }
+
+      newTab.document.write('<!DOCTYPE html><html lang="en"><head>');
+      newTab.document.write('<meta charset="UTF-8">');
+      newTab.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+      // Include other head content here if needed
+      newTab.document.write('</head><body>');
+
+      const iframe = newTab.document.createElement('iframe');
+      iframe.style.width = '100%';
+      iframe.style.height = '100vh';
+      iframe.style.border = 'none';
+      iframe.srcdoc = readmeContent;
+      newTab.document.body.appendChild(iframe);
+
+      newTab.document.write('</body></html>');
     } catch (error) {
-      console.error('Error fetching or opening README:', error);
+      console.error('Error opening README:', error);
     }
   };
 
