@@ -23,7 +23,6 @@ const ChatBox = () => {
 
     const toggleChatBox = () => {
         setIsExpanded(!isExpanded);
-
     }
 
     const loadFriends = () => {
@@ -34,6 +33,10 @@ const ChatBox = () => {
         }
         console.log("friends loaded")
     };
+
+    useEffect(() => {
+        loadFriends();
+    }, [user]);
 
     useEffect(() => {
         if (refreshFriends) {
@@ -88,6 +91,7 @@ const ChatBox = () => {
             if (!isExpanded) {
                 console.log("expanding chat.")
                 setIsExpanded(true);
+                handleUserSelect(senderUser);
             }
 
             if (!selectedUser || selectedUser.username !== senderUsername) {
@@ -202,7 +206,7 @@ const ChatBox = () => {
                     )}
                 </>
             ) : (
-                <div onClick={toggleChatBox}>Messages</div> // Collapsed state
+                <div onClick={toggleChatBox}>Messages</div>
             )}
         </div>
     );
