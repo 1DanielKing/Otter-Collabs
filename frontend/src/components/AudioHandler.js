@@ -18,7 +18,7 @@ const AudioHandler = ({ onFileChange }) => {
 
   return (
     <div>
-      <p>User ID: {user ? user.id : 'Not authenticated'}</p>
+      <p><span style={{ fontWeight: 'bold' }}>User: </span>{user ? user.username : 'Not authenticated'}</p>
       <input type="file" accept="audio/*" onChange={handleFileChange} />
       {audioFile && (
         <div>
