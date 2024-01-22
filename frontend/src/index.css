@@ -124,6 +124,10 @@ code {
 
 }
 
+.profile-portfolio-section{
+  text-align: left;
+}
+
 .main-container {
   overflow-y: auto;
   height: auto;
