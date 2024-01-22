@@ -1,15 +1,16 @@
 import { useAuth } from "../contexts/AuthContext";
 import React, { useState } from "react";
 import FindUser from "../components/FindUsersComponent";
-import axiosBase from '../contexts/axiosBase';
+import axiosBase from "../contexts/axiosBase";
 
 const FindUsers = () => {
   const { user } = useAuth();
 
   const [searchCriteria, setSearchCriteria] = useState({
-    "username": "",
-    "email": "",
-    "instrument": "",
+    userSearching: user.username,
+    username: "",
+    email: "",
+    instrument: "",
   });
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState(null);
@@ -26,18 +27,18 @@ const FindUsers = () => {
   };
 
   const searchUsers = () => {
-    axiosBase.post('/api/users/search-all', searchCriteria, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => setResults(response.data))
-      .catch(error => {
+    axiosBase
+      .post("/api/users/search-all", searchCriteria, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => setResults(response.data))
+      .catch((error) => {
         setResults(null);
         console.error("Error fetching search results:", error);
       });
   };
-
 
   return (
     <div className="main-container">

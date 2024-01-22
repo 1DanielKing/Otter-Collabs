@@ -66,6 +66,10 @@ public class UserController {
     @PostMapping("/search-all")
     public ResponseEntity<List<User>> searchUsers(@RequestBody UserSearchCriteria criteria) {
         List<User> users = userService.searchUsers(criteria);
+        users = users.stream()
+                .filter(user -> !user.getUsername().equals(criteria.getUserSearching()))
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(users);
     }
 
@@ -131,17 +135,17 @@ public class UserController {
 
     @PutMapping("/{userId}/update-tags")
     public ResponseEntity<User> updateUserMusicTags(@PathVariable @NonNull Long userId,
-        @RequestBody Set<String> stringTags) {
+            @RequestBody Set<String> stringTags) {
         return userService.findUserById(userId)
-            .map(user -> {
-            Set<MusicTagsEnum> enumTags = stringTags.stream()
-                .map(String::toUpperCase)
-                .map(MusicTagsEnum::valueOf)
-                .collect(Collectors.toSet());
-            user.setMusicTags(enumTags);
-            return ResponseEntity.ok(userService.updateUser(user));
-            })
-            .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(user -> {
+                    Set<MusicTagsEnum> enumTags = stringTags.stream()
+                            .map(String::toUpperCase)
+                            .map(MusicTagsEnum::valueOf)
+                            .collect(Collectors.toSet());
+                    user.setMusicTags(enumTags);
+                    return ResponseEntity.ok(userService.updateUser(user));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
