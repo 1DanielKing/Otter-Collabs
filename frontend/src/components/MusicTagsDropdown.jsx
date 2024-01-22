@@ -45,6 +45,16 @@ const MusicTagsDropdown = ({ user, loadProfileData }) => {
     updateUserMusicTags(user.id, updatedTags);
   };
 
+  const formatEnum = (input) => {
+    if (input) {
+      return input.split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+    } else {
+      return '';
+    }
+  }
+
 
   return (
     <div className="music-tags-container">
@@ -53,7 +63,7 @@ const MusicTagsDropdown = ({ user, loadProfileData }) => {
           <option value="" disabled>Add a tag</option>
           {tags && tags.map((tag) => (
             <option key={tag} value={tag}>
-              {tag}
+              {formatEnum(tag)}
             </option>
           ))}
         </select>
