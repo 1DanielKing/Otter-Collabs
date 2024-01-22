@@ -3,6 +3,8 @@ import SockJS from 'sockjs-client';
 import { Stomp } from 'stompjs/lib/stomp.min.js'
 import { useAuth } from '../contexts/AuthContext';
 import axiosBase from '../contexts/axiosBase';
+import { useNotifications } from '../contexts/NotificationsContext';
+
 
 const ChatBox = () => {
     const [stompClient, setStompClient] = useState(null);
@@ -11,22 +13,34 @@ const ChatBox = () => {
     const [friends, setFriends] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isExpanded, setIsExpanded] = useState(false);
+    const friendsRef = useRef([]);
     const messagesEndRef = useRef(null);
     const { user } = useAuth();
+    const { fetchNotifications } = useNotifications();
+    const fetchNotificationsRef = useRef(fetchNotifications);
+    const [refreshFriends, setRefreshFriends] = useState(false);
 
-    const toggleChatBox = () => setIsExpanded(!isExpanded);
+
+    const toggleChatBox = () => {
+        setIsExpanded(!isExpanded);
+
+    }
+
+    const loadFriends = () => {
+        if (user && (user.id !== undefined)) {
+            axiosBase.get(`/api/users/${user.id}/friends`)
+                .then(response => setFriends(response.data))
+                .catch(error => console.error('Error fetching friends:', error));
+        }
+        console.log("friends loaded")
+    };
 
     useEffect(() => {
-        const getFriendsOnLoad = () => {
-            if (user && (user.id !== undefined)) {
-                axiosBase.get(`/api/users/${user.id}/friends`)
-                    .then(response => setFriends(response.data))
-                    .catch(error => console.error('Error fetching friends:', error));
-            }
-        };
-
-        getFriendsOnLoad();
-    }, [user]);
+        if (refreshFriends) {
+            loadFriends();
+            setRefreshFriends(false);
+        }
+    }, [refreshFriends, user]);
 
     useEffect(() => {
         const socket = new SockJS(`http://localhost:8080/chat`);
@@ -43,7 +57,17 @@ const ChatBox = () => {
             client.subscribe('/user/queue/messages', message => {
                 const incomingMessage = JSON.parse(message.body);
                 handleIncomingMessage(incomingMessage);
+
             });
+
+            client.subscribe('/user/queue/notifications', message => {
+                const notificationMsg = message.body;
+                if (notificationMsg.includes('UPDATE')) {
+                    fetchNotificationsRef.current();
+                    setRefreshFriends(true);
+                }
+            });
+
         });
 
         return () => {
@@ -55,8 +79,10 @@ const ChatBox = () => {
 
     const handleIncomingMessage = (incomingMessage) => {
         const senderUsername = incomingMessage.sender;
-        const senderUser = friends.find(friend => friend.username === senderUsername);
-        console.log("sender username: " + senderUsername)
+        console.log("friends: " + friendsRef.current);
+        const senderUser = friendsRef.current.find(friend => friend.username === senderUsername);
+        console.log("sender user: " + senderUser)
+        console.log("selected User: " + (selectedUser ? selectedUser.username : "null"));
 
         if (senderUser) {
             if (!isExpanded) {
@@ -65,12 +91,11 @@ const ChatBox = () => {
             }
 
             if (!selectedUser || selectedUser.username !== senderUsername) {
+                console.log("changing selected user");
                 handleUserSelect(senderUser);
             }
 
-            if (selectedUser && senderUsername === selectedUser.username) {
-                setMessages(prev => [...prev, incomingMessage]);
-            }
+            fetchMessageHistory();
         }
     };
 
@@ -106,6 +131,16 @@ const ChatBox = () => {
         scrollToBottom();
     }, [messages]);
 
+    useEffect(() => {
+        friendsRef.current = friends;
+        console.log("friendsRef refreshed")
+    }, [friends]);
+
+    useEffect(() => {
+        fetchNotificationsRef.current = fetchNotifications;
+    }, [fetchNotifications]);
+
+
 
 
     const sendMessage = async () => {
@@ -131,7 +166,9 @@ const ChatBox = () => {
                                 <div className="chatbox-back-arrow">&nbsp;</div>
                             )}
                         </div>
-                        <div className="chatbox-title" onClick={toggleChatBox}>Messages</div>
+                        <div className="chatbox-title" onClick={toggleChatBox}>
+                            {selectedUser ? `Chatting with: ${selectedUser.username}` : "Messages"}
+                        </div>
                     </div>
                     {selectedUser ? (
                         <>
