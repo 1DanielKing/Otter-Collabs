@@ -1,8 +1,10 @@
 import { useAuth } from "../contexts/AuthContext";
+import MusicTagsDropdown from "../components/MusicTagsDropdown";
+import { Link } from "react-router-dom";
 
 
 function DisplayProfile({ toggleEditMode }) {
-  const { user } = useAuth();
+  const { user, loadProfileData } = useAuth();
 
   const formatEnum = (input) => {
     if (input) {
@@ -40,6 +42,8 @@ function DisplayProfile({ toggleEditMode }) {
         </div>
       </div>
       <button onClick={toggleEditMode}>Edit Profile</button>
+      <MusicTagsDropdown user={user} loadProfileData={loadProfileData} />
+      <button> <Link to="/portfolio" style={{textDecoration: "none"}}>View Your Audio Uploads Portfolio</Link></button>
     </div>
   );
 }

@@ -3,10 +3,10 @@ import { useAuth } from "../contexts/AuthContext";
 import DisplayProfile from "../components/DisplayProfile";
 import "./ProfilePage.css";
 import EditProfileForm from "../components/EditProfileForm";
-import MusicTagsDropdown from "../components/MusicTagsDropdown";
+
 
 const ProfilePage = () => {
-  const { user, loadProfileData } = useAuth();
+  const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
 
   const toggleEditMode = () => {
@@ -26,7 +26,8 @@ const ProfilePage = () => {
         ) : (
           <>
             <DisplayProfile data={user} toggleEditMode={toggleEditMode} />
-            <MusicTagsDropdown user={user} loadProfileData={loadProfileData} />
+            
+            
           </>
         )}
       </div>
