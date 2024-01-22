@@ -37,11 +37,6 @@ const ProfilePage = () => {
           <>
             <DisplayProfile data={user} toggleEditMode={toggleEditMode} />
             <MusicTagsDropdown user={user} loadProfileData={loadProfileData} />
-            {location.pathname.includes("/") &&
-              location.search.includes("?code=") ? null : (
-              <SpotifyAuth />
-            )}{" "}
-            {/* Add condition to render SpotifyAuth */}
           </>
         )}
       </div>
