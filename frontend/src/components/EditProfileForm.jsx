@@ -3,34 +3,18 @@ import { useAuth } from "../contexts/AuthContext";
 import axiosBase from '../contexts/axiosBase';
 import {ExperienceLevelEnum } from "../shared/Enums";
 
+
 const EditProfileForm = ({ user, toggleEditMode }) => {
-  const { loadProfileData } = useAuth();
+  const { loadProfileData, updateUsername } = useAuth();
 
-  const mapToFrontendEnum = (backendEnumValue) => {
-    console.log('Mapping backend to frontend:', backendEnumValue);
 
-    switch (backendEnumValue) {
-      case "Beginner":
-        return "BEGINNER";
-      case "Intermediate":
-        return "INTERMEDIATE";
-      case "Advanced":
-        return "ADVANCED";
-      case "Expert":
-        return "EXPERT";
-      case "Professional":
-        return "PROFESSIONAL";
-      default:
-        return backendEnumValue;
-    }
-  };
 
   const [formData, setFormData] = useState({
     imageURL: user.imageURL,
     username: user.username,
     email: user.email,
     instrument: user.instrument,
-    experience: user.experienceLevel,
+    experienceLevel: user.experienceLevel,
     genre: user.genre,
   });
   const defaultProfilePics = [
@@ -51,7 +35,7 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
       username: user.username,
       email: user.email,
       instrument: user.instrument,
-      experience: user.experienceLevel,
+      experienceLevel: user.experienceLevel,
       genre: user.genre,
     });
   }, [user]);
@@ -60,7 +44,7 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
     const { name, value } = e.target;
     console.log(`Changing ${name} to:`, value);
   
-    setFormData((prevData) => ({ ...prevData, [name]: name === 'experienceLevel' ? value : mapToFrontendEnum(value) }));
+    setFormData((prevData) => ({ ...prevData, [name]: (value) }));
   };
 
   const handleSubmit = async (e) => {
@@ -75,7 +59,8 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
 
       if (status === 200) {
         console.log("User information updated successfully");
-        loadProfileData();
+      updateUsername(formData.username); 
+        await loadProfileData();
         toggleEditMode();
       } else {
         console.error("Failed to update user information");
@@ -145,6 +130,7 @@ const EditProfileForm = ({ user, toggleEditMode }) => {
           <label htmlFor="experienceLevel">Experience</label>
           <select
             id="experienceInput"
+            name="experienceLevel"
             value={formData.experienceLevel}
             onChange={handleChange}
             >

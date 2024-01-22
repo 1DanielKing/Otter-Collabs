@@ -75,7 +75,11 @@ function App() {
 }
 
 const MainApp = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if(loading) {
+    return <p>Loading...</p>;
+  }
 
   return user ? <AuthenticatedApp /> : <UnauthenticatedApp />;
 };
