@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useAuth } from "../contexts/AuthContext.js";
-import { useNotifications } from "../contexts/NotificationsContext.js";
 import { useModal } from "../contexts/ModalContext";
 import LogoutModal from "./LogOutModal";
 import NotificationsMenu from "./NotificationsMenu";
@@ -10,11 +9,14 @@ import NotificationsMenu from "./NotificationsMenu";
 function Navbar() {
   const { user } = useAuth();
   const { showModal } = useModal();
+  const location = useLocation();
 
   const handleLogoutClick = (event) => {
     event.preventDefault();
     showModal(<LogoutModal />);
   };
+
+  
 
   return (
     <nav className="navbar">
@@ -22,28 +24,36 @@ function Navbar() {
         <div className="Logo-Home-Button">
           <li>
             <Link className="logo-home-button" to="/">
-              <img src="/media/pictures/logo.png" alt="LOGO OTTERCOLLAB" class="logo"></img>
-              <img src="/media/pictures/hover-logo.png" alt="LOGO OTTERCOLLAB TRACED IN WHITE" class="hover-logo" />
+              <img
+                src="/media/pictures/logo.png"
+                alt="LOGO OTTERCOLLAB"
+                className="logo"
+              ></img>
+              <img
+                src="/media/pictures/hover-logo.png"
+                alt="LOGO OTTERCOLLAB TRACED IN WHITE"
+                className="hover-logo"
+              />
             </Link>
           </li>
         </div>
         <div className="nav-links">
-          <div>
+          <div className={location.pathname === "/" ? "active" : ""}>
             <li>
               <Link to="/">Profile</Link>
             </li>
           </div>
-          <div>
+          <div className={location.pathname === "/portfolio" ? "active" : ""}>
             <li>
               <Link to="/portfolio">Portfolio</Link>
             </li>
           </div>
-          <div>
+          <div className={location.pathname === "/friends" ? "active" : ""}>
             <li>
               <Link to="/friends">Friends</Link>
             </li>
           </div>
-          <div>
+          <div className={location.pathname === "/findUsers" ? "active" : ""}>
             <li>
               <Link to="/findUsers">Find Users</Link>
             </li>

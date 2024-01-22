@@ -64,6 +64,13 @@
   flex: 1;
 }
 
+.nav-links div.active {
+  background-color: #929ca6; /* Dark gray color */
+  border: #000000;
+  border-radius: 6px;
+}
+
+
 .nav-links a {
   display: inline-block;
   text-decoration: none;
