@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.wecancodeit.backend.models.Notification;
 import org.wecancodeit.backend.models.PairRequest;
@@ -26,6 +27,9 @@ public class PairRequestService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public PairRequest savePairRequest(PairRequest request) {
         User sender = userRepository.findByUsername(request.getSender().getUsername())
@@ -52,6 +56,12 @@ public class PairRequestService {
             notification.setUser(savedRequest.getReceiver());
             notification.setRequest(savedRequest);
             notificationService.saveNotification(notification);
+        }
+
+        if (savedRequest != null) {
+            String recipientUsername = savedRequest.getReceiver().getUsername();
+            String notificationMsg = "UPDATE";
+            messagingTemplate.convertAndSendToUser(recipientUsername, "/queue/notifications", notificationMsg);
         }
         return savedRequest;
     }
@@ -87,13 +97,21 @@ public class PairRequestService {
 
         pairRequest.setRequestStatus(response);
 
-        // If the request is accepted, add each user to the other's friend list
         if (response == RequestStatus.ACCEPTED) {
             User sender = pairRequest.getSender();
             User receiver = pairRequest.getReceiver();
 
             if (sender != null && receiver != null) {
-                userService.setUserFriends(sender, receiver);
+                boolean friendsSet = userService.setUserFriends(sender, receiver);
+                if (friendsSet) {
+                    String notificationMsg = "UPDATE";
+
+                    String username1 = sender.getUsername();
+                    messagingTemplate.convertAndSendToUser(username1, "/queue/notifications", notificationMsg);
+
+                    String username2 = receiver.getUsername();
+                    messagingTemplate.convertAndSendToUser(username2, "/queue/notifications", notificationMsg);
+                }
             }
         }
 
