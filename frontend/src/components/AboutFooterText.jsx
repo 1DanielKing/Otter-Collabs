@@ -4,7 +4,7 @@ import React from 'react';
 const AboutFooterText = () => {
   const openReadmeInNewTab = async () => {
     try {
-      const readmeUrl = '/media/README.html'; // Adjust the path as needed
+      const readmeUrl = '/media/README.html';
 
       const response = await fetch(readmeUrl);
       const readmeContent = await response.text();
@@ -18,7 +18,6 @@ const AboutFooterText = () => {
       newTab.document.write('<!DOCTYPE html><html lang="en"><head>');
       newTab.document.write('<meta charset="UTF-8">');
       newTab.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
-      // Include other head content here if needed
       newTab.document.write('</head><body>');
 
       const iframe = newTab.document.createElement('iframe');

@@ -37,6 +37,7 @@ function Navbar() {
             </Link>
           </li>
         </div>
+        <div></div> {/* spacer for nav */}
         <div className="nav-links">
           <div className={location.pathname === "/" ? "active" : ""}>
             <li>
