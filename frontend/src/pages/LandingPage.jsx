@@ -47,7 +47,7 @@ const LandingPage = () => {
             <NewUser toggleLoginFunc={toggleLogin} />
           )}
           <p className="landing-description">
-            Welcome to <strong>OtterCollab</strong> — the nexus for rock stars and rising stars alike. Here, creativity knows no bounds, and every connection is a potential masterpiece in the making. With OtterCollab, artists from every corner of the globe come together to compose, share, and produce music in real-time. This platform is a beacon for those who dare to blend sounds, innovate genres, and push the boundaries of music. Embrace the power of collaboration with intuitive tools, a dynamic community, and an immersive experience. Begin your journey with OtterCollab and transform the way you create music. <strong>Join and unlock the power of global collaboration today!</strong>
+           <h2> Welcome to <strong>OtterCollab</strong></h2> The nexus for rock stars and rising stars alike. Here, creativity knows no bounds, and every connection is a potential masterpiece in the making. With OtterCollab, artists from every corner of the globe come together to compose, share, and produce music in real-time.Begin your journey with OtterCollab and transform the way you create music. <h3><strong>Join and unlock the power of global collaboration today!</strong></h3>
           </p>
         </div>
       )

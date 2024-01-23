@@ -160,8 +160,8 @@ const ProfileCreation = () => {
   value={experienceLevel}
   onChange={handleExperienceChange}
 >
-  {Object.values(experienceLevel).map((level) => (
-    <option key={level} value={level}>
+ {["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT", "PROFESSIONAL"].map((level) => (    
+  <option key={level} value={level}>
       {level}
     </option>
   ))}
