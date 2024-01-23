@@ -27,8 +27,13 @@
   align-items: center;
 }
 
+.logo-home-button img {
+  height: 40px;
+  width: auto;
+}
+
 .hover-logo {
-  opacity: 0; /* Hover logo initially hidden */
+  opacity: 0; /* Hover style logo is initially hidden until hovering of logo */
   position: absolute;
   top: 0;
   left: 0;
@@ -42,29 +47,12 @@
   opacity: 1; /* Show the hover-logo.png on hover */
 }
 
-.rest-of-nav {
-  margin-left: auto;
-  border-left: black;
-  border-right: black;
-  border-radius: 10px;
-  align-items: stretch;
-}
-
-.rest-of-nav a {
-  display: block;
-  text-decoration: none;
-  color: black;
-  padding: 10px;
-  transition: color 0.3s ease;
-  height: 100%;
-}
-
 .nav-links li {
   margin: 0 10px;
   flex: 1;
 }
 
-.nav-links div.active {
+.nav-links div.active { /* Shows the current active page using a const */
   background-color: #929ca6; /* Dark gray color */
   border: #000000;
   border-radius: 6px;
@@ -88,10 +76,6 @@
   border-radius: 6px;
 }
 
-.logo-home-button img {
-  height: 40px;
-  width: auto;
-}
 
 .notification-button {
   background: rgb(0, 0, 0);
@@ -122,7 +106,6 @@
   top: 100%;
   left: -145%;
   width: 400px;
-  /* Adjust as needed */
   background-color: #fff;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
@@ -139,6 +122,7 @@
   border-bottom: 1px solid #eee;
 }
 
+/* styles shared by both */
 .notif-accept,
 .notif-deny {
   padding: 8px;
