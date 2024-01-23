@@ -1,5 +1,6 @@
 package org.wecancodeit.backend.controllers;
 
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -60,7 +61,6 @@ public class AudioController {
         }
     }
 
-
     /**
      * Endpoint to retrieve all audio metadata.
      *
@@ -95,40 +95,43 @@ public class AudioController {
     }
 
     @GetMapping("/stream/{id}")
-    public ResponseEntity<Resource> streamAudioFile(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Resource> streamAudioFile(@PathVariable @NonNull Long id, HttpServletRequest request) {
         try {
             AudioMetadata metaData = audioService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Audio not found"));
             Path filePath = Paths.get(metaData.getFilePath());
             Resource resource = new UrlResource(filePath.toUri());
-            
-            if (resource.exists() || resource.isReadable()) {
-                long resourceLength = resource.contentLength();
-                String rangeString = request.getHeader(HttpHeaders.RANGE);
-                long start = 0, end = resourceLength - 1;
 
-                if (rangeString != null && rangeString.startsWith("bytes=")) {
-                    String[] ranges = rangeString.substring("bytes=".length()).split("-");
-                    start = Long.parseLong(ranges[0]);
-                    end = ranges.length > 1 ? Long.parseLong(ranges[1]) : end;
-                }
-
-                HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_TYPE, "audio/mpeg");
-                headers.add(HttpHeaders.ACCEPT_RANGES, "bytes");
-                headers.add(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + resourceLength);
-                headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(end - start + 1));
-
-                return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                        .headers(headers)
-                        .body(resource);
-            } else {
+            if (!resource.exists() || !resource.isReadable()) {
                 throw new RuntimeException("Could not read the file!");
             }
 
+            long resourceLength = resource.contentLength();
+            String rangeString = request.getHeader(HttpHeaders.RANGE);
+            long start = 0, end = resourceLength - 1;
+
+            if (rangeString != null && rangeString.startsWith("bytes=")) {
+                String[] ranges = rangeString.substring("bytes=".length()).split("-");
+                start = Long.parseLong(ranges[0]);
+                end = ranges.length > 1 ? Long.parseLong(ranges[1]) : end;
+                if (start >= resourceLength || end >= resourceLength) {
+                    return ResponseEntity.status(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE).build();
+                }
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, "audio/mpeg");
+            headers.add(HttpHeaders.ACCEPT_RANGES, "bytes");
+            headers.add(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + resourceLength);
+            headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(end - start + 1));
+
+            InputStreamResource inputStreamResource = new InputStreamResource(resource.getInputStream());
+            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                    .headers(headers)
+                    .body(inputStreamResource);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
-}
 
+}

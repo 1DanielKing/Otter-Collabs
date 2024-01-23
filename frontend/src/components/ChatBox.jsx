@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from 'stompjs/lib/stomp.min.js'
 import { useAuth } from '../contexts/AuthContext';
@@ -20,67 +20,27 @@ const ChatBox = () => {
     const fetchNotificationsRef = useRef(fetchNotifications);
     const [refreshFriends, setRefreshFriends] = useState(false);
 
-
-    const toggleChatBox = () => {
-        setIsExpanded(!isExpanded);
-    }
-
-    const loadFriends = () => {
-        if (user && (user.id !== undefined)) {
-            axiosBase.get(`/api/users/${user.id}/friends`)
-                .then(response => setFriends(response.data))
-                .catch(error => console.error('Error fetching friends:', error));
-        }
-        console.log("friends loaded")
-    };
-
-    useEffect(() => {
-        loadFriends();
-    }, [user]);
-
-    useEffect(() => {
-        if (refreshFriends) {
-            loadFriends();
-            setRefreshFriends(false);
-        }
-    }, [refreshFriends, user]);
-
-    useEffect(() => {
-        const socket = new SockJS(`http://localhost:8080/chat`);
-        const client = Stomp.over(socket);
-
-        let isConnected = false;
-        console.log('Current token: ' + user.token);
-
-        client.connect({
-            'Authorization': `Bearer ${user.token}`
-        }, frame => {
-            isConnected = true;
-            setStompClient(client);
-            client.subscribe('/user/queue/messages', message => {
-                const incomingMessage = JSON.parse(message.body);
-                handleIncomingMessage(incomingMessage);
-
-            });
-
-            client.subscribe('/user/queue/notifications', message => {
-                const notificationMsg = message.body;
-                if (notificationMsg.includes('UPDATE')) {
-                    fetchNotificationsRef.current();
-                    setRefreshFriends(true);
-                }
-            });
-
-        });
-
-        return () => {
-            if (client && isConnected) {
-                client.disconnect();
-            }
-        };
+    const handleUserSelect = useCallback((user) => {
+        setSelectedUser(user);
     }, []);
 
-    const handleIncomingMessage = (incomingMessage) => {
+    const fetchMessageHistory = useCallback(async () => {
+        if (selectedUser) {
+            axiosBase.get(`/api/message/history?user1=${user.username}&user2=${selectedUser.username}`)
+                .then(({ data, status }) => {
+                    if (status === 200) {
+                        setMessages(Array.isArray(data) ? data : []);
+                    } else {
+                        console.error('Failed to fetch message history');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Failed to fetch message history', error);
+                });
+        }
+    }, [selectedUser, user.username]);
+
+    const handleIncomingMessage = useCallback((incomingMessage) => {
         const senderUsername = incomingMessage.sender;
         console.log("friends: " + friendsRef.current);
         const senderUser = friendsRef.current.find(friend => friend.username === senderUsername);
@@ -101,31 +61,73 @@ const ChatBox = () => {
 
             fetchMessageHistory(senderUser);
         }
-    };
+    }, [isExpanded, selectedUser, friendsRef, handleUserSelect, fetchMessageHistory]);
 
-    const fetchMessageHistory = async () => {
-        if (selectedUser) {
-            axiosBase.get(`/api/message/history?user1=${user.username}&user2=${selectedUser.username}`)
-                .then(({ data, status }) => {
-                    if (status === 200) {
-                        setMessages(Array.isArray(data) ? data : []);
-                    } else {
-                        console.error('Failed to fetch message history');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Failed to fetch message history', error);
-                });
+
+    const toggleChatBox = () => {
+        setIsExpanded(!isExpanded);
+    }
+
+    const loadFriends = useCallback(() => {
+        if (user && (user.id !== undefined)) {
+            axiosBase.get(`/api/users/${user.id}/friends`)
+                .then(response => setFriends(response.data))
+                .catch(error => console.error('Error fetching friends:', error));
         }
-    };
+        console.log("friends loaded")
+    }, [user]);
+
+    useEffect(() => {
+        loadFriends();
+    }, [user, loadFriends]);
+
+    useEffect(() => {
+        if (refreshFriends) {
+            loadFriends();
+            setRefreshFriends(false);
+        }
+    }, [refreshFriends, user, loadFriends]);
+
+    useEffect(() => {
+        const socket = new SockJS(`http://localhost:8080/chat`);
+        const client = Stomp.over(socket);
+
+        let isConnected = false;
+        console.log('Current token: ' + user.token);
+
+        client.connect({
+            'Authorization': `Bearer ${user.token}`
+        }, frame => {
+            isConnected = true;
+            setStompClient(client);
+            client.subscribe('/user/queue/messages', message => {
+                const incomingMessage = JSON.parse(message.body);
+                handleIncomingMessage(incomingMessage);
+            });
+
+            client.subscribe('/user/queue/notifications', message => {
+                const notificationMsg = message.body;
+                if (notificationMsg.includes('UPDATE')) {
+                    fetchNotificationsRef.current();
+                    setRefreshFriends(true);
+                }
+            });
+        });
+
+        return () => {
+            if (client && isConnected) {
+                client.disconnect();
+            }
+        };
+    }, [handleIncomingMessage, user.token]);
+
+
+
 
     useEffect(() => {
         fetchMessageHistory();
-    }, [selectedUser, user.username]);
+    }, [selectedUser, user.username, fetchMessageHistory]);
 
-    const handleUserSelect = (user) => {
-        setSelectedUser(user);
-    };
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
