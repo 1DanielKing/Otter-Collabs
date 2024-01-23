@@ -71,9 +71,9 @@ export const UserView = ({ selectedUser }) => {
 
   const renderFriendshipStatus = () => {
     if (isFriends) {
-      return <p>You are friends with this user</p>;
+      return <p>You are friends with this user.</p>;
     } else if (requestSent) {
-      return <p>You've sent a pair request to this user, they haven't responded yet</p>;
+      return <p>You've sent a pair request to this user, they haven't responded yet.</p>;
     } else {
       return <button onClick={handleSendPairRequest}>Send Pair Request</button>;
     }
