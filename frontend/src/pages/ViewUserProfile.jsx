@@ -38,7 +38,8 @@ const ViewUserProfile = () => {
       <div className="display-profile-container">
         <UserView selectedUser={selectedUser} />
         <MusicTagsDisplayViewOnly data={selectedUser.musicTags} />
-        <Portfolio userId={selectedUser.id} />
+        {/* <Portfolio userId={selectedUser.id} />  */}
+        {/* ^ table from ViewOnlyProfile.jsx is not needed since we have the section below*/}
         </div>
 
         <div className="audio-list">
